@@ -1,0 +1,9 @@
+#summary One-sentence summary of this page.
+
+= X-Tracker User Guide =
+
+This guide explains how to use X-Tracker with the optional X-Tracker GUI. This is the easiest was to process data from relatively small numbers of samples.
+
+== And so it begins ...==
+
+Blah, blah.

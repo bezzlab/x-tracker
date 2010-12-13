@@ -1,0 +1,17 @@
+#summary x-tracker welcome page
+
+= Introduction =
+
+Welcome to X-Tracker, a software framework for supporting mass spectrometry-based protein and peptide quantitation. Through an abstraction of the main steps involved in quatitation, X-Tracker is able to support quantitative analysis by means of all the current protocols, both at MS and Tandem MS level, and provide a flexible, platform-independent and easy-to-use quantitation environment.
+
+= Downloading X-Tracker =
+
+You can download X-Tracker, from somewhere.
+
+= Documentation =
+
+There are three levels of documentation available, depending on how you plan to use X-Tracker:
+
+*[[User Guide]] - shows you how to process your data using the X-Tracker GUI.
+*[[Command Line User Guide]] - if you want run X-Tracker from the command line, e.g. in a pipeline.
+*[[Plugin Developer Guide]] - if you want to write your own plugins for X-Tracker.

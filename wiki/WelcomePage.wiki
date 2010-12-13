@@ -12,6 +12,6 @@ You can download X-Tracker, from somewhere.
 
 There are three levels of documentation available, depending on how you plan to use X-Tracker:
 
-*[User Guide] - shows you how to process your data using the X-Tracker GUI.
-*[Command Line User Guide] - if you want run X-Tracker from the command line, e.g. in a pipeline.
-*[Plugin Developer Guide] - if you want to write your own plugins for X-Tracker.
+*[User_Guide] - shows you how to process your data using the X-Tracker GUI.
+*[Command_Line_User_Guide] - if you want run X-Tracker from the command line, e.g. in a pipeline.
+*[Plugin_Developer_Guide] - if you want to write your own plugins for X-Tracker.

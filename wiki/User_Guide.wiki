@@ -1,9 +1,5 @@
-#summary One-sentence summary of this page.
+#summary Where to find X-Tracker documentation.
 
-= X-Tracker User Guide =
+= X-Tracker User Documentation =
 
-This guide explains how to use X-Tracker with the optional X-Tracker GUI. This is the easiest was to process data from relatively small numbers of samples.
-
-== And so it begins ...==
-
-Blah, blah.
+The Google Code project site is designed specifically at the developers of X-Tracker's core program code and plugins. If you are seeking to use X-Tracker to analyse data, please see the user-facing site at www.x-tracker.info.

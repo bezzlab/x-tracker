@@ -2,4 +2,4 @@
 
 = X-Tracker User Documentation =
 
-The Google Code project site is designed specifically at the developers of X-Tracker's core program code and plugins. If you are seeking to use X-Tracker to analyse data, please see the user-facing site at www.x-tracker.info.
+The Google Code project site is designed specifically for the developers of X-Tracker's core program code and plugins. If you are seeking to use X-Tracker to analyse data, please see the user-facing site at www.x-tracker.info.

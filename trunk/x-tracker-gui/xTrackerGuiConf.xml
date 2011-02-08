@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+  NB ONLY X-TRACKER PLUGIN DEVELOPERS SHOULD EDIT THIS FILE
+  
+  This XML file specifies the one to one mapping between each
+  X-Tracker plugin and an optional xsd schema file - if no xsd
+  schema file is required leave the value blank
+-->
+
+<xTrackerGuiConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="xTrackerGuiConf.xsd">
+
+  <jarToXsdSchema jar_file="computeLcMsAreas.jar"></jarToXsdSchema>
+  <jarToXsdSchema jar_file="displayResults.jar"></jarToXsdSchema>
+  <jarToXsdSchema jar_file="displayTable.jar">outTable.xsd</jarToXsdSchema>
+  <jarToXsdSchema jar_file="iTraqNplexPeakSel.jar">iTRAQ.xsd</jarToXsdSchema>
+  <jarToXsdSchema jar_file="iTraqNplexQuant.jar">iTRAQ.xsd</jarToXsdSchema>
+  <jarToXsdSchema jar_file="LcMsAreasSimpson.jar"></jarToXsdSchema>
+  <jarToXsdSchema jar_file="linearFitQuant.jar"></jarToXsdSchema>
+  <jarToXsdSchema jar_file="loadAllIdents.jar">loadData.xsd</jarToXsdSchema>
+  <jarToXsdSchema jar_file="loadDummyRaw.jar"></jarToXsdSchema>
+  <jarToXsdSchema jar_file="loadEmptyIdents.jar"></jarToXsdSchema>
+  <jarToXsdSchema jar_file="loadIdentTAB.jar">loadData.xsd</jarToXsdSchema>
+  <jarToXsdSchema jar_file="loadMascotIdent.jar">loadMascot.xsd</jarToXsdSchema>
+  <jarToXsdSchema jar_file="loadRawMGF.jar">loadData.xsd</jarToXsdSchema>
+  <jarToXsdSchema jar_file="loadRawMzML.jar"></jarToXsdSchema>
+  <jarToXsdSchema jar_file="loadRawMzXML.jar">loadData.xsd</jarToXsdSchema>
+  <jarToXsdSchema jar_file="metLabellingPeakSel.jar">metLabeling.xsd</jarToXsdSchema>
+  <jarToXsdSchema jar_file="OutputAPEX.jar"></jarToXsdSchema>
+  <jarToXsdSchema jar_file="OutputAPEXExcel.jar">outExcel.xsd</jarToXsdSchema>
+  <jarToXsdSchema jar_file="outputCSV.jar"></jarToXsdSchema>
+  <jarToXsdSchema jar_file="OutputEMPAI.jar"></jarToXsdSchema>
+  <jarToXsdSchema jar_file="OutputemPAIExcel.jar">outExcel.xsd</jarToXsdSchema>
+  <jarToXsdSchema jar_file="outputExcel.jar">outExcel.xsd</jarToXsdSchema>
+  <jarToXsdSchema jar_file="peakSelSpectralCount.jar"></jarToXsdSchema>
+  <jarToXsdSchema jar_file="quantAPEXbasic.jar"></jarToXsdSchema>
+  <jarToXsdSchema jar_file="quantAPEXcustom.jar"></jarToXsdSchema>
+  <jarToXsdSchema jar_file="quantEMPAI.jar"></jarToXsdSchema>
+  <jarToXsdSchema jar_file="sumIntensities.jar"></jarToXsdSchema>
+  <jarToXsdSchema jar_file="sumIntMetLab.jar"></jarToXsdSchema>
+  
+</xTrackerGuiConfig>
+

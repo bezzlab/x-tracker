@@ -86,6 +86,14 @@ public class loadRawMGF implements rawData_loadPlugin
                          if(m.find()){
                     
                                line=line.substring(8);
+                               Float val=0f;
+                               String [] tmp= new String[2];
+                               //If mz/intensity skip intensity
+                               if(line.contains(" ")){
+                                                tmp=line.split(" ");
+                                                line=tmp[0];
+                               }
+
                                try{
                                parIonMz=Float.valueOf(line).floatValue();
                                }

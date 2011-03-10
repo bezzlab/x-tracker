@@ -243,6 +243,7 @@ public class loadMascotIdent implements identData_loadPlugin {
         
         File file = new File(mascotFile);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
         try {
             
             DocumentBuilder db = dbf.newDocumentBuilder();

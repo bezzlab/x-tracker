@@ -713,6 +713,16 @@ public class xTracker {
     }
 
     /**
+     * Return X-Tracker version number
+     * @return version as a string
+    */
+
+    public String getVersion()
+    {
+        return version;
+    }
+
+    /**
      * The plugin class loader
      */
     private static pluginClassLoader pluginLoader;
@@ -769,5 +779,10 @@ public class xTracker {
       * @see quantPlugin
       */
     private static outPlugin outputPlugin;
+
+     /**
+      * This string holds the version number
+      */
+    private final static String version = "1.3";
     
 }

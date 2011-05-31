@@ -698,9 +698,9 @@ public class xTracker {
         
            freeMem = r.freeMemory();
       //     System.out.println("Free memory: " +freeMem);
-         
-         System.out.println("xTracker finished execution without errors!");
-     
+         System.out.println("*************************************************");
+         System.out.println("** xTracker finished execution without errors! **");
+         System.out.println("*************************************************");
            
            
            

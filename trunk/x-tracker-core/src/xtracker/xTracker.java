@@ -358,7 +358,7 @@ public class xTracker {
                             System.out.println("");
                             System.out.println("     Usage: java -jar xTracker.jar configuration_file.xtc");
                             System.out.println("");
-                            System.out.println("           where configuration_file.xtc is an XML file specifying the five plugins\n\t   and their parameter files.");
+                            System.out.println("           where configuration_file.xtc is an XML file specifying the five\n\t   plugins and their parameter files.");
                             System.out.println("");
                             System.out.println("           alternatively:");
                             System.out.println("                          java -jar xTracker.jar --pluginInfo plugin.jar");
@@ -400,7 +400,7 @@ public class xTracker {
                             System.out.println("");
                             System.out.println("     Usage: java -jar xTracker.jar configuration_file.xtc");
                             System.out.println("");
-                            System.out.println("           where configuration_file.xtc is an XML file specifying the five plugins\n\t   and their parameter files.");
+                            System.out.println("           where configuration_file.xtc is an XML file specifying the five\n\t   plugins and their parameter files.");
                             System.out.println("");
                             System.out.println("           alternatively:");
                             System.out.println("                          java -jar xTracker.jar --pluginInfo plugin.jar");

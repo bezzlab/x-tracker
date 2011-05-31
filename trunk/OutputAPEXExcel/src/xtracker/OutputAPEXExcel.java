@@ -443,6 +443,7 @@ public class OutputAPEXExcel implements outPlugin {
 
         File file = new File(dataFile);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
         int i = 0;
 
         try {

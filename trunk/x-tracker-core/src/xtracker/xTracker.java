@@ -283,7 +283,7 @@ public class xTracker {
                                 System.out.println("");
                                 System.out.println("");
                                 System.out.println("    **************************************");
-                                System.out.println("    *****  Welcome to X-Tracker  v" + version + " ****");
+                                System.out.println("    *****  Welcome to X-Tracker v" + version + " *****");
                                 System.out.println("    **************************************");
                                 System.out.println("");
                                 System.out.println("");
@@ -352,7 +352,7 @@ public class xTracker {
                             System.out.println("");
                             System.out.println("");
                                 System.out.println("    **************************************");
-                                System.out.println("    *****  Welcome to X-Tracker  v" + version + " ****");
+                                System.out.println("    *****  Welcome to X-Tracker v" + version + " *****");
                                 System.out.println("    **************************************");
                             System.out.println("");
                             System.out.println("");
@@ -394,7 +394,7 @@ public class xTracker {
                             System.out.println("");
                             System.out.println("");
                                 System.out.println("    **************************************");
-                                System.out.println("    *****  Welcome to X-Tracker  v" + version + " ****");
+                                 System.out.println("    *****  Welcome to X-Tracker v" + version + " *****");
                                 System.out.println("    **************************************");
                             System.out.println("");
                             System.out.println("");

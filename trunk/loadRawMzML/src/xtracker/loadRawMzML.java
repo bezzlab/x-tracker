@@ -338,8 +338,7 @@ public class loadRawMzML implements rawData_loadPlugin{
             System.exit(1);
         }
 
-
-    }    
+     }
 
      /**
       * list of mzML file to read in

@@ -299,6 +299,7 @@ public class loadRawMzML implements rawData_loadPlugin{
         // open the xml file
         File file = new File(dataFile);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
         //======================================================
 
         try{

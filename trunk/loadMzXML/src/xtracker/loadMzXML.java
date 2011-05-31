@@ -289,6 +289,7 @@ public class loadMzXML implements loadPlugin
         int index=2;
         File file = new File(dataFile);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
         try{
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(file);

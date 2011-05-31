@@ -255,6 +255,7 @@ public class quantAPEXcustom implements quantPlugin
       public void loadParams(String dataFile) {
           File file = new File(dataFile);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
         int i=0;
 
         try {

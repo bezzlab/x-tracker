@@ -845,6 +845,7 @@ Vector<Float> XICrtN = new Vector<Float>();
         int index=2;
         File file = new File(dataFile);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
         try{
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(file);

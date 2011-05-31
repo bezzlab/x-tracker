@@ -41,7 +41,7 @@ public class outputCSV implements outPlugin
         //Let's loop through the quantification results of all the available datasets
         for(int dtaCnt=0;dtaCnt<dataSize;dtaCnt++){
             xQuantData myQntData=InputData.getElementAtIndex(dtaCnt);
-            System.out.println("Writing results for dataset " + myQntData.getFileName());
+            System.out.println("Writing results for dataset " + myQntData.getFileName() +"\nto output file: " + this.outputFileName);
 
             //Remember that combinations of proteinId, peptideSeq are unique!
             int pepInd=myQntData.getQuantitativeDataSize();
@@ -115,6 +115,7 @@ public class outputCSV implements outPlugin
         int i=0;
         File file = new File(dataFile);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
         try{
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(file);

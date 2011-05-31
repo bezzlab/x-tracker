@@ -280,9 +280,9 @@ public class xTracker {
                                 System.out.println("");
                                 System.out.println("");
                                 System.out.println("");
-                                System.out.println("    *********************************");
-                                System.out.println("    *****  Welcome to xTracker  *****");
-                                System.out.println("    *********************************");
+                                System.out.println("    **************************************");
+                                System.out.println("    *****  Welcome to X-Tracker v1.3 *****");
+                                System.out.println("    **************************************");
                                 System.out.println("");
                                 System.out.println("");
                            
@@ -349,12 +349,12 @@ public class xTracker {
                             System.out.println("");
                             System.out.println("");
                             System.out.println("");
-                                System.out.println("    *********************************");
-                                System.out.println("    *****  Welcome to xTracker  *****");
-                                System.out.println("    *********************************");
+                                System.out.println("    **************************************");
+                                System.out.println("    *****  Welcome to xTracker v1.3  *****");
+                                System.out.println("    **************************************");
                             System.out.println("");
                             System.out.println("");
-                            System.out.println("     Usage: java -jar xTracker.jar parameter_file.xml");
+                            System.out.println("     Usage: java -jar xTracker.jar configuration_file.xtc");
                             System.out.println("");
                             System.out.println("           where parameter_file is a xml file specifying the five plugins\n\t   and parameters.");
                             System.out.println("");
@@ -391,12 +391,12 @@ public class xTracker {
                             System.out.println("");
                             System.out.println("");
                             System.out.println("");
-                                System.out.println("    *********************************");
-                                System.out.println("    *****  Welcome to xTracker  *****");
-                                System.out.println("    *********************************");
+                                System.out.println("    **************************************");
+                                System.out.println("    *****  Welcome to xTracker v1.3  *****");
+                                System.out.println("    **************************************");
                             System.out.println("");
                             System.out.println("");
-                            System.out.println("     Usage: java -jar xTracker.jar parameter_file.xml");
+                            System.out.println("     Usage: java -jar xTracker.jar configuration_file.xtc");
                             System.out.println("");
                             System.out.println("           where parameter_file is a xml file specifying the five plugins\n\t   and parameters.");
                             System.out.println("");

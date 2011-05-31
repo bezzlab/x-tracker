@@ -117,6 +117,7 @@ public class xTracker {
                         
                         //The xml document containing plugins and parameter files.
                         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+                        dbf.setNamespaceAware(true);
                          try{ 
                                 DocumentBuilder db = dbf.newDocumentBuilder();
                                 Document doc = db.parse(args[0]);
@@ -227,6 +228,7 @@ public class xTracker {
                                         System.out.println("\n\n    Common reasons:");
                                         System.out.println("     - Is the plugin ("+fileName+") located in the \"Plugins\" folder?");
                                         System.out.println("     - Does the plugin contain the \"package xtracker;\" statement?");
+                                        System.out.println("     - Are you running xTracker from the program main folder?");
                                         plugin = null;
                                         System.exit(1);
                                     }

@@ -385,6 +385,7 @@ public double computeSumInt(Vector<Float> mzVals, Vector<Float> intVals){
 
         File file = new File(dataFile);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
         try{
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(file);

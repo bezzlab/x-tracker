@@ -327,7 +327,7 @@ public class quantEMPAI implements quantPlugin {
             }
          
         } catch (Exception e) {
-            System.err.println("Exception while reading the parameter file" + dataFile + "\n" + e);
+            System.err.println("Exception while reading the parameter file " + dataFile + "\n" + e);
             System.err.println("Impossible to continue the quantifiation");
             System.exit(1);
         }

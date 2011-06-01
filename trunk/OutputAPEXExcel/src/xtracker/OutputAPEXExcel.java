@@ -4,8 +4,15 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Source;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import jxl.Workbook;
 import jxl.format.Alignment;
 import jxl.format.Border;
@@ -20,6 +27,7 @@ import jxl.write.WritableWorkbook;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 
 /**
@@ -451,8 +459,44 @@ public class OutputAPEXExcel implements outPlugin {
             //open and read the file
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(file);
+                         // create a SchemaFactory
+            SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+
             doc.getDocumentElement().normalize();
             Node nodeLst = doc.getElementsByTagName("param").item(0); // get the first tag
+
+            String schemaLocation="";
+
+            if(nodeLst.getAttributes().getNamedItem("xsi:schemaLocation") != null){
+                schemaLocation=nodeLst.getAttributes().getNamedItem("xsi:schemaLocation").getTextContent();
+            }
+            else {
+                if(nodeLst.getAttributes().getNamedItem("xsi:noNamespaceSchemaLocation")!= null){
+                schemaLocation=nodeLst.getAttributes().getNamedItem("xsi:noNamespaceSchemaLocation").getTextContent();
+                }
+                else{
+                    System.out.println("ERROR: No .xsd schema is provided for " + dataFile );
+                    System.exit(1);
+                }
+            }
+
+
+
+            // load the xtracker WXS schema
+            Source schemaFile = new StreamSource(new File(schemaLocation));
+            Schema schema = factory.newSchema(schemaFile);
+
+            // create a Validator instance
+            Validator validator = schema.newValidator();
+
+            try {
+                validator.validate(new DOMSource(doc));
+            } catch (SAXException e) {
+                // instance document is invalid!
+                System.out.println("\n\nERRROR - could not validate the input file " + dataFile+"!");
+                System.out.print(e);
+                System.exit(1);
+            }
 
             NodeList itemList = nodeLst.getChildNodes();
 

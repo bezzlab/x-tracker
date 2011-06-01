@@ -81,7 +81,7 @@ public class loadDummyRaw implements rawData_loadPlugin {
             }
 
             if (rawDataFiles.size() == 0) {
-                System.out.println("WARNING, no filename in the parameter file, impossible to create the data structure");
+                System.out.println("ERROR, no filename in the parameter file (" +dataFile + "), impossible to create the data structure");
                 System.exit(1);
             }
 

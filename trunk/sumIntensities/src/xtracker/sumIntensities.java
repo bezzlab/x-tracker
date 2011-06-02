@@ -262,8 +262,8 @@ public class sumIntensities implements quantPlugin
         return description;
     }
     
-    private final static String name = "ComputeLcMsAreas";
-    private final static String version = "0.1";
+    private final static String name = "sumIntensities";
+    private final static String version = "1.0";
     private final static String type = "QUANT_plugin";
-    private final static String description = "This plugin reads in LC/MS peak correspondences and computes the area in the time domain.";
+    private final static String description = "This plugin reads in LC/MS peak correspondences and computes the sum of the intensities.";
 }

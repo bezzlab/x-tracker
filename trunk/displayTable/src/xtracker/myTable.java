@@ -113,14 +113,22 @@ public class myTable extends javax.swing.JFrame {
 
             }
         
-    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+
    // Add Panels
 //    Container contentPane = getContentPane();
 //   contentPane.add(titleLab=new JLabel());
 
 
-  panel=new JPanel(new BorderLayout());
- 
+  panel=new JPanel(new GridBagLayout());
+  GridBagConstraints c = new GridBagConstraints();
+        c.weightx = 0.0;
+        c.ipady = 10;// long element
+        c.insets = new Insets(0, 5, 0, 0);
+        c.fill = GridBagConstraints.HORIZONTAL; // take all the horizontal place
+        c.anchor = GridBagConstraints.PAGE_START; //stay at the left side
+        c.gridx = 0;
+        c.gridy = 0;
+
   jCombo = new JComboBox();
   for(int g=0;g<FileNames.size();g++){
     jCombo.addItem(FileNames.elementAt(g));
@@ -135,10 +143,15 @@ public class myTable extends javax.swing.JFrame {
    titleLab.setFont(new Font("SansSerif", Font.BOLD, 14));
    titleLab.setForeground(Color.RED);
    titleLab.setVisible(true);
-   panel.add(titleLab,BorderLayout.NORTH);
-   panel.add(jCombo);
-
-
+panel.add(titleLab, c);
+   //panel.add(titleLab,BorderLayout.NORTH);
+   //panel.add(jCombo);
+       c.weightx = 0.0;
+        c.fill = GridBagConstraints.HORIZONTAL; // take all the horizontal place
+        c.anchor = GridBagConstraints.PAGE_START; //stay at the left side
+        c.gridx = 0;
+        c.gridy = 1;
+   panel.add(jCombo, c);
   
 
 
@@ -175,7 +188,6 @@ for(int jj=0;jj<quantifData.length;jj++){
 }
 
 table = new JTable(model);
-
 table.setPreferredScrollableViewportSize(new Dimension(500, 580));
 table.setShowHorizontalLines(true);
 table.setShowVerticalLines(true);
@@ -187,7 +199,16 @@ table.setShowVerticalLines(true);
         //Add the scroll pane to this panel.
   //      add(titleLab);
     //    add(scrollPane,-1);
-       panel.add(scrollPane,BorderLayout.SOUTH);
+        c.fill = GridBagConstraints.BOTH;
+        c.ipady = 20;      //make this component tall
+        c.weightx = 0.5;
+        c.weighty = 1.0;
+        // c.gridwidth = 3;
+        c.insets = new Insets(5, 5, 5, 5);
+        c.gridx = 0;
+        c.gridy = 2;
+    panel.add(scrollPane, c);
+    //   panel.add(scrollPane,BorderLayout.SOUTH);
 add(panel);
 
     }

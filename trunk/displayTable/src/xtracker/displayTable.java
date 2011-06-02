@@ -39,7 +39,7 @@ public class displayTable implements outPlugin
         myTable frame = new myTable(InputData,normalisation);
 		frame.setDefaultCloseOperation( javax.swing.JFrame.EXIT_ON_CLOSE );
 		frame.setTitle("X-Tracker's Quantitation Results");
-        frame.setSize(600, 650);
+        frame.setSize(800, 600);
         frame.setResizable(true);
         // Get the size of the default screen
 

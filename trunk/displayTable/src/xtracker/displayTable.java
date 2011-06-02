@@ -164,7 +164,7 @@ public class displayTable implements outPlugin
     }
     
     public boolean normalisation=false;
-    private final static String name = "DisplayResults";
+    private final static String name = "DisplayTable";
     private final static String version = "1.0";
     private final static String type = "OUTPUT_plugin";
     private final static String description = "The plugin outputs in a tabular form the results of quantitation.\n\tResults can be normalised accross the different labels or not.";

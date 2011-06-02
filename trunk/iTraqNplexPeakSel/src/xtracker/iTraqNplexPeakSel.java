@@ -206,10 +206,7 @@ public class iTraqNplexPeakSel implements peakSelPlugin
                          upperMzTol=Float.valueOf(item.getTextContent());
              //            System.out.println("Upper tol:" +upperMzTol);
                    }
-                   else if(item.getNodeName().equals("intThreshold")){
-                       intThreshold=Float.valueOf(item.getTextContent());
-               //        System.out.println("Int thresh:" +intThreshold);
-                   }
+                   
 
                 }
             }
@@ -290,7 +287,7 @@ public class iTraqNplexPeakSel implements peakSelPlugin
     private Vector<String> labels = new Vector<String>();
     private float lowerMzTol=0f;
     private float upperMzTol=0f;
-    private float intThreshold=0f;
+    
 
 
     private final static String name = "iTRAQ-N-PlexPeakSel";

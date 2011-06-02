@@ -214,7 +214,7 @@ public class loadIdentTAB implements identData_loadPlugin
 
     Vector<String> identificationFiles = new Vector<String>();
 
-    private final static String name = "Load MZXML files";
+    private final static String name = "Load TAB delimited identification files";
     private final static String version = "1.00";
     private final static String type = "IDENTDATA_LOAD_plugin";
     private final static String description = "This plugin loads peptide identifications from a text, TAB separated, file.";

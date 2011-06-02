@@ -268,7 +268,7 @@ public class loadAllIdents implements identData_loadPlugin
                 if(item.getNodeType() == Node.ELEMENT_NODE){
                    if(item.getNodeName().equals("datafile")){
                     rawDataFiles.addElement(item.getTextContent());
-                    identificationFiles.addElement(item.getAttributes().item(0).getTextContent().toString());
+                   // identificationFiles.addElement(item.getAttributes().item(0).getTextContent().toString());
                   //  System.out.println("Read files:" + item.getTextContent() + " " + item.getAttributes().item(0).getTextContent().toString());
                    }
 
@@ -311,7 +311,7 @@ public class loadAllIdents implements identData_loadPlugin
 
 
     Vector<String> rawDataFiles = new Vector<String>();
-    Vector<String> identificationFiles = new Vector<String>();
+   // Vector<String> identificationFiles = new Vector<String>();
 
 
     private final static String name = "LoadAllIds";

@@ -374,7 +374,7 @@ public class loadRawMGF implements rawData_loadPlugin
                 if(item.getNodeType() == Node.ELEMENT_NODE){
                    if(item.getNodeName().equals("datafile")){
                     rawDataFiles.addElement(item.getTextContent());
-                    System.out.println("Read files:" + item.getTextContent() + " " + item.getAttributes().item(0).getTextContent().toString());
+                  //  System.out.println("Read files:" + item.getTextContent() + " " + item.getAttributes().item(0).getTextContent().toString());
                    }
 
 

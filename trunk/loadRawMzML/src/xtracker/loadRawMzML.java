@@ -323,7 +323,7 @@ public class loadRawMzML implements rawData_loadPlugin{
                    if(item.getNodeName().equals("datafile")){ // find the tags with the mzML files
 
                     rawDataFiles.addElement(item.getTextContent()); // add each MzML file to read to the list
-                    System.out.println("Read files:" + item.getTextContent() + " " + item.getAttributes().item(0).getTextContent().toString());
+                   // System.out.println("Read files:" + item.getTextContent() + " " + item.getAttributes().item(0).getTextContent().toString());
 
                    }
 

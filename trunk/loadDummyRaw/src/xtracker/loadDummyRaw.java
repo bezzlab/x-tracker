@@ -11,7 +11,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- *  Plugin to load fake data in case the quantification is made only on the
+ *  Plugin to load empty data in case the quantification is made only on the
  *  identification data. It reads the parameters file of the plugin to load
  *  identifications and create an xLoad structure with the name of all the files
  *  specified. The raw part of xLoad  will never be used.
@@ -135,7 +135,7 @@ public class loadDummyRaw implements rawData_loadPlugin {
     /**
      * Put in this String the name of your plugin.
      */
-    private final static String name = "loadFakeRaw";
+    private final static String name = "loadEmptyRawData";
     /**
      * The version of the plugin goes here.
      */
@@ -147,7 +147,7 @@ public class loadDummyRaw implements rawData_loadPlugin {
     /**
      * A string with the description of the plugin.
      */
-    private final static String description = "This is a plugin to load fake raw data when the quantification is made" +
+    private final static String description = "This is a plugin to load empty raw data when the quantification is made" +
             " only with the identification data. It use the name of the identification file specified in a parameters file" +
             " to create an almost empty xLoad structure ";
 }

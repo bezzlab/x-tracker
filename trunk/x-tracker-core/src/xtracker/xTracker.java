@@ -1,7 +1,9 @@
 package xtracker;
 
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -16,6 +18,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
 /**
  * xTracker is the main class of the whole project. 
  * It contains the main and it manages plugins and data structures.
@@ -113,163 +117,207 @@ public class xTracker {
             case 1 :    {
                         // Four parameters are ok go on!
                         // First check that all plugins can be loaded and are of the right type.
-                        System.out.print("\nChecking plugins in "  + args[0] +" file...\n");
-                        
-                        //The xml document containing plugins and parameter files.
-                        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-                        dbf.setNamespaceAware(true);
-                         try{ 
-                                DocumentBuilder db = dbf.newDocumentBuilder();
-                                Document doc = db.parse(args[0]);
+                        if((args[0].indexOf(".xtc") >= 0)||(args[0].indexOf(".xml") >= 0)){
+                            System.out.print("\nChecking plugins in "  + args[0] +" file...\n");
 
-                                // create a SchemaFactory
-                                SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                            //The xml document containing plugins and parameter files.
+                            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+                            dbf.setNamespaceAware(true);
+                             try{
+                                    DocumentBuilder db = dbf.newDocumentBuilder();
+                                    Document doc = db.parse(args[0]);
 
-                                
-                                doc.getDocumentElement().normalize();
+                                    // create a SchemaFactory
+                                    SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
-                                Node nodeLst = doc.getElementsByTagName("xTrackerPipeline").item(0);
 
-                                String schemaLocation="";
+                                    doc.getDocumentElement().normalize();
 
-                                if(nodeLst.getAttributes().getNamedItem("xsi:schemaLocation") != null){
-                                    schemaLocation=nodeLst.getAttributes().getNamedItem("xsi:schemaLocation").getTextContent();
-                                }
-                                else {
-                                    if(nodeLst.getAttributes().getNamedItem("xsi:noNamespaceSchemaLocation")!= null){
-                                    schemaLocation=nodeLst.getAttributes().getNamedItem("xsi:noNamespaceSchemaLocation").getTextContent();
+                                    Node nodeLst = doc.getElementsByTagName("xTrackerPipeline").item(0);
+
+                                    String schemaLocation="";
+
+                                    if(nodeLst.getAttributes().getNamedItem("xsi:schemaLocation") != null){
+                                        schemaLocation=nodeLst.getAttributes().getNamedItem("xsi:schemaLocation").getTextContent();
                                     }
-                                    else{
-                                        System.out.println("ERROR: No .xsd schema is provided for " + args[0] );
-                                        System.exit(1);
-                                    }
-                                }
-
-                              
-                                
-                                // load the xtracker WXS schema
-                                Source schemaFile = new StreamSource(new File(schemaLocation));
-                                Schema schema = factory.newSchema(schemaFile);
-
-                                // create a Validator instance
-                                Validator validator = schema.newValidator();
-
-                                try {
-                                    validator.validate(new DOMSource(doc));
-                                } catch (SAXException e) {
-                                    // instance document is invalid!
-                                    System.out.println("\n\nERRROR - could not validate the input file " + args[0]+"!");
-                                    System.out.print(e);
-                                    System.exit(1);
-                                }
-                               
-
-
-
-
-                                nodeLst = doc.getElementsByTagName("rawdata_loadplugin").item(0);
-                                //The first plugin is the loadplugin
-                                plugins[0]=nodeLst.getAttributes().item(0).getTextContent();
-                                pluginInputs[0]=nodeLst.getTextContent();
-                                nodeLst = doc.getElementsByTagName("identdata_loadplugin").item(0);
-                                //The first plugin is the loadplugin
-                                plugins[1]=nodeLst.getAttributes().item(0).getTextContent();
-                                pluginInputs[1]=nodeLst.getTextContent();
-
-                                nodeLst = doc.getElementsByTagName("peakselplugin").item(0);
-                                //The second plugin is the peakselplugin
-                                plugins[2]=nodeLst.getAttributes().item(0).getTextContent();
-                                pluginInputs[2]=nodeLst.getTextContent();
-                                nodeLst = doc.getElementsByTagName("quantplugin").item(0);
-                                //The first plugin is the loadplugin
-                                plugins[3]=nodeLst.getAttributes().item(0).getTextContent();
-                                pluginInputs[3]=nodeLst.getTextContent();
-                                nodeLst = doc.getElementsByTagName("outplugin").item(0);
-                                //The first plugin is the loadplugin
-                                plugins[4]=nodeLst.getAttributes().item(0).getTextContent();
-                                pluginInputs[4]=nodeLst.getTextContent();
-                                
-                                //ok let's do some cleaning up!
-                                db=null;
-                                doc=null;
-                                nodeLst=null;
-                         }
-                         catch(Exception e){System.out.println("Exception while reading " + args[0]+ "!\n" + e);}
-                        for(int i=0;i<plugins.length;i++){
-                               String fileName = plugins[i]; //the filename .jar in input
-                               String className ="";    //the classname should be like the filename without the .jar
-                               String pluginType=""; //the type of the plugin
-                               int index=-1; //a counter to check if it is a jar or not
-                               if ((index = fileName.indexOf(".jar")) >= 0){
-                                    className = fileName.substring(0, index);
-                                
-                                    try
-                                    {
-                                        pluginLoader = new pluginClassLoader(pluginPath+fileName);
-                                    }
-                                    catch (Exception e){
-                                        System.err.println("\n\nERROR: ClassLoader for \""+pluginPath+fileName+"\" could not be created");
-                                        System.out.print(e);
-                                        System.exit(1);
-                                    }
-                                    
-                                    // Loading the class
-                                    try
-                                    {
-                                     plugin = (pluginInterface)pluginLoader.findClass("xtracker."+className).newInstance();
-                                    
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        System.err.println("ERROR: Class \""+className+"\" could not be loaded");
-                                        
-                                        System.out.print(e);
-                                        
-                                        System.out.println("\n\n    Common reasons:");
-                                        System.out.println("     - Is the plugin ("+fileName+") located in the \"Plugins\" folder?");
-                                        System.out.println("     - Does the plugin contain the \"package xtracker;\" statement?");
-                                        System.out.println("     - Are you running xTracker from the program main folder?");
-                                        plugin = null;
-                                        System.exit(1);
-                                    }
-                                    
-                                    if(plugin != null){
-                                        pluginType = plugin.getType();
-                                        if(pluginType.equals(pluginTypes[i])){
-                                        //Ok Plugin has correct type 
-                                        if((! pluginInputs[i].equals("")) && (new File(pluginInputs[i]).exists())){
-                                            //OK the parameter file does exist
+                                    else {
+                                        if(nodeLst.getAttributes().getNamedItem("xsi:noNamespaceSchemaLocation")!= null){
+                                        schemaLocation=nodeLst.getAttributes().getNamedItem("xsi:noNamespaceSchemaLocation").getTextContent();
                                         }
                                         else{
-                                            if(! pluginInputs[i].equals("")){
-                                                   System.err.println("\n\nERROR: File \""+pluginInputs[i]+"\" input of " + "\"" + plugins[i] + "\" could not be found!");
-                                                   System.exit(1);
-                                            }
-                                        
-                                        }
-                                       
-
-                                        }
-                                        else{
-                                           //Nope Plugin is not of correct type 
-                                            System.out.println("\nError: " + plugin.getName() + " ("+ fileName+ ") is a \"" + pluginType + "\" but \"" +  pluginTypes[i] +"\" is needed instead!");
+                                            System.out.println("ERROR: No .xsd schema is provided for " + args[0] );
                                             System.exit(1);
                                         }
-                                        plugin=null;
-                                       
                                     }
-                               }
-                        }
-                        //Call the garbage collector
-                        System.gc();
-                        System.out.print("done!\n");
-                        break;
+
+
+
+                                    // load the xtracker WXS schema
+                                    Source schemaFile = new StreamSource(new File(schemaLocation));
+                                    Schema schema = factory.newSchema(schemaFile);
+
+                                    // create a Validator instance
+                                    Validator validator = schema.newValidator();
+
+                                    try {
+                                        validator.validate(new DOMSource(doc));
+                                    } catch (SAXException e) {
+                                        // instance document is invalid!
+                                        System.out.println("\n\nERRROR - could not validate the input file " + args[0]+"!");
+                                        System.out.print(e);
+                                        System.exit(1);
+                                    }
+
+
+
+
+
+                                    nodeLst = doc.getElementsByTagName("rawdata_loadplugin").item(0);
+                                    //The first plugin is the loadplugin
+                                    plugins[0]=nodeLst.getAttributes().item(0).getTextContent();
+                                    pluginInputs[0]=nodeLst.getTextContent();
+                                    nodeLst = doc.getElementsByTagName("identdata_loadplugin").item(0);
+                                    //The first plugin is the loadplugin
+                                    plugins[1]=nodeLst.getAttributes().item(0).getTextContent();
+                                    pluginInputs[1]=nodeLst.getTextContent();
+
+                                    nodeLst = doc.getElementsByTagName("peakselplugin").item(0);
+                                    //The second plugin is the peakselplugin
+                                    plugins[2]=nodeLst.getAttributes().item(0).getTextContent();
+                                    pluginInputs[2]=nodeLst.getTextContent();
+                                    nodeLst = doc.getElementsByTagName("quantplugin").item(0);
+                                    //The first plugin is the loadplugin
+                                    plugins[3]=nodeLst.getAttributes().item(0).getTextContent();
+                                    pluginInputs[3]=nodeLst.getTextContent();
+                                    nodeLst = doc.getElementsByTagName("outplugin").item(0);
+                                    //The first plugin is the loadplugin
+                                    plugins[4]=nodeLst.getAttributes().item(0).getTextContent();
+                                    pluginInputs[4]=nodeLst.getTextContent();
+
+                                    //ok let's do some cleaning up!
+                                    db=null;
+                                    doc=null;
+                                    nodeLst=null;
+                             }
+                             catch(Exception e){System.out.println("Exception while reading " + args[0]+ "!\n" + e);}
+                            for(int i=0;i<plugins.length;i++){
+                                   String fileName = plugins[i]; //the filename .jar in input
+                                   String className ="";    //the classname should be like the filename without the .jar
+                                   String pluginType=""; //the type of the plugin
+                                   int index=-1; //a counter to check if it is a jar or not
+                                   if ((index = fileName.indexOf(".jar")) >= 0){
+                                        className = fileName.substring(0, index);
+
+                                        try
+                                        {
+                                            pluginLoader = new pluginClassLoader(pluginPath+fileName);
+                                        }
+                                        catch (Exception e){
+                                            System.err.println("\n\nERROR: ClassLoader for \""+pluginPath+fileName+"\" could not be created");
+                                            System.out.print(e);
+                                            System.exit(1);
+                                        }
+
+                                        // Loading the class
+                                        try
+                                        {
+                                         plugin = (pluginInterface)pluginLoader.findClass("xtracker."+className).newInstance();
+
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            System.err.println("ERROR: Class \""+className+"\" could not be loaded");
+
+                                            System.out.print(e);
+
+                                            System.out.println("\n\n    Common reasons:");
+                                            System.out.println("     - Is the plugin ("+fileName+") located in the \"Plugins\" folder?");
+                                            System.out.println("     - Does the plugin contain the \"package xtracker;\" statement?");
+                                            System.out.println("     - Are you running xTracker from the program main folder?");
+                                            plugin = null;
+                                            System.exit(1);
+                                        }
+
+                                        if(plugin != null){
+                                            pluginType = plugin.getType();
+                                            if(pluginType.equals(pluginTypes[i])){
+                                            //Ok Plugin has correct type
+                                            if((! pluginInputs[i].equals("")) && (new File(pluginInputs[i]).exists())){
+                                                //OK the parameter file does exist
+                                            }
+                                            else{
+                                                if(! pluginInputs[i].equals("")){
+                                                       System.err.println("\n\nERROR: File \""+pluginInputs[i]+"\" input of " + "\"" + plugins[i] + "\" could not be found!");
+                                                       System.exit(1);
+                                                }
+
+                                            }
+
+
+                                            }
+                                            else{
+                                               //Nope Plugin is not of correct type
+                                                System.out.println("\nError: " + plugin.getName() + " ("+ fileName+ ") is a \"" + pluginType + "\" but \"" +  pluginTypes[i] +"\" is needed instead!");
+                                                System.exit(1);
+                                            }
+                                            plugin=null;
+
+                                        }
+                                   }
+                            }
+                            //Call the garbage collector
+                            System.gc();
+                            System.out.print("done!\n");
+                            break;
+                            }
+                            else{
+                                        System.out.println("");
+                                    System.out.println("");
+                                    System.out.println("");
+                                        System.out.println("    **************************************");
+                                        System.out.println("    *****  Welcome to X-Tracker v" + version + " *****");
+                                        System.out.println("    **************************************");
+                                    System.out.println("");
+                                    System.out.println("");
+                                    System.out.println("     Usage: java -jar xTracker.jar configuration_file.xtc");
+                                    System.out.println("");
+                                    System.out.println("           where configuration_file.xtc is an XML file specifying the five\n\t   plugins and their parameter files.");
+                                    System.out.println("");
+                                    System.out.println("           alternatively:");
+                                    System.out.println("                          java -jar xTracker.jar --pluginInfo plugin.jar");
+                                    System.out.println("");
+                                    System.out.println("           can be used to display information on plugin.jar plugin.");
+                                    System.out.println("");
+
+                                    //Let's list now possible plugins (i.e. plugins that are in the folder Plugins\
+                                    File f = new File(pluginPath);  //plugins
+                                    File files[] = f.listFiles();   //array of available plugins
+
+                                    System.out.println("\n\tThe following plugins are currently available (in \"Plugins\" folder):");
+
+                                    for(int i=0;i<files.length;i++){
+                                        if(files[i].isFile() && (files[i].getName().indexOf(".jar"))>0){
+                                            System.out.println("\t - " + files[i].getName());
+
+                                        }
+                                    }
+                                   //collecting some garbage
+                                   plugin=null;
+                                   f=null;
+                                   files=null;
+                                   r.gc();
+                                   //let's print the index.html documentation file
+                                   printHtmlHelp("./htmls/");
+                                   System.exit(0);
+
+                                break;
+                            }
                         }
             case 2 :    {
                         // Two parameters are ok only if the first is "--pluginInfo" and the second a valid plugin 
                        //  name.
                        
-                           if(args[0].equals("--pluginInfo")){
+                           if(args[0].equals("--pluginInfo") && args.length==2){
                                String fileName = args[1]; //the filename .jar in input
                                String className ="";    //the classname should be like the filename without the .jar
                                String pluginVersion=""; //the version of the plugin
@@ -338,6 +386,9 @@ public class xTracker {
                                     System.out.println("    The plugin specified (" + pluginPath + fileName + ") is not a valid plugin." );
                                     System.exit(1);
                                }
+
+                           printHtmlHelp("./htmls/");
+
                            //collecting some garbage     
                            plugin=null;
                            pluginName=null;
@@ -365,7 +416,8 @@ public class xTracker {
                             System.out.println("");
                             System.out.println("           can be used to display information on plugin.jar plugin.");
                             System.out.println("");
-                       
+
+
                             //Let's list now possible plugins (i.e. plugins that are in the folder Plugins\
                             File f = new File(pluginPath);  //plugins
                             File files[] = f.listFiles();   //array of available plugins
@@ -384,6 +436,8 @@ public class xTracker {
                            files=null;
                            r.gc();
                        }
+                       //Let's print the index.html help file
+                       printHtmlHelp("./htmls/");
                        System.exit(0);
                        break;    
                        }
@@ -420,7 +474,8 @@ public class xTracker {
         
                                 }
                             }
- 
+                           //Let's print the index.html help file
+                           printHtmlHelp("./htmls/");
                            //collecting some garbage!
                            plugin=null; 
                            f=null;
@@ -715,11 +770,58 @@ public class xTracker {
     }
 
     /**
+     * This method dynamically creates the index file with the description of
+     * the parameters of all plugins.
+     * @param descPath the path containing all the .html parameter file descriptions.
+     */
+    public static void printHtmlHelp(String descPath){
+
+         Calendar cal = Calendar.getInstance();
+         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+        String htmlPage="";
+        htmlPage+="<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n<html>\n<head>\n<title>X-Tracker's Plugin Description Page</title>\n</head>";
+        htmlPage+="\n<body style=\"color: rgb(0, 0, 0);\" alink=\"#ee0000\" link=\"#0000ee\" vlink=\"#551a8b\">\n<table style=\"text-align: left; width: 100%; height: 100%;\">\n";
+        htmlPage+="\n<tbody>\n<tr>\n\t<td style=\"width: 30px; background-color: rgb(51, 102, 255);\"><img alt=\"X-Tracker's parameters\" src=\"img/name.png\"></td>\n\t";
+        htmlPage+="<td style=\"width: 7px;\">&nbsp;</td>\n\t<td style=\"vertical-align: top;\">\n\t\t";
+        htmlPage+="<h1>This page contains information on all available X-Tracker plugins</h1>\n\t\t";
+        htmlPage+="<div align=\"center\"><h3>[Page automatically generated by X-Tracker v." + getVersion() + " on " + sdf.format(cal.getTime())+ "]</h3></div><br>\n\t\t";
+        htmlPage+="X-Tracker is a new piece of software allowing Mass Spectrometry-based protein quantitation. Through an abstraction of the main steps involved in quantitation, X-Tracker is able to support quantitation by means of several current protocols, both at MS or Tandem MS level, and provide a flexible, platform-independent and easy-to-use quantitation environment.<br><br>\n\t\t";
+        htmlPage+="X-Tracker has been developed in the Bioinformatics Group of Cranfield University, UK.<br><br><br><h2>Plugin parameter pages</h2>\n\t\t";
+
+        //Let's list now possible plugin descriptions
+        File f = new File(descPath);  //plugins
+        File files[] = f.listFiles();   //array of available plugins
+        for(int i=0;i<files.length;i++){
+           if(files[i].isFile() && (files[i].getName().indexOf(".html"))>0 && (files[i].getName().indexOf("index.html"))==-1){
+               htmlPage+="<a href=\""+ files[i].getName() +"\" >"+files[i].getName()+"</a><br>\n\t\t";
+            }
+        }
+
+        htmlPage+="\n\t\t";
+        htmlPage+="\n\t\t</td>\n\t\t<td style=\"text-align: right; height: 100%; width: 39%; vertical-align: top;\"><img style=\"width: 504px; height: 378px;\" alt=\"xTracker\" src=\"img/XtrackerLogo.png\"></td>\n</tr>\n</tbody>\n</table>\n</body>\n</html>";
+
+
+        try{
+            // Create file
+            FileWriter fstream = new FileWriter(descPath +"index.html");
+            BufferedWriter out = new BufferedWriter(fstream);
+            out.write(htmlPage);
+            //Close the output stream
+            out.close();
+        }catch (Exception e){//Catch exception if any
+            System.err.println("Error, couldn't write index.html file: " + e.getMessage());
+        }
+        System.out.println("Descriptions of plugin parameters can be found at "+ descPath + "index.html");
+  }
+
+
+    /**
      * Return X-Tracker version number
      * @return version as a string
     */
 
-    public String getVersion()
+    public static String getVersion()
     {
         return version;
     }

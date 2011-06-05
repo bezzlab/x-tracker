@@ -789,14 +789,28 @@ public class xTracker {
         htmlPage+="X-Tracker is a new piece of software allowing Mass Spectrometry-based protein quantitation. Through an abstraction of the main steps involved in quantitation, X-Tracker is able to support quantitation by means of several current protocols, both at MS or Tandem MS level, and provide a flexible, platform-independent and easy-to-use quantitation environment.<br><br>\n\t\t";
         htmlPage+="X-Tracker has been developed in the Bioinformatics Group of Cranfield University, UK.<br><br><br><h2>Plugin parameter pages</h2>\n\t\t";
 
+        htmlPage+="\t<table><tr><th>File</th><th>Name</th><th>Type</th><th>Description</th></tr>";
         //Let's list now possible plugin descriptions
         File f = new File(descPath);  //plugins
         File files[] = f.listFiles();   //array of available plugins
         for(int i=0;i<files.length;i++){
            if(files[i].isFile() && (files[i].getName().indexOf(".html"))>0 && (files[i].getName().indexOf("index.html"))==-1){
-               htmlPage+="<a href=\""+ files[i].getName() +"\" >"+files[i].getName()+"</a><br>\n\t\t";
+               String pN=files[i].getName().substring(0, files[i].getName().indexOf(".html"));
+               String pluginData[]=getPluginData(pN);
+               if(pluginData[0].length()==0){
+                    pluginData[0]="Not available.";
+                    pluginData[1]="Not available.";
+                    pluginData[2]="Not available.";
+               }
+               else{
+                   if(pluginData[2].length()>80){
+                        pluginData[2]=pluginData[2].substring(0, 80) + "...";
+                   }
+               }
+               htmlPage+="<tr><td><a href=\""+ files[i].getName() +"\" >"+files[i].getName()+"</a><br></td><td>"+pluginData[0] + "</td><td>"+pluginData[1] + "</td><td>"+pluginData[2] + "</td></tr>\n\t\t";
             }
         }
+        htmlPage+="\n\t\t\t</table>";
 
         htmlPage+="\n\t\t";
         htmlPage+="\n\t\t</td>\n\t\t<td style=\"text-align: right; height: 100%; width: 39%; vertical-align: top;\"><img style=\"width: 504px; height: 378px;\" alt=\"xTracker\" src=\"img/XtrackerLogo.png\"></td>\n</tr>\n</tbody>\n</table>\n</body>\n</html>";
@@ -816,6 +830,47 @@ public class xTracker {
   }
 
 
+    public static String[] getPluginData(String pluginName){
+       String[] retVal={"","",""};
+       pluginName+=".jar";
+       String pluginPath="Plugins/";
+       File pFile= new File(pluginPath+pluginName);
+       //if the plugin exists then let's get some information about it otherwise just return empty values
+       if(pFile.exists()){
+               pluginInterface plugin=null; //the plugin to load
+               String className ="";    //the classname should be like the filename without the .jar
+               String pluginType=""; //the type of the plugin
+               int index=-1; //a counter to check if it is a jar or not
+               if ((index = pluginName.indexOf(".jar")) >= 0){
+                    className = pluginName.substring(0, index);
+
+                    try
+                    {
+                        pluginLoader = new pluginClassLoader(pluginPath+pluginName);
+                    }
+                    catch (Exception e){
+
+                    }
+
+                    // Loading the class
+                    try
+                    {
+                     plugin = (pluginInterface)pluginLoader.findClass("xtracker."+className).newInstance();
+                     retVal[0]=plugin.getType();
+                     retVal[1]=plugin.getName() + " (v." + plugin.getVersion() + ")";
+                     retVal[2]=plugin.getDescription();
+
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+           }
+        }
+
+        return retVal;
+
+    }
     /**
      * Return X-Tracker version number
      * @return version as a string

@@ -307,7 +307,7 @@ public class xTracker {
                                    files=null;
                                    r.gc();
                                    //let's print the index.html documentation file
-                                   printHtmlHelp("./htmls/");
+                                   printHtmlHelp("./Plugins/");
                                    System.exit(0);
 
                                 break;
@@ -387,7 +387,7 @@ public class xTracker {
                                     System.exit(1);
                                }
 
-                           printHtmlHelp("./htmls/");
+                           printHtmlHelp("./Plugins/");
 
                            //collecting some garbage     
                            plugin=null;
@@ -437,7 +437,7 @@ public class xTracker {
                            r.gc();
                        }
                        //Let's print the index.html help file
-                       printHtmlHelp("./htmls/");
+                       printHtmlHelp("./Plugins/");
                        System.exit(0);
                        break;    
                        }
@@ -475,7 +475,7 @@ public class xTracker {
                                 }
                             }
                            //Let's print the index.html help file
-                           printHtmlHelp("./htmls/");
+                           printHtmlHelp("./Plugins/");
                            //collecting some garbage!
                            plugin=null; 
                            f=null;
@@ -776,7 +776,7 @@ public class xTracker {
      */
     public static void printHtmlHelp(String descPath){
 
-         String indexPath="Documentation/";
+         String indexPath="Documentation/pluginInfo.html";
          Calendar cal = Calendar.getInstance();
          SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
@@ -815,20 +815,20 @@ public class xTracker {
         htmlPage+="\n\t\t\t</table>";
 
         htmlPage+="\n\t\t";
-        htmlPage+="\n\t\t</td>\n</tr>\n</tbody>\n</table>\n</body>\n</html>";
+        htmlPage+="\n\t\t<br><br></td>\n</tr>\n</tbody>\n</table>\n</body>\n</html>";
 
 
         try{
             // Create file
-            FileWriter fstream = new FileWriter(indexPath +"pluginInformation.html");
+            FileWriter fstream = new FileWriter(indexPath);
             BufferedWriter out = new BufferedWriter(fstream);
             out.write(htmlPage);
             //Close the output stream
             out.close();
         }catch (Exception e){//Catch exception if any
-            System.err.println("Error, couldn't write index.html file: " + e.getMessage());
+            System.err.println("Error, couldn't write pluginInfo.html file: " + e.getMessage());
         }
-        System.out.println("Descriptions of plugin parameters can be found at "+ descPath + "index.html");
+        System.out.println("Descriptions of plugin parameters can be found at "+ indexPath );
   }
 
 /**

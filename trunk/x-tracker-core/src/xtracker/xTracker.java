@@ -776,10 +776,12 @@ public class xTracker {
      */
     public static void printHtmlHelp(String descPath){
 
+         String indexPath="Documentation/";
          Calendar cal = Calendar.getInstance();
          SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
         String htmlPage="";
+
         htmlPage+="<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n<html>\n<head>\n<title>X-Tracker's Plugin Description Page</title>\n</head>";
         htmlPage+="\n<body style=\"color: rgb(0, 0, 0);\" alink=\"#ee0000\" link=\"#0000ee\" vlink=\"#551a8b\">\n<table style=\"text-align: left; width: 100%; height: 100%;\">\n";
         htmlPage+="\n<tbody>\n<tr>\n\t<td style=\"width: 30px; background-color: rgb(51, 102, 255); vertical-align: top;\"><img alt=\"X-Tracker's parameters\" src=\"img/name.png\"></td>\n\t";
@@ -807,7 +809,7 @@ public class xTracker {
                         pluginData[2]=pluginData[2].substring(0, 60) + "...";
                    }
                }
-               htmlPage+="<tr><td><a href=\""+ files[i].getName() +"\" >"+files[i].getName()+"</a><br></td><td>"+pluginData[1] + "</td><td>"+pluginData[0] + "</td><td>"+pluginData[2] + "</td></tr>\n\t\t";
+               htmlPage+="<tr><td><a href=\"..\\Plugins\\"+ files[i].getName() +"\" >"+files[i].getName()+"</a><br></td><td>"+pluginData[1] + "</td><td>"+pluginData[0] + "</td><td>"+pluginData[2] + "</td></tr>\n\t\t";
             }
         }
         htmlPage+="\n\t\t\t</table>";
@@ -818,7 +820,7 @@ public class xTracker {
 
         try{
             // Create file
-            FileWriter fstream = new FileWriter(descPath +"index.html");
+            FileWriter fstream = new FileWriter(indexPath +"pluginInformation.html");
             BufferedWriter out = new BufferedWriter(fstream);
             out.write(htmlPage);
             //Close the output stream

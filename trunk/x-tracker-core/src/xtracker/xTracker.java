@@ -56,14 +56,14 @@ public class xTracker {
      *              outplugin
      *          the attribute "filename" will point to the .jar plugin (which has to be put in the Plugins folder)
      *          and the parameter file is the content of the tag
-     *          (e.g. <peakselplugin filename="plugin2.jar">15n14n.xml</peakselplugin>).
+     *          (e.g. <peakselplugin filename="plugin2.jar">15n14n.xtp</peakselplugin>).
      *      -->
      *
-     *          <rawdata_loadplugin filename="loadrawdata.jar">loadRawParams.xml</rawdata_loadplugin>
-     *          <identdata_loadplugin filename="loadidentdata.jar">loadIdentParams.xml</identdata_loadplugin>
-     *          <peakselplugin filename="metLabeling.jar">15n14n.xml</peakselplugin>
+     *          <rawdata_loadplugin filename="loadrawdata.jar">loadRawParams.xtp</rawdata_loadplugin>
+     *          <identdata_loadplugin filename="loadidentdata.jar">loadIdentParams.xtp</identdata_loadplugin>
+     *          <peakselplugin filename="metLabeling.jar">15n14n.xtp</peakselplugin>
      *          <quantplugin filename="LcMsAreasSimpson.jar"></quantplugin>
-     *          <outplugin filename="displayResults.jar">displayParam.xml</outplugin>
+     *          <outplugin filename="displayResults.jar">displayParam.xtp</outplugin>
 
      *  </xTrackerPipeline>
    * }

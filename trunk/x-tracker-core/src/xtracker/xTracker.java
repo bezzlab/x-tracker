@@ -830,7 +830,7 @@ public class xTracker {
         }
         System.out.println("Descriptions of plugin parameters can be found at "+ indexPath );
   }
-
+    
 /**
  * Given a plugin name in input, this plugin retrieves information about it like type, name, description. 
  * @param pluginName the plugin name (without .jar extension)

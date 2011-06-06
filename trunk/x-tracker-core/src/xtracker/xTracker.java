@@ -829,7 +829,14 @@ public class xTracker {
         System.out.println("Descriptions of plugin parameters can be found at "+ descPath + "index.html");
   }
 
-
+/**
+ * Given a plugin name in input, this plugin retrieves information about it like type, name, description. 
+ * @param pluginName the plugin name (without .jar extension)
+ * @return a String array where:
+ * retVal[0] is pluginType
+ * retVal[1] is pluginName and version in parenthesis ex. myPlugin (v.1.00)
+ * retVal[2] a short plugin description (max 60 chars).
+ */
     public static String[] getPluginData(String pluginName){
        String[] retVal={"","",""};
        pluginName+=".jar";
@@ -839,7 +846,6 @@ public class xTracker {
        if(pFile.exists()){
                pluginInterface plugin=null; //the plugin to load
                String className ="";    //the classname should be like the filename without the .jar
-               String pluginType=""; //the type of the plugin
                int index=-1; //a counter to check if it is a jar or not
                if ((index = pluginName.indexOf(".jar")) >= 0){
                     className = pluginName.substring(0, index);

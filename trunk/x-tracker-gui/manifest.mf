@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-SplashScreen-Image: xtrackergui/gui/images/xtracker-splash.png
-X-COMMENT: Main-Class will be added automatically by build
-

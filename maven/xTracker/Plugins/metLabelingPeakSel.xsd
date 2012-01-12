@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+
+
+  <xs:simpleType  name="massType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="monoisotopic"/>
+      <xs:enumeration value="average" />
+    </xs:restriction>
+  </xs:simpleType>
+
+
+  <xs:simpleType name="incRateType">
+    <xs:restriction base="xs:decimal">
+      <xs:maxInclusive value="1.0"/>
+      <xs:minExclusive value="0.0" />
+    </xs:restriction>
+  </xs:simpleType>
+
+
+  <xs:simpleType name="RTwinType">
+    <xs:restriction base="xs:decimal">
+      <xs:minExclusive value="0.0" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="mzTolType">
+    <xs:restriction base="xs:decimal">
+      <xs:minInclusive value="0.0" />
+    </xs:restriction>
+  </xs:simpleType>
+
+
+  <xs:simpleType name="massValType">
+    <xs:restriction base="xs:decimal">
+      <xs:minInclusive value="0.0" />
+    </xs:restriction>
+  </xs:simpleType>
+
+
+
+  <xs:simpleType name="aminoType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="A"/>
+      <xs:enumeration value="R"/>
+	  <xs:enumeration value="N"/>
+	  <xs:enumeration value="D"/>
+	  <xs:enumeration value="C"/>
+	  <xs:enumeration value="E"/>
+	  <xs:enumeration value="Q"/>
+	  <xs:enumeration value="G"/>
+	  <xs:enumeration value="H"/>
+	  <xs:enumeration value="I"/>
+	  <xs:enumeration value="L"/>
+	  <xs:enumeration value="K"/>
+	  <xs:enumeration value="M"/>
+	  <xs:enumeration value="F"/>
+	  <xs:enumeration value="P"/>
+	  <xs:enumeration value="S"/>
+	  <xs:enumeration value="T"/>
+	  <xs:enumeration value="W"/>
+	  <xs:enumeration value="Y"/>
+	  <xs:enumeration value="V"/>	  
+    </xs:restriction>
+  </xs:simpleType>
+
+
+
+<xs:complexType name="paramType">
+  <xs:all>
+   <xs:element name="mass_type" type="massType"/>
+	
+	<xs:element name="incorporation_rate" type="incRateType"/>
+	
+	<xs:element name="RT_window" type="RTwinType"/>
+	
+	<xs:element name="mz_tolerance" type="mzTolType"/>
+	
+	<xs:element name="C_term" type="massValType"/>
+	
+	<xs:element name="N_term" type="massValType"/>
+	<xs:element name="aminoShifts">
+	<xs:complexType>
+	<xs:sequence>	
+	<xs:element name="aminoacid" maxOccurs="20">
+		<xs:complexType>
+  		<xs:simpleContent>
+   			<xs:extension base="massValType">
+    			<xs:attribute name="value" use="required" type="aminoType" />
+   			</xs:extension>
+  		</xs:simpleContent>
+	</xs:complexType>
+	</xs:element>	
+    </xs:sequence>
+	</xs:complexType>
+	</xs:element>
+	
+  </xs:all>
+</xs:complexType>
+
+
+<xs:element name="param" type="paramType"/>
+
+</xs:schema>

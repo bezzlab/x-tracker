@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+This is the LoadMzXML file parameters file. 
+It specifies a list of raw data files together with their identification file.
+-->
+<param xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Plugins\loadRawMGF.xsd">
+	
+	<datafile>example/itraqSample.mgf</datafile>
+	
+	
+</param>
+

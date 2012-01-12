@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+
+
+<xs:simpleType name="mzThreshType">
+    <xs:restriction base="xs:decimal">
+      <xs:minInclusive value="0.0" />
+    </xs:restriction>
+ </xs:simpleType>
+
+				
+				
+ 
+<xs:complexType name="repIonsType">
+	<xs:sequence>	
+		<xs:element name="reporter" maxOccurs="unbounded">
+		<xs:complexType>
+
+				<xs:attribute name="mz" use="required" type="mzThreshType" />
+				<xs:attribute name="label" use="required" type="xs:string" />
+	
+			</xs:complexType>		  
+		</xs:element>
+		
+	</xs:sequence>	
+	</xs:complexType>
+
+
+
+<xs:complexType name="paramType">
+  <xs:all>
+   
+   <xs:element name="settings">
+	<xs:complexType>
+	<xs:sequence>	
+		<xs:element name="mzLowerThreshold" type="mzThreshType" />
+		<xs:element name="mzUpperThreshold" type="mzThreshType" />
+	</xs:sequence>	
+	</xs:complexType>
+	</xs:element>
+   
+   <xs:element name="reporterIons" type="repIonsType" />
+	
+	
+	
+	
+	
+	
+		
+	
+  </xs:all>
+</xs:complexType>
+
+
+
+<xs:element name="iTraq" type="paramType"/>
+
+
+</xs:schema>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<iTraq xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Plugins\iTraqNplexPeakSel.xsd">
+<settings>
+    <mzLowerThreshold>0.05</mzLowerThreshold>
+    <mzUpperThreshold>0.05</mzUpperThreshold>
+</settings>
+
+<reporterIons>
+    <reporter label="Label 114" mz="114.1" />
+    <reporter label="Label 115" mz="115.1" />
+    <reporter label="Label 116" mz="116.1" />
+    <reporter label="Label 117" mz="117.1" />
+</reporterIons>
+</iTraq>

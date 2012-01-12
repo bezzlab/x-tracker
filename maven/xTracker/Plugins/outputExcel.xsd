@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:simpleType name="outFile">
+  <xs:restriction base="xs:string">
+  		<xs:pattern value="[\w|\W|]*.xls" />
+  </xs:restriction>
+</xs:simpleType>
+
+  
+
+
+
+
+
+<xs:element name="param">
+<xs:complexType>
+	<xs:sequence>	
+	<xs:element name="fileName" minOccurs="1" maxOccurs="1">
+		<xs:complexType>
+  		<xs:simpleContent>
+   			<xs:extension base="outFile" />
+  		</xs:simpleContent>
+	</xs:complexType>
+	</xs:element>	
+    </xs:sequence>
+	</xs:complexType>
+
+</xs:element>
+
+
+
+</xs:schema>

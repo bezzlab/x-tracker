@@ -52,6 +52,8 @@ public class metLabelingPeakSel implements peakSelPlugin {
 
         int totalAdded = 0;
         int addedCounter = 0;
+        
+        System.out.println("Loading " + getName() + " plugin ...");
 
         //First open the .xml file and retrieve mass shifts.
         massShifts = loadParams(paramFile);

@@ -42,6 +42,7 @@ public class loadRawMGF implements rawData_loadPlugin {
         String rawDataFile = "";
         Pattern pattern;
         //let's load files to process
+        System.out.println(paramFile);
         loadParams(paramFile);
 
         //Let's load all raw data files specified in input

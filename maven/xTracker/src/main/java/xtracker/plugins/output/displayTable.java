@@ -30,6 +30,7 @@ public class displayTable implements outPlugin {
      */
     public void start(xQuant InputData, String paramFile) {
         //Let's first load the control_condition in from the xml parameter file.
+        System.out.println("Loading " + getName() + " plugin ...");
         this.loadParams(paramFile);
 
         myTable frame = new myTable(InputData, normalisation);

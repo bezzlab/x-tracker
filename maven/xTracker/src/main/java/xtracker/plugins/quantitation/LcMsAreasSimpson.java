@@ -18,8 +18,6 @@ public class LcMsAreasSimpson implements quantPlugin {
         xCorrespondences myFileCorr = null;
         //The output structure
         xQuant ret = new xQuant();
-        
-        System.out.println("Loading " + getName() + " plugin ...");
 
         //Let's process the peaks belonging to every raw data file
         for (i = 0; i < size; i++) {

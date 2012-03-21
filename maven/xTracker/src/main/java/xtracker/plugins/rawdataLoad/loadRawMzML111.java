@@ -1,8 +1,8 @@
 /*
  * --------------------------------------------------------------------------
- * loadRawMzML110.java
+ * loadRawMzML111.java
  * --------------------------------------------------------------------------
- * Description:       Plugin to load mzML files (Version 1.1)
+ * Description:       Plugin to load mzML files (Versions 1.1.1)
  * Developer:         Faviel Gonzalez
  * Created:           03 February 2012
  * Read our documentation file under our Google SVN repository
@@ -36,7 +36,7 @@ import xtracker.data.xSpectrum;
 
 /**
  *
- * @author Faviel Gonzalez
+ * @author faviel
  */
 public class loadRawMzML111 implements rawData_loadPlugin {
     
@@ -55,40 +55,42 @@ public class loadRawMzML111 implements rawData_loadPlugin {
         
         //... Loading data structure to fill raw data ...//
         xLoad ret = new xLoad();        
-        System.out.println("Loading " + getName() + " plugin ...");
+        System.out.println("");
+        System.out.println("=== PLUGIN: " + getName() + " ===");
         String sDataType = "MS1";
 
         //... Initializing mzML file to read ...//
         String rawDataFile = "";
         
         long heapSize = Runtime.getRuntime().totalMemory();
-        System.out.println("Current heap size " + heapSize/(1024*1024) + " MB  ...");
         long heapMaxSize = Runtime.getRuntime().maxMemory();
-        System.out.println("Max heap size " + heapMaxSize/(1024*1024) + " MB  ...");
         long heapFreeSize = Runtime.getRuntime().freeMemory();
+        System.out.println("Current heap size " + heapSize/(1024*1024) + " MB  ...");        
+        System.out.println("Max heap size " + heapMaxSize/(1024*1024) + " MB  ...");        
         System.out.println("Free memory " + heapFreeSize/(1024*1024) + " MB  ...");                
         
         //... Loading all files included in the .xtp file ...//
         System.out.println("Reading " + paramFile + " file ...");
         this.loadParams(paramFile);        
+        long lTime = System.currentTimeMillis();
         for (int iFiles = 0; iFiles < rawDataFiles.size(); iFiles++)
         {
                 rawDataFile = rawDataFiles.elementAt(iFiles);
                 File xmlFile = new File(rawDataFile);
                         
                 //... Unmarshall data using jzmzML API ...//
-                System.out.println("Unmarshalling starts at " + System.currentTimeMillis());
+                
+                System.out.println("Unmarshalling " + xmlFile + " file");
                 iUnmarshaller = new ArrayList<MzMLUnmarshaller>();
                 MzMLUnmarshaller unmarshaller = new MzMLUnmarshaller(xmlFile);
                 iUnmarshaller.add(unmarshaller);
-                System.out.println("Unmarshalling ends at " + System.currentTimeMillis());                                
+                lTime = System.currentTimeMillis()-lTime;
+                System.out.println("Unmarshalling ends after " + (lTime/1000) + " secs");                                
 
                 //... Creating object for samples ...//
                 CVList cvList = unmarshaller.unmarshalFromXpath("/cvList", CVList.class);              
                 System.out.println("mzML file = " + unmarshaller.getMzMLId());
                 System.out.println("Version = " + unmarshaller.getMzMLVersion());
-                System.out.println("Accession = " + unmarshaller.getMzMLAccession());
-                System.out.println("cvList = " + cvList.getCount());
 
                 //... Calculating number of spectra ...//
                 int iSpectrums = unmarshaller.getObjectCountForXpath("/run/spectrumList/spectrum");
@@ -114,7 +116,7 @@ public class loadRawMzML111 implements rawData_loadPlugin {
                             mslevel = lCVParam.getValue().trim();
                         }
                     }
-                    System.out.println("SpectrumID = " + spectrum.getIndex().longValue() + " with MS level = " + mslevel);
+                    // System.out.println("SpectrumID = " + spectrum.getIndex().longValue() + " with MS level = " + mslevel);
 
                     //... Getting Retention Time (rt) ...//
                     float rt = 0;
@@ -163,9 +165,8 @@ public class loadRawMzML111 implements rawData_loadPlugin {
                             }                            
                             iJ++;
                         }
-                        System.out.println(" Specs = " + iJ);
+                        // System.out.println(" Specs = " + iJ);
                         inputData.addLcMsData(rt, msSpectrum);
-                        // System.out.println("It has read the first spectrum with mz and intensities at a given rt. ");                        
                     }
                     else                                  //... For MS2 Data ...//
                     {                        
@@ -231,11 +232,11 @@ public class loadRawMzML111 implements rawData_loadPlugin {
                 // add the complete dataset to xLoad
                 ret.addDataElem(inputData);                                
 
-                System.out.println("loadMzML Done!");
-                System.out.println("Data size: " + ret.getDataSize());
+                System.out.println("loadMzML OK!");
+                System.out.println("Data size (files) : " + ret.getDataSize());
                 System.out.println("Filename: " + ret.getDataElemAt(iFiles).getFileName());
-                System.out.println("Lc/Ms Datasize: " + ret.getDataElemAt(iFiles).getLcMsDataSize());
-                System.out.println("Ms/Ms Datasize: " + ret.getDataElemAt(iFiles).getLcMsMsDataPointSize());                          
+                System.out.println("LC/MS Datasize: " + ret.getDataElemAt(iFiles).getLcMsDataSize());
+                System.out.println("MS/MS Datasize: " + ret.getDataElemAt(iFiles).getLcMsMsDataPointSize());                          
     
         } //... for ...//
         
@@ -270,7 +271,7 @@ public class loadRawMzML111 implements rawData_loadPlugin {
                     if (item.getNodeName().equals("datafile")) 
                     { 
                         rawDataFiles.addElement(item.getTextContent()); 
-                        System.out.println(item.getTextContent() + " file loaded");
+                        System.out.println(item.getTextContent() + " file loaded OK!");
                     }
                 }
             }

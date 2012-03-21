@@ -13,13 +13,11 @@
 package xtracker.plugins.identificationLoad;
 
 import java.io.File;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
 import java.util.*;
 import xtracker.data.xIdentData;
 import xtracker.data.xLcMsMsData;
@@ -31,23 +29,23 @@ import xtracker.utils.XMLparser;
 
 /**
  *
- * @author Faviel Gonzalez
+ * @author faviel
  */
 
 public class loadMascotIdent111 implements identData_loadPlugin {
 
-    Vector<String> identificationFiles = new Vector<String>();
-    
-    Vector<String> fixedMods = new Vector<String>(); //... Fixed modifications on xtracker config file ...//
-    Vector<Float> fixedModShifts = new Vector<Float>();
+    Vector<String> identificationFiles = new Vector<String>();      //... Ident files on xtracker param file                ...//
+    Vector<String> fixedMods = new Vector<String>();                //... Fixed modifications on xtracker param file        ...//
+    Vector<Float> fixedModShifts = new Vector<Float>();             //... Fixed mod shifts on xtracker param file           ...//
+    float scoreThreshold = 0f;                                      //... Identification threshold on xtracker param file   ...//
     
     Vector<String> mascotVarMods = new Vector<String>(); //... Modification variables from mascot file ...//
     Vector<Float> mascotVarModShifts = new Vector<Float>();    
     Vector<String> mascotFixedMods = new Vector<String>(); 
     Vector<Float> mascotFixedModShifts = new Vector<Float>();
-    Vector<String> fixModResidues = new Vector<String>();
+    Vector<String> mascotFixedModResidues = new Vector<String>();
     
-    float scoreThreshold = 0f;
+    
     private final static String name = "loadMascotIdent111";
     private final static String version = "1.0";
     private final static String description = "This plugin loads Mascot XML files.";    
@@ -56,7 +54,8 @@ public class loadMascotIdent111 implements identData_loadPlugin {
     {
         //... Loading data structure to fill identification data (previously loaded with raw data) ...//
         xLoad ret = inputData;
-        System.out.println("Loading " + getName() + " plugin ...");
+        System.out.println("");
+        System.out.println("=== PLUGIN: " + getName() + " ===");
         
         String inputDataFile = "";                  
         
@@ -64,21 +63,21 @@ public class loadMascotIdent111 implements identData_loadPlugin {
         System.out.println("Reading " + paramFile + " file ...");
         this.loadParams(paramFile);                 
 
-        //... Loading modificiations from mascot XML file ...//
+        //... Loading modifications from mascot XML file ...//
         this.loadMascotMods(identificationFiles.elementAt(0));
-        System.out.println("Mods loaded!");        
+        System.out.println("Modifications loaded OK!");        
         
         //... Print modification variables and residues ...//
         for (int i = 0; i < mascotVarMods.size(); i++) 
         {
             System.out.println("Mascot modification variable, Name=" + mascotVarMods.elementAt(i) + ", Shift=" + mascotVarModShifts.elementAt(i).toString());
         }
-        for (int i = 0; i < fixModResidues.size(); i++) 
+        for (int i = 0; i < mascotFixedModResidues.size(); i++) 
         {
-            System.out.println("Mascot fixed variable, Residue=(" + fixModResidues.elementAt(i) + "), Name=" + mascotFixedMods.elementAt(i) + ", Shift=" + mascotFixedModShifts.elementAt(i).toString());
+            System.out.println("Mascot fixed variable, Residue=(" + mascotFixedModResidues.elementAt(i) + "), Name=" + mascotFixedMods.elementAt(i) + ", Shift=" + mascotFixedModShifts.elementAt(i).toString());
         }        
         
-        //... Once we have data on the arrays, we need to update the xLoad data structure ...//
+        //... Once we have fixed and modification variables on the arrays, we need to update the xLoad data structure (read hits from the mascot file) ...//
         for (int fileCnt = 0; fileCnt < identificationFiles.size(); fileCnt++) 
         {
             inputDataFile = identificationFiles.elementAt(fileCnt);
@@ -86,7 +85,7 @@ public class loadMascotIdent111 implements identData_loadPlugin {
             //... Adding the identifications ...//
             addIdentifications(inputDataFile, ret, fileCnt);
         }        
-        System.out.println("Reading identification files");
+        System.out.println("Removing duplicate peptides identified by Mascot ...");
         for (int fileCnt = 0; fileCnt < identificationFiles.size(); fileCnt++) 
         {
             xLoadData data = inputData.getDataElemAt(fileCnt);
@@ -118,7 +117,8 @@ public class loadMascotIdent111 implements identData_loadPlugin {
 
             }
         }
-        System.out.println("End identification file reading");
+        System.out.println("Duplicated peptides removed OK!");
+        System.out.println("Identification load finished OK!");
         return ret;
     }
 
@@ -147,7 +147,7 @@ public class loadMascotIdent111 implements identData_loadPlugin {
 
             //... The following code is to debug raw data acquisition if needed (MS2 data not needed yet) ...//
             int lcMsMsSize = dataStruct.getLcMsMsDataSize();
-            System.out.println("LcMSMS size = " + lcMsMsSize);            
+            System.out.println("LC-MS/MS size = " + lcMsMsSize);            
             
             //... At the moment there is no reason to load MS2 data, we will be working on the examples on how to associate identifications ...//
             //... with MS1 data                                                                                                             ...//
@@ -168,9 +168,9 @@ public class loadMascotIdent111 implements identData_loadPlugin {
             String peptideSeq = "";
             float hitScore = 0.0f;
             float retTime = 0.0f;
-            float parIonMz = 0.0f;                      
+            float parIonMz = 0.0f;
 
-            identInputData identData = null; //... Data structures on XTracker ...//
+            identInputData identData = null; //... Data structures on XTracker (identInputData) ...//
             xIdentData myIdent = null;
             
             String[] modification = new String[6];
@@ -258,7 +258,7 @@ public class loadMascotIdent111 implements identData_loadPlugin {
                                                         if (differentMods[0].equals("")) //... Verify if has data ...//
                                                         {
                                                             isVariableMod = false; 
-                                                        }                   
+                                                        }
                                                         else
                                                         {
                                                             for (int iDiffMod=0; iDiffMod < differentMods.length; iDiffMod++)
@@ -330,25 +330,27 @@ public class loadMascotIdent111 implements identData_loadPlugin {
                                                         // ----------------------------------------------------- //
                                                         //... Adding new identification to the data structure ...//
                                                         // ----------------------------------------------------- //
+                                                        // (confidenceLevel, retTimeDB, parentMassDB, chargeDB on documentation file)
                                                         myIdent = new xIdentData(hitScore, retTime, parIonMz, dbCharge);
 
-                                                        //... Adding Mascot Variable modifications ...//
+                                                        //... Adding Mascot modification variables (Some initializations have been proccessed above) ...//
                                                         int startIndex = 0;
                                                         for (int iM = 0; iM < iContMod; iM++) 
                                                         {
                                                             //... Searching for the position where the modification occurred e.g. 00100000 ...//
-                                                            for (int iParams=0; iParams<mascotVarMods.size(); iParams++)
+                                                            for (int iChar=0; iChar<10; iChar++)  //... Digit by digit ...//
                                                             {
-                                                                modPosition = mascotPos.indexOf(Integer.toString(iParams), startIndex);     //... Digit by digit ...//
+                                                                modPosition = mascotPos.indexOf(Integer.toString(iChar+1), startIndex);     
                                                                 if (modPosition > 0)
                                                                 {
+                                                                    //System.out.println(" - String=" + Integer.toString(iChar+1) + " found at modPosition= " + modPosition + " with startIndex=" + startIndex);
                                                                     break;
                                                                 }
-                                                            }                                                             
+                                                            }
                                                             startIndex = modPosition + 1; //... Increase position in case it has more than one mod, e.g. 0000000002020 ...//
                                                             
                                                             int mascotModIndex = mascotVarMods.indexOf(modification[iM]);
-                                                            System.out.println(" - ModVar=" + modification[iM] + ", Modified Peptide=" + mascotPos + ", Pos=" + modPosition + ", Mascot Index:" + (mascotModIndex));
+                                                            System.out.println(" - ModVar=" + modification[iM] + ", Shift=" + mascotVarModShifts.elementAt(mascotModIndex).toString() + ", Modified Peptide=" + mascotPos + ", Pos=" + modPosition + ", Mascot Index:" + (mascotModIndex));
 
                                                             xModification myMod = new xModification(modification[iM], mascotVarModShifts.elementAt(mascotModIndex), modPosition, true);
                                                             myIdent.addModification(myMod);
@@ -358,7 +360,7 @@ public class loadMascotIdent111 implements identData_loadPlugin {
                                                         for (int pepEl = 0; pepEl < peptideSeq.length(); pepEl++) 
                                                         {
                                                             char residue = peptideSeq.charAt(pepEl);
-                                                            int myModInd = fixModResidues.indexOf(Character.toString(residue));
+                                                            int myModInd = mascotFixedModResidues.indexOf(Character.toString(residue));
                                                             if (myModInd > -1) 
                                                             {
                                                                 System.out.println(" - FixModRes=" + mascotFixedMods.elementAt(myModInd) + ", mascotfixedmodshifts=" + mascotFixedModShifts.elementAt(myModInd) + ", PepEl=" + (pepEl + 1));
@@ -367,14 +369,14 @@ public class loadMascotIdent111 implements identData_loadPlugin {
                                                             }
                                                         }
                                                         //... Checking for N-Term and C-Term modification residues ...//
-                                                        int myModInd = fixModResidues.indexOf("N-term");
+                                                        int myModInd = mascotFixedModResidues.indexOf("N-term");
                                                         if (myModInd > -1) 
                                                         {
                                                             System.out.println(" - FixModN-term=" + mascotFixedMods.elementAt(myModInd) + ", mascotfixedmodshifts=" + mascotFixedModShifts.elementAt(myModInd));
                                                             xModification myFixMod = new xModification(mascotFixedMods.elementAt(myModInd), mascotFixedModShifts.elementAt(myModInd), 0, false);
                                                             myIdent.addModification(myFixMod);
                                                         }
-                                                        myModInd = fixModResidues.indexOf("C-term");
+                                                        myModInd = mascotFixedModResidues.indexOf("C-term");
                                                         if (myModInd > -1) 
                                                         {
                                                             System.out.println(" - FixModC-term=" + mascotFixedMods.elementAt(myModInd) + ", mascotfixedmodshifts=" + mascotFixedModShifts.elementAt(myModInd) + ", peptSeq=" + (peptideSeq.length() + 1));
@@ -409,7 +411,7 @@ public class loadMascotIdent111 implements identData_loadPlugin {
      */
     public void loadParams(String dataFile) 
     {
-        //... Open the xml file ...//
+        //... Open the xml (params) file ...//
         XMLparser parser = new XMLparser(dataFile);
         
         //... Parsing inputFiles, modificationData and other elements ...//
@@ -430,6 +432,7 @@ public class loadMascotIdent111 implements identData_loadPlugin {
                         if (itemI.getNodeName().equals("datafile")) 
                         {
                             identificationFiles.addElement(itemI.getAttributes().item(0).getTextContent().toString()); //... The first attribute represents the XML mascot file ...//
+                            System.out.println("Identification file = " + itemI.getAttributes().item(0).getTextContent().toString());
                         }
                     }
                 } 
@@ -568,14 +571,14 @@ public class loadMascotIdent111 implements identData_loadPlugin {
                                             res = aminos.toCharArray();
                                             for (int iL = 0; iL < res.length; iL++) 
                                             {
-                                                fixModResidues.addElement(String.valueOf(res[iL]));
+                                                mascotFixedModResidues.addElement(String.valueOf(res[iL]));
                                                 mascotFixedMods.addElement(myTok);
                                                 mascotFixedModShifts.addElement(fixedModShifts.elementAt(iK)); //... It looks into the config file for the corresponding shift value ...//
                                             }
                                         } 
                                         else 
                                         {
-                                            fixModResidues.addElement(aminos);
+                                            mascotFixedModResidues.addElement(aminos);
                                             mascotFixedMods.addElement(myTok);
                                             mascotFixedModShifts.addElement(fixedModShifts.elementAt(iK)); //... It looks into the config file for the corresponding shift value ...//
                                         }

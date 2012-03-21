@@ -2,13 +2,14 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>xtracker</groupId>
-  <artifactId>xTracker</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <groupId>info.xtracker</groupId>
+  <artifactId>xTracker</artifactId>  
   <packaging>jar</packaging>
 
   <name>xTracker</name>
   <url>http://maven.apache.org</url>
+  <version>1.0-SNAPSHOT</version>
+  <description>Software for quantitative proteomics</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -35,6 +36,75 @@
 	<groupId>xpp3</groupId>
 	<artifactId>xpp3</artifactId>
 	<version>1.1.4c</version>
-    </dependency> 
+    </dependency>
+    <dependency>
+        <groupId>uk.ac.ebi.jmzml</groupId>
+        <artifactId>jmzml</artifactId>
+        <version>1.6.7</version>
+    </dependency>    
+    <dependency>
+        <groupId>uk.ac.ebi.jmzidml</groupId>
+        <artifactId>jmzidentml</artifactId>
+        <version>1.1.2</version>
+    </dependency>
   </dependencies>
+  
+    <repositories>
+        <repository>
+            <id>ebi-repo</id>
+            <name>The EBI Maven 2 repository</name>
+            <url>http://www.ebi.ac.uk/~maven/m2repo</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>  
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2.2</version>
+                <executions>
+                    <execution>
+                        <id>create-executable-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptorRefs>
+                                <descriptorRef>
+                                    jar-with-dependencies
+                                </descriptorRef>
+                            </descriptorRefs>
+                            <archive>
+                                <manifest>
+                                    <mainClass>xtracker.xTracker</mainClass>
+                                </manifest>
+                            </archive>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>             
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.3.1</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>xtracker.xTracker</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>             
+        </plugins>        
+    </build>
 </project>

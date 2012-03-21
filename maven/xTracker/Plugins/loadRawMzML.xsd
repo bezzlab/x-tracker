@@ -3,13 +3,13 @@
 
 <xs:simpleType name="rawFile">
   <xs:restriction base="xs:string">
-  		<xs:pattern value="([\w|_|-|+|.]+.[\w|_|-|+|.]+)*" />
+  		<!-- <xs:pattern value="([\w|_|-|+|.]+.[\w|_|-|+|.]+)*" /> -->
   </xs:restriction>
 </xs:simpleType>
 
 <xs:simpleType name="identFile">
   	<xs:restriction base="xs:string">
-  	<xs:pattern value="([\w|_|-|+|.]+.[\w|_|-|+|.]+)*"/>
+  	<!-- <xs:pattern value="([\w|_|-|+|.]+.[\w|_|-|+|.]+)*"/> -->
   </xs:restriction>
 </xs:simpleType>
   

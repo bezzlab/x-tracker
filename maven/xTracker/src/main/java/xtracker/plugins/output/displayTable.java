@@ -43,7 +43,7 @@ public class displayTable implements outPlugin {
         this.loadParams(paramFile);
 
         myTable frame = new myTable(InputData, normalisation);
-        frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+        //frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
         frame.setTitle("X-Tracker's Quantitation Results");
         frame.setSize(800, 600);
         frame.setResizable(true);

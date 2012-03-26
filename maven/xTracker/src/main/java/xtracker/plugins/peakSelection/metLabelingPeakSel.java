@@ -104,7 +104,7 @@ public class metLabelingPeakSel implements peakSelPlugin {
                 //... How many identifications do we have for this peptideSequence/peptideId? ...//
                 int howMany = myLoadData.countIdentofPeptide(pepSeq, pepId);
                 int outOf = myLoadData.getAllIdentOfPeptideSeq(pepSeq).size();
-                System.out.println("pepId="+pepId+" pepSeq="+pepSeq+" howMany=" + myLoadData.countIdentofPeptide(pepSeq, pepId)+" outOf="+myLoadData.getAllIdentOfPeptideSeq(pepSeq).size());
+                //System.out.println("pepId="+pepId+" pepSeq="+pepSeq+" howMany=" + myLoadData.countIdentofPeptide(pepSeq, pepId)+" outOf="+myLoadData.getAllIdentOfPeptideSeq(pepSeq).size());
 
                 //... We check if the peptide sequence is unique or not (i.e. same peptide sequence cannot appear associated to different protein ids) ...//
                 if (howMany == outOf) {
@@ -136,11 +136,11 @@ public class metLabelingPeakSel implements peakSelPlugin {
 
                             //... Let's retrieve some important fields of the identification ...//
                             float pIMz = myXidentData.getParentMass();
-                            System.out.println("ParentMass="+pIMz);
+                            //System.out.println("ParentMass="+pIMz);
                             float tModShift = myXidentData.getTotalModificationMassShift();
-                            System.out.println("tModShift (Mascot)="+tModShift);
+                            //System.out.println("tModShift (Mascot)="+tModShift);
                             int iChg = myXidentData.getCharge();
-                            System.out.println("Charge="+iChg);
+                            //System.out.println("Charge="+iChg);
 
                             //... Is it a light version? ...//
                             if (Math.abs((pepThMass + tModShift) - pIMz * iChg) <= 3) {
@@ -163,7 +163,7 @@ public class metLabelingPeakSel implements peakSelPlugin {
                     //... OK all the identification of peptide pepSeq, pepId have been processed and now it'time to compute their peak correspondences ...//
                     int lightSize = lightPeps.size();
                     int heavySize = heavyPeps.size();
-                    System.out.println("LightSize:" + lightSize + " HeavySize:" + heavySize);
+                    //System.out.println("LightSize:" + lightSize + " HeavySize:" + heavySize);
                     if (lightSize > 0 && heavySize > 0) {
                         //... OK The same peptide has been identified by the search engine in both heavy and light versions ...//
 
@@ -171,27 +171,27 @@ public class metLabelingPeakSel implements peakSelPlugin {
                         //... for each peptide (i.e. the minimum between heavy identifications and light ones ...//
                         int toConsider = Math.min(lightSize, heavySize);
                         //Let's first compute peak correspondences of the light version.
-                        System.out.println("Light and Heavy version of " + pepSeq + ":");
+                        //System.out.println("Light and Heavy version of " + pepSeq + ":");
 
                         for (int li = 0; li < toConsider; li++) {
                             String indexes[] = new String[2];
                             indexes = lightPeps.get(li).split(":");
                             identInputData myDoubIdentData = myIdent.get(Integer.valueOf(indexes[0]).intValue());
                             xIdentData myXIdntDt = myDoubIdentData.getLcMsMsElemAt(Integer.valueOf(indexes[1]).intValue());
-                            System.out.println("- Light mz:" + myXIdntDt.getParentMass() + " (at rt:" + myXIdntDt.getRetTime() + ") charge:+" + myXIdntDt.getCharge());
+                            //System.out.println("- Light mz:" + myXIdntDt.getParentMass() + " (at rt:" + myXIdntDt.getRetTime() + ") charge:+" + myXIdntDt.getCharge());
 
                             //Ok everything is ready to compute the peak-correspondences for hte light version of the peptide
                             computePeakCorrespondences("Light", pepSeq, pepId, myXIdntDt.getParentMass(), myXIdntDt.getCharge(), myXIdntDt.getRetTime(), myXCorrData, myLoadData, myXIdntDt.getAllModifications());
 
                             //Now it's time to compute peak correspondences of the heavy version.
-                            System.out.println("Heavy version of " + pepSeq + ":");
+                            //System.out.println("Heavy version of " + pepSeq + ":");
 
                             for (int h = 0; h < toConsider; h++) {
                                 //String indexes[] = new String[2];
                                 indexes = heavyPeps.get(h).split(":");
                                 myDoubIdentData = myIdent.get(Integer.valueOf(indexes[0]).intValue());
                                 myXIdntDt = myDoubIdentData.getLcMsMsElemAt(Integer.valueOf(indexes[1]).intValue());
-                                System.out.println("- Heavy mz:" + myXIdntDt.getParentMass() + " (at rt:" + myXIdntDt.getRetTime() + ") charge:+" + myXIdntDt.getCharge());
+                                //System.out.println("- Heavy mz:" + myXIdntDt.getParentMass() + " (at rt:" + myXIdntDt.getRetTime() + ") charge:+" + myXIdntDt.getCharge());
 
                                 //Ok everything is ready to compute the peak-correspondences for hte heavy version of the peptide
                                 computePeakCorrespondences("Heavy", pepSeq, pepId, myXIdntDt.getParentMass(), myXIdntDt.getCharge(), myXIdntDt.getRetTime(), myXCorrData, myLoadData, myXIdntDt.getAllModifications());
@@ -201,32 +201,32 @@ public class metLabelingPeakSel implements peakSelPlugin {
                         //... Oops, just one of the two (heavy or light) versions have been identified... which one is it? ...//
                         if (lightSize > 0) {
                             //... OK the identified peptide whas light, let's compute peak correspondences ...//
-                            System.out.println("Just Light version of " + pepSeq + ":");
+                            //System.out.println("Just Light version of " + pepSeq + ":");
 
                             for (int li = 0; li < lightPeps.size(); li++) {
                                 String indexes[] = new String[2];
                                 indexes = lightPeps.get(li).split(":");
                                 identInputData myDoubIdentData = myIdent.get(Integer.valueOf(indexes[0]).intValue());
                                 xIdentData myXIdntDt = myDoubIdentData.getLcMsMsElemAt(Integer.valueOf(indexes[1]).intValue());
-                                System.out.println("- Light mz:" + myXIdntDt.getParentMass() + " (at rt:" + +myXIdntDt.getRetTime() + ") charge:+" + myXIdntDt.getCharge());
+                                //System.out.println("- Light mz:" + myXIdntDt.getParentMass() + " (at rt:" + +myXIdntDt.getRetTime() + ") charge:+" + myXIdntDt.getCharge());
 
                                 //... Ok everything is ready to compute the peak-correspondences for the light version of the peptide ...//
                                 computePeakCorrespondences("Light", pepSeq, pepId, myXIdntDt.getParentMass(), myXIdntDt.getCharge(), myXIdntDt.getRetTime(), myXCorrData, myLoadData, myXIdntDt.getAllModifications());
 
                                 //... Now the associated heavy peaks:
-                                System.out.println("- Heavy exp mz:" + (myXIdntDt.getParentMass() + shift / myXIdntDt.getCharge()) + " (at rt:" + +myXIdntDt.getRetTime() + ") charge:+" + myXIdntDt.getCharge());
+                                //System.out.println("- Heavy exp mz:" + (myXIdntDt.getParentMass() + shift / myXIdntDt.getCharge()) + " (at rt:" + +myXIdntDt.getRetTime() + ") charge:+" + myXIdntDt.getCharge());
 
                                 computePeakCorrespondences("Heavy", pepSeq, pepId, myXIdntDt.getParentMass() + (shift / myXIdntDt.getCharge()), myXIdntDt.getCharge(), myXIdntDt.getRetTime(), myXCorrData, myLoadData, myXIdntDt.getAllModifications());
                             }
                         } else {
                             //OK the identified peptide whas heavy, let's compute peak correspondences.
-                            System.out.println("Just Heavy version of " + pepSeq + ":");
+                            //System.out.println("Just Heavy version of " + pepSeq + ":");
                             for (int h = 0; h < heavyPeps.size(); h++) {
                                 String indexes[] = new String[2];
                                 indexes = heavyPeps.get(h).split(":");
                                 identInputData myDoubIdentData = myIdent.get(Integer.valueOf(indexes[0]).intValue());
                                 xIdentData myXIdntDt = myDoubIdentData.getLcMsMsElemAt(Integer.valueOf(indexes[1]).intValue());
-                                System.out.println("- Heavy exp mz:" + myXIdntDt.getParentMass() + " (at rt:" + myXIdntDt.getRetTime() + ") charge:+" + myXIdntDt.getCharge());
+                                //System.out.println("- Heavy exp mz:" + myXIdntDt.getParentMass() + " (at rt:" + myXIdntDt.getRetTime() + ") charge:+" + myXIdntDt.getCharge());
 
                                 Vector<Float> rtH = new Vector<Float>();
                                 Vector<Float> intH = new Vector<Float>();
@@ -286,31 +286,31 @@ public class metLabelingPeakSel implements peakSelPlugin {
             lowerIsoBound = pMz - mzTolerance - 2 * (isotopeDiff / pepCharge);
             upperIsoBound = pMz + mzTolerance + 2 * (isotopeDiff / pepCharge);
         }
-        System.out.println(type);
-        System.out.println("RT range: " + (rt - retTimeWindow) + "-" + (rt + retTimeWindow));
-        System.out.println("MZ range: " + lowerIsoBound + "-" + upperIsoBound);
+        //System.out.println(type);
+        //System.out.println("RT range: " + (rt - retTimeWindow) + "-" + (rt + retTimeWindow));
+        //System.out.println("MZ range: " + lowerIsoBound + "-" + upperIsoBound);
 
-        int[] candPeaksIndexes=data.getLcMsIndexOfAllBetweenRT(rt-retTimeWindow, rt+retTimeWindow);
-        // int[] candPeaksIndexes = new int[2];
-        // candPeaksIndexes[0] = 0;
-        // candPeaksIndexes[1] = data.getLcMsDataSize() - 1;
-        System.out.println("Candidate Peaks=["+candPeaksIndexes[0]+"-"+candPeaksIndexes[1]+"]");
+        // int[] candPeaksIndexes=data.getLcMsIndexOfAllBetweenRT(rt-retTimeWindow, rt+retTimeWindow);
+         int[] candPeaksIndexes = new int[2];
+         candPeaksIndexes[0] = 0;
+         candPeaksIndexes[1] = data.getLcMsDataSize() - 1;
+         //System.out.println("Candidate Peaks=["+candPeaksIndexes[0]+"-"+candPeaksIndexes[1]+"]");
 
         for (int j = candPeaksIndexes[0]; j <= candPeaksIndexes[1]; j++) {
             xLcMsData vals = data.getLcMsDataElemAt(j);
             float retTime = vals.getRetTime();
             //... ok let's find the LcMs peaks ...//
             // float elements[][]=vals.getSpectrum().getSubspectrumBetween(lowerIsoBound, upperIsoBound);
-            System.out.println("rt="+retTime+" MZ range Candidate Peaks: " + (pMz - noiseMzThresh) + "-" + (pMz + noiseMzThresh));
+            //System.out.println("rt="+retTime+" MZ range Candidate Peaks: " + (pMz - noiseMzThresh) + "-" + (pMz + noiseMzThresh));
             float elements[][] = vals.getSpectrum().getSubspectrumBetween(pMz - noiseMzThresh, pMz + noiseMzThresh);
             for (int iJ=0;iJ<elements.length;iJ++)
             {
                 for(int iK=0; iK<elements[iJ].length; iK++)
                 {
-                    System.out.println("Array ["+ iJ + "][" + iK + "]="+elements[iJ][iK]);
+                    //System.out.println("Array ["+ iJ + "][" + iK + "]="+elements[iJ][iK]);
                 }
             }
-            System.out.println("======= Next ========");            
+            //System.out.println("======= Next ========");            
             int elSize = -1;
             if (elements != null) {
                 elSize = elements.length;
@@ -377,14 +377,14 @@ public class metLabelingPeakSel implements peakSelPlugin {
 
         }
 
-        System.out.println("Smoothed XIC for mass range [" + lowerIsoBound + "," + upperIsoBound + "]");
+        //System.out.println("Smoothed XIC for mass range [" + lowerIsoBound + "," + upperIsoBound + "]");
         for (int i = 0; i < XICint.size(); i++) {
-            System.out.println(XICrt.elementAt(i) + " " + XICint.elementAt(i));
+            //System.out.println(XICrt.elementAt(i) + " " + XICint.elementAt(i));
         }
 
         float[] retTimePoints = this.getStartEndRT(XICrt, XICint, rt);
 
-        System.out.println("RT:" + retTimePoints[0] + " -->" + retTimePoints[1] + "\n");
+        //System.out.println("RT:" + retTimePoints[0] + " -->" + retTimePoints[1] + "\n");
 
         int indLow = Collections.binarySearch(XICrt, retTimePoints[0]);
         if (indLow < 0) {
@@ -450,9 +450,9 @@ public class metLabelingPeakSel implements peakSelPlugin {
             lowerIsoBound = pMz - mzTolerance - 2 * (isotopeDiff / pepCharge);
             upperIsoBound = pMz + mzTolerance + 2 * (isotopeDiff / pepCharge);
         }
-        System.out.println(type);
-        System.out.println("RT range: " + (rt - retTimeWindow) + "-" + (rt + retTimeWindow));
-        System.out.println("MZ range: " + lowerIsoBound + "-" + upperIsoBound);
+        //System.out.println(type);
+        //System.out.println("RT range: " + (rt - retTimeWindow) + "-" + (rt + retTimeWindow));
+        //System.out.println("MZ range: " + lowerIsoBound + "-" + upperIsoBound);
 
         // int[] candPeaksIndexes=data.getLcMsIndexOfAllBetweenRT(rt-retTimeWindow, rt+retTimeWindow);
         int[] candPeaksIndexes = new int[2];
@@ -545,9 +545,9 @@ public class metLabelingPeakSel implements peakSelPlugin {
 
         XICint = this.smooth(XICint);
 
-        System.out.println("Smoothed XIC for mass range [" + lowerIsoBound + "," + upperIsoBound + "]");
+        //System.out.println("Smoothed XIC for mass range [" + lowerIsoBound + "," + upperIsoBound + "]");
         for (int i = 0; i < XICint.size(); i++) {
-            System.out.println(XICrt.elementAt(i) + " " + XICint.elementAt(i));
+            //System.out.println(XICrt.elementAt(i) + " " + XICint.elementAt(i));
             rtVals.addElement(XICrt.elementAt(i));
             intVals.addElement(XICint.elementAt(i));
 
@@ -555,7 +555,7 @@ public class metLabelingPeakSel implements peakSelPlugin {
 
         retTimePoints = this.getStartEndRT(XICrt, XICint, rt);
 
-        System.out.println("\n\nRT:" + retTimePoints[0] + " -->" + retTimePoints[1]);
+        //System.out.println("\n\nRT:" + retTimePoints[0] + " -->" + retTimePoints[1]);
 
 
 
@@ -662,7 +662,7 @@ public class metLabelingPeakSel implements peakSelPlugin {
                 maxInd = i;
             }
         }
-        System.out.println("DEBUG: lowerInd "+lowerInd+" upperInd "+upperInd+" vector size "+rtV.size()+" "+intV.size());
+        //System.out.println("DEBUG: lowerInd "+lowerInd+" upperInd "+upperInd+" vector size "+rtV.size()+" "+intV.size());
         //Let's find the leftmost value higher than half maxVal
         int L = maxInd;
         int R = maxInd;
@@ -672,7 +672,7 @@ public class metLabelingPeakSel implements peakSelPlugin {
         while (R <= upperInd && intV.elementAt(R) >= (maxVal / 2)) {
             R++;
         }
-        System.out.println("L: "+L+ " R: "+R);
+        //System.out.println("L: "+L+ " R: "+R);
         //Error correction (i.e. make sure we are within array boundaries)
         if (L < 0) {
             L = 0;
@@ -680,7 +680,7 @@ public class metLabelingPeakSel implements peakSelPlugin {
         if (R >= rtV.size()) {
             R = rtV.size() - 1;
         }
-        System.out.println("After adjustment L: "+L+ " R: "+R);
+        //System.out.println("After adjustment L: "+L+ " R: "+R);
 
         float fwhmCenter = (rtV.elementAt(L) + rtV.elementAt(R)) / 2;
 
@@ -1021,7 +1021,7 @@ public class metLabelingPeakSel implements peakSelPlugin {
         ret = ret * incorpRate;
         //... Add C-Terminus and N-terminus shifts if any!
         ret = ret + massShifts[0] + massShifts[1];
-        System.out.println("Pep Seq: "+pepSeq+" Total Shift including incorporation rate and N- and C- terminus (xtp config file): "+ ret);
+        // System.out.println("Pep Seq: "+pepSeq+" Total Shift including incorporation rate and N- and C- terminus (xtp config file): "+ ret);
 //        return ret/charge;
         return ret;
     }
@@ -1325,7 +1325,7 @@ public class metLabelingPeakSel implements peakSelPlugin {
                 }
             }
         }
-        System.out.println("Peptide Mass (consider charge) = " + ret);
+        // System.out.println("Peptide Mass (consider charge) = " + ret);
         return ret;
     }
 
@@ -1363,8 +1363,6 @@ public class metLabelingPeakSel implements peakSelPlugin {
     }
 
     public Vector[] computePeakCorrespondences(float rt, float pMz, xLoadData data, float shift, String type, int pepCharge) {
-
-
 
 
         float lowerIsoBound = 0.0f;

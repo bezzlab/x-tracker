@@ -204,7 +204,7 @@ public class loadMascotIdent111 implements identData_loadPlugin {
                                     if (peptideItem.getNodeName().equals("peptide")) //... Reading peptides ...//
                                     {
                                         iPeptides++;                                        
-                                        System.out.println("Protein " + iProteins + ": " + proteinId + " Peptide " + iPeptides );
+                                        //System.out.println("Protein " + iProteins + ": " + proteinId + " Peptide " + iPeptides );
                                         NodeList peptideDataList = peptideItem.getChildNodes(); //... Peptide subnodes ...//
                                         
                                         //... Initializing variables ...//
@@ -226,24 +226,24 @@ public class loadMascotIdent111 implements identData_loadPlugin {
                                                 if (peptideElem.getNodeName().equals("pep_seq")) 
                                                 {
                                                     peptideSeq = peptideElem.getTextContent().toString();
-                                                    System.out.println(" - Sequence: " + peptideSeq);
+                                                    //System.out.println(" - Sequence: " + peptideSeq);
 
                                                     identData = new identInputData(proteinId, peptideSeq);
                                                 } 
                                                 else if (peptideElem.getNodeName().equals("pep_exp_mz")) 
                                                 {
                                                     parIonMz = Double.valueOf(peptideElem.getTextContent().toString()).floatValue();
-                                                    System.out.println(" - Experimental m/z: " + parIonMz);
+                                                    //System.out.println(" - Experimental m/z: " + parIonMz);
                                                 } 
                                                 else if (peptideElem.getNodeName().equals("pep_exp_z")) 
                                                 {
                                                     dbCharge = Integer.valueOf(peptideElem.getTextContent().toString()).intValue();
-                                                    System.out.println(" - Experimental charge: " + dbCharge);
+                                                    //System.out.println(" - Experimental charge: " + dbCharge);
                                                 } 
                                                 else if (peptideElem.getNodeName().equals("pep_score")) 
                                                 {
                                                     hitScore = Double.valueOf(peptideElem.getTextContent().toString()).floatValue();
-                                                    System.out.println(" - Score: " + hitScore);
+                                                    //System.out.println(" - Score: " + hitScore);
                                                 } 
                                                 else if (hitScore >= this.scoreThreshold) //... Verify if hits are over minimum threshold ...//
                                                 {
@@ -251,10 +251,10 @@ public class loadMascotIdent111 implements identData_loadPlugin {
                                                     {
                                                         String sModVariable = peptideElem.getTextContent().toString();
                                                         
-                                                        System.out.println(" - IndexOf="+sModVariable.indexOf(";"));
+                                                        //System.out.println(" - IndexOf="+sModVariable.indexOf(";"));
                                                         String[] differentMods = new String[3];
                                                         differentMods = sModVariable.split(";"); //... Check if different modifications are separated by colons ..//
-                                                        System.out.println(" - Length="+differentMods.length);
+                                                        //System.out.println(" - Length="+differentMods.length);
                                                         if (differentMods[0].equals("")) //... Verify if has data ...//
                                                         {
                                                             isVariableMod = false; 
@@ -268,7 +268,7 @@ public class loadMascotIdent111 implements identData_loadPlugin {
                                                                 {
                                                                      differentMods[iDiffMod] = differentMods[iDiffMod].substring(1, differentMods[iDiffMod].length());
                                                                 }
-                                                                System.out.println(" - NewMod="+differentMods[iDiffMod]);
+                                                                //System.out.println(" - NewMod="+differentMods[iDiffMod]);
                                                                 if (differentMods[iDiffMod].length() > 0) 
                                                                 {
                                                                     String[] multipleMods = new String[3]; //... New array for multiple modifications in different modifications ...//
@@ -277,7 +277,7 @@ public class loadMascotIdent111 implements identData_loadPlugin {
                                                                     {
                                                                         multipleMods = differentMods[iDiffMod].split(" ");
                                                                         numMods = Integer.valueOf(multipleMods[0]).intValue();
-                                                                        System.out.println(" - Note: The same modification was repeated several times!");
+                                                                        //System.out.println(" - Note: The same modification was repeated several times!");
                                                                         sChainToInsert = differentMods[iDiffMod].replace(numMods + " ", "");
                                                                     }
                                                                     else
@@ -302,7 +302,7 @@ public class loadMascotIdent111 implements identData_loadPlugin {
                                                     } 
                                                     else if (peptideElem.getNodeName().equals("pep_scan_title")) //... Only in some cases the rt is specified in the scan title ...//
                                                     {
-                                                        System.out.println(" - Parsing scan_title for rt");
+                                                        //System.out.println(" - Parsing scan_title for rt");
                                                         if (peptideElem.getTextContent().toString().indexOf("rt=")>0) //... Option 1, reading on scan title ...//
                                                         {
                                                             String myTmpString = peptideElem.getTextContent().toString();
@@ -325,7 +325,7 @@ public class loadMascotIdent111 implements identData_loadPlugin {
                                                             //... Read mzML file or MGF (TO DO) ...//                                                            
                                                             retTime = 0;                                                            
                                                         }
-                                                        System.out.println(" - retTime=" + retTime);
+                                                        //System.out.println(" - retTime=" + retTime);
                                                         
                                                         // ----------------------------------------------------- //
                                                         //... Adding new identification to the data structure ...//
@@ -350,7 +350,7 @@ public class loadMascotIdent111 implements identData_loadPlugin {
                                                             startIndex = modPosition + 1; //... Increase position in case it has more than one mod, e.g. 0000000002020 ...//
                                                             
                                                             int mascotModIndex = mascotVarMods.indexOf(modification[iM]);
-                                                            System.out.println(" - ModVar=" + modification[iM] + ", Shift=" + mascotVarModShifts.elementAt(mascotModIndex).toString() + ", Modified Peptide=" + mascotPos + ", Pos=" + modPosition + ", Mascot Index:" + (mascotModIndex));
+                                                            //System.out.println(" - ModVar=" + modification[iM] + ", Shift=" + mascotVarModShifts.elementAt(mascotModIndex).toString() + ", Modified Peptide=" + mascotPos + ", Pos=" + modPosition + ", Mascot Index:" + (mascotModIndex));
 
                                                             xModification myMod = new xModification(modification[iM], mascotVarModShifts.elementAt(mascotModIndex), modPosition, true);
                                                             myIdent.addModification(myMod);
@@ -363,7 +363,7 @@ public class loadMascotIdent111 implements identData_loadPlugin {
                                                             int myModInd = mascotFixedModResidues.indexOf(Character.toString(residue));
                                                             if (myModInd > -1) 
                                                             {
-                                                                System.out.println(" - FixModRes=" + mascotFixedMods.elementAt(myModInd) + ", mascotfixedmodshifts=" + mascotFixedModShifts.elementAt(myModInd) + ", PepEl=" + (pepEl + 1));
+                                                                //System.out.println(" - FixModRes=" + mascotFixedMods.elementAt(myModInd) + ", mascotfixedmodshifts=" + mascotFixedModShifts.elementAt(myModInd) + ", PepEl=" + (pepEl + 1));
                                                                 xModification myFixMod = new xModification(mascotFixedMods.elementAt(myModInd), mascotFixedModShifts.elementAt(myModInd), pepEl + 1, false);
                                                                 myIdent.addModification(myFixMod);
                                                             }
@@ -372,14 +372,14 @@ public class loadMascotIdent111 implements identData_loadPlugin {
                                                         int myModInd = mascotFixedModResidues.indexOf("N-term");
                                                         if (myModInd > -1) 
                                                         {
-                                                            System.out.println(" - FixModN-term=" + mascotFixedMods.elementAt(myModInd) + ", mascotfixedmodshifts=" + mascotFixedModShifts.elementAt(myModInd));
+                                                            //System.out.println(" - FixModN-term=" + mascotFixedMods.elementAt(myModInd) + ", mascotfixedmodshifts=" + mascotFixedModShifts.elementAt(myModInd));
                                                             xModification myFixMod = new xModification(mascotFixedMods.elementAt(myModInd), mascotFixedModShifts.elementAt(myModInd), 0, false);
                                                             myIdent.addModification(myFixMod);
                                                         }
                                                         myModInd = mascotFixedModResidues.indexOf("C-term");
                                                         if (myModInd > -1) 
                                                         {
-                                                            System.out.println(" - FixModC-term=" + mascotFixedMods.elementAt(myModInd) + ", mascotfixedmodshifts=" + mascotFixedModShifts.elementAt(myModInd) + ", peptSeq=" + (peptideSeq.length() + 1));
+                                                            //System.out.println(" - FixModC-term=" + mascotFixedMods.elementAt(myModInd) + ", mascotfixedmodshifts=" + mascotFixedModShifts.elementAt(myModInd) + ", peptSeq=" + (peptideSeq.length() + 1));
                                                             xModification myFixMod = new xModification(mascotFixedMods.elementAt(myModInd), mascotFixedModShifts.elementAt(myModInd), peptideSeq.length() + 1, false);
                                                             myIdent.addModification(myFixMod);
                                                         }

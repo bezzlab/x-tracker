@@ -24,13 +24,22 @@ import xtracker.data.xQuant;
 
 public class displayTable implements outPlugin {
 
+    public boolean normalisation = false;
+    private final static String name = "DisplayTable";
+    private final static String version = "1.0";
+//    private final static String type = "OUTPUT_plugin";
+    private final static String description = "The plugin outputs in a tabular form the results of quantitation.\n\tResults can be normalised accross the different labels or not.";
+    
     /**
      * Prints the "3D" matrix with the results.
      * @param InputData the data to be printed.
      */
     public void start(xQuant InputData, String paramFile) {
+        
         //Let's first load the control_condition in from the xml parameter file.
-        System.out.println("Loading " + getName() + " plugin ...");
+        System.out.println("");
+        System.out.println("=== PLUGIN: " + getName() + " ===");
+        
         this.loadParams(paramFile);
 
         myTable frame = new myTable(InputData, normalisation);
@@ -145,10 +154,4 @@ public class displayTable implements outPlugin {
     public String getDescription() {
        return description;
     }
-
-    public boolean normalisation = false;
-    private final static String name = "DisplayTable";
-    private final static String version = "1.0";
-//    private final static String type = "OUTPUT_plugin";
-    private final static String description = "The plugin outputs in a tabular form the results of quantitation.\n\tResults can be normalised accross the different labels or not.";
 }

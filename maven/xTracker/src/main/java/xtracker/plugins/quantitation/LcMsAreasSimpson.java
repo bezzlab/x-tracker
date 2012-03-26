@@ -23,13 +23,22 @@ import xtracker.data.xCorrespondences;
 
 public class LcMsAreasSimpson implements quantPlugin {
 
-    public xQuant start(xPeaks inputData, String paramFile) {
+    private final static String name = "ComputeLcMsAreas";
+    private final static String version = "0.1";
+//    private final static String type = "QUANT_plugin";
+    private final static String description = "This plugin reads in LC/MS peak correspondences and computes the area in the time domain with Simpson's rule.";
+    
+    public xQuant start(xPeaks inputData, String paramFile) {            
+    
         //... Let's retrieve how many files have been processed ...//
         int size = inputData.getSize();
         int i = -1;
         xCorrespondences myFileCorr = null;
         //... The output structure ...//
         xQuant ret = new xQuant();
+        
+        System.out.println("");
+        System.out.println("=== PLUGIN: " + getName() + " ===");        
 
         //... Let's process the peaks belonging to every raw data file ...//
         for (i = 0; i < size; i++) {
@@ -151,14 +160,13 @@ public class LcMsAreasSimpson implements quantPlugin {
         float y3 = 0;
         float h = 0; //the common mz step (it's the average of the two steps)
         for (int j = 0; j < RT.size(); j++) {
-            System.out.println(j + ") RT[" + RT.elementAt(j) + "]=" + IC.elementAt(j));
+            //System.out.println(j + ") RT[" + RT.elementAt(j) + "]=" + IC.elementAt(j));
         }
 
         if (size > 1) {
             switch (remainder) {
                 case 1: {
-                    //The number of peaks cannot be divided by three, the first and last two peaks will be integrated with
-                    //trapezoid rule.
+                    //... The number of peaks cannot be divided by three, the first and last two peaks will be integrated with trapezoid rule ...//
                     tmp_val = (IC.elementAt(0) + IC.elementAt(1)) * (RT.elementAt(1) - RT.elementAt(0)) / 2;
                     ret += tmp_val;
                     starti = 2;
@@ -168,12 +176,10 @@ public class LcMsAreasSimpson implements quantPlugin {
 
                 }
                 case 2: {
-                    //The number of peaks cannot be divided by three, the first two peaks will be integrated with
-                    //trapezoid rule.
+                    //... The number of peaks cannot be divided by three, the first two peaks will be integrated with trapezoid rule ...//
                     tmp_val = (IC.elementAt(0) + IC.elementAt(1)) * (RT.elementAt(1) - RT.elementAt(0)) / 2;
                     ret += tmp_val;
                     starti = 2;
-
                 }
             }
         }
@@ -266,8 +272,4 @@ public class LcMsAreasSimpson implements quantPlugin {
     public String getDescription() {
        return description;
     }
-    private final static String name = "ComputeLcMsAreas";
-    private final static String version = "0.1";
-//    private final static String type = "QUANT_plugin";
-    private final static String description = "This plugin reads in LC/MS peak correspondences and computes the area in the time domain with Simpson's rule.";
 }

@@ -82,7 +82,7 @@ public class loadMascotIdent111 implements identData_loadPlugin {
         {
             inputDataFile = identificationFiles.elementAt(fileCnt);
             
-            //... Adding the identifications ...//
+            //... Adding the identifications (hits + modification variables) ...//
             addIdentifications(inputDataFile, ret, fileCnt);
         }        
         System.out.println("Removing duplicate peptides identified by Mascot ...");
@@ -116,8 +116,8 @@ public class loadMascotIdent111 implements identData_loadPlugin {
                 }
 
             }
+            System.out.println("Duplicated peptides removed OK! Total=" + data.getIdentificationDataSize());
         }
-        System.out.println("Duplicated peptides removed OK!");
         System.out.println("Identification load finished OK!");
         return ret;
     }
@@ -302,7 +302,7 @@ public class loadMascotIdent111 implements identData_loadPlugin {
                                                     } 
                                                     else if (peptideElem.getNodeName().equals("pep_scan_title")) //... Only in some cases the rt is specified in the scan title ...//
                                                     {
-                                                        System.out.println(" - Parsing title");
+                                                        System.out.println(" - Parsing scan_title for rt");
                                                         if (peptideElem.getTextContent().toString().indexOf("rt=")>0) //... Option 1, reading on scan title ...//
                                                         {
                                                             String myTmpString = peptideElem.getTextContent().toString();

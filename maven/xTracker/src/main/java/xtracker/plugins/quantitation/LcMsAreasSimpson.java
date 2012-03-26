@@ -1,3 +1,15 @@
+/*
+ * --------------------------------------------------------------------------
+ * LcMsAreasSimpson.java
+ * --------------------------------------------------------------------------
+ * Description:       Plugin to estimate areas by Simpson method
+ * Developer:         Luca Bianco
+ * Created:           06 February 2012
+ * Read our documentation file under our Google SVN repository
+ * SVN: http://code.google.com/p/x-tracker/
+ * Project Website: http://www.x-tracker.info/
+ * --------------------------------------------------------------------------
+ */
 package xtracker.plugins.quantitation;
 
 import java.util.*;
@@ -12,19 +24,19 @@ import xtracker.data.xCorrespondences;
 public class LcMsAreasSimpson implements quantPlugin {
 
     public xQuant start(xPeaks inputData, String paramFile) {
-        //Let's retrieve how many files have been processed
+        //... Let's retrieve how many files have been processed ...//
         int size = inputData.getSize();
         int i = -1;
         xCorrespondences myFileCorr = null;
-        //The output structure
+        //... The output structure ...//
         xQuant ret = new xQuant();
 
-        //Let's process the peaks belonging to every raw data file
+        //... Let's process the peaks belonging to every raw data file ...//
         for (i = 0; i < size; i++) {
             myFileCorr = inputData.getElemAt(i);
-            //The raw data file name
+            //.... The raw data file name ...//
             String fileName = myFileCorr.getFileName();
-            //Let's get the set of unique labels we want to quantitate on.
+            //... Let's get the set of unique labels we want to quantitate on ...//
             String[] labels = myFileCorr.getUniqueLabelsOfLcMsCorr();
             int labSize = labels.length;
             int corrSize = myFileCorr.getPeptideCorrespondenceDataSize();
@@ -32,13 +44,14 @@ public class LcMsAreasSimpson implements quantPlugin {
             xQuantData myQuantData = new xQuantData(fileName, labSize);
             myQuantData.setAllLabels(labels);
 
-            //Let's process any correspondence
+            //... Let's process any correspondence ...//
             for (int ii = 0; ii < corrSize; ii++) {
                 xCorrespondenceData myCdata = myFileCorr.getPeptideCorrespondenceDataElemtAt(ii);
-                //Let's retrieve the proteinId and peptide sequence
+                //... Let's retrieve the proteinId and peptide sequence ...//
                 String protId = myCdata.getProteinId();
                 String pepSeq = myCdata.getPeptideSeq();
-                //Vectors for modifications associated to the peak of this peptide.
+                
+                //... Vectors for modifications associated to the peak of this peptide ...//
                 Vector<String> modNames = new Vector<String>();
                 Vector<Integer> modPos = new Vector<Integer>();
 
@@ -46,7 +59,7 @@ public class LcMsAreasSimpson implements quantPlugin {
                 int indx = -1;
                 Vector rts[] = new Vector[labSize];
                 Vector ics[] = new Vector[labSize];
-                //Let's loop now through all lcMs peaks stored for this couple proteinId, peptideSeq.
+                //... Let's loop now through all lcMs peaks stored for this couple proteinId, peptideSeq ...//
                 for (int jj = 0; jj < lcMsSize; jj++) {
                     xLcMsCorr myLcMsCorr = myCdata.getLcMsCorrElemAt(jj);
                     String lbl = myLcMsCorr.getLabel();
@@ -60,20 +73,20 @@ public class LcMsAreasSimpson implements quantPlugin {
                     }
                     if (!searching) {
                         if (rts[indx] == null) {
-                            //Let's create the rt vector and add the rt value of the peak to the vector corresponding to lbl experimental condition
+                            //... Let's create the rt vector and add the rt value of the peak to the vector corresponding to lbl experimental condition ...//
                             rts[indx] = new Vector<Float>();
                             rts[indx].addElement(Float.valueOf(myLcMsCorr.getRT()));
-                            //Let's create the intensity vector and add the intensity value of the peak to the vector corresponding to lbl experimental condition
+                            //... Let's create the intensity vector and add the intensity value of the peak to the vector corresponding to lbl experimental condition ...//
                             ics[indx] = new Vector<Float>();
                             ics[indx].addElement(Float.valueOf(myLcMsCorr.getIntensity()));
 
                         } else {
-                            //We have to keep the vectors ordered by increasing RT!
+                            //... We have to keep the vectors ordered by increasing RT! ...//
                             float rtVal = myLcMsCorr.getRT();
                             int my_index = findIndex(rts[indx], rtVal);
-                            //Let's add the rt value of the peak to the vector corresponding to lbl experimental condition
+                            //... Let's add the rt value of the peak to the vector corresponding to lbl experimental condition ...//
                             rts[indx].add(my_index, Float.valueOf(myLcMsCorr.getRT()));
-                            //Let's add the intensity value of the peak to the vector corresponding to lbl experimental condition
+                            //... Let's add the intensity value of the peak to the vector corresponding to lbl experimental condition ...//
                             ics[indx].add(my_index, Float.valueOf(myLcMsCorr.getIntensity()));
                         }
                     } else {
@@ -81,7 +94,7 @@ public class LcMsAreasSimpson implements quantPlugin {
                         System.exit(1);
                     }
 
-                    //Adding modifications (if any)
+                    //... Adding modifications (if any) ...//
                     for (int modCnt = 0; modCnt < myLcMsCorr.getModificationSize(); modCnt++) {
                         int pos = myLcMsCorr.getModPositionAtIndex(modCnt);
                         String modNM = myLcMsCorr.getModificationNameAtIndex(modCnt);
@@ -93,22 +106,22 @@ public class LcMsAreasSimpson implements quantPlugin {
                         }
                     }
                 }
-                //Let's create a quantities data structure
+                //... Let's create a quantities data structure ...//
                 xQuantities quantElem = new xQuantities(protId, pepSeq, labSize);
                 for (int kk = 0; kk < labSize; kk++) {
                     float qty = this.computeArea(rts[kk], ics[kk]);
-                    //Let's add the quantity in the right place
+                    //... Let's add the quantity in the right place ...//
                     quantElem.addQuantity(kk, qty);
                 }
-                //Let's add modifications to the quantities data structure.
+                //... Let's add modifications to the quantities data structure ...//
                 for (int kk = 0; kk < modPos.size(); kk++) {
                     quantElem.addModification(modNames.elementAt(kk), modPos.elementAt(kk));
                 }
 
-                //Let's add it to the xQuantData structure
+                //... Let's add it to the xQuantData structure ...//
                 myQuantData.addQuantitativeDataElem(quantElem);
             }
-            //Let's add all the quantitative information from the raw data file to the xQuant structure
+            //... Let's add all the quantitative information from the raw data file to the xQuant structure ...//
             ret.addQuantificationDataElem(myQuantData);
         }
         return ret;
@@ -116,7 +129,7 @@ public class LcMsAreasSimpson implements quantPlugin {
 
     /**    
      * Computes the area of the peak Ion chromatogram specified. NOTE THAT it assumes 
-     * the vectors ordered by Retention Time ascendingly.
+     * the vectors ordered by Retention Time ascending.
      * @param IC the vector of Intensities.
      * @param RT the vector of retention times.
      * @return the area of the peak.

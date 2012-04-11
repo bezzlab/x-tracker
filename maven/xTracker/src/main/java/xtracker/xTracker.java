@@ -375,7 +375,7 @@ public class xTracker {
         pluginName += ".jar";
         String pluginPath = "Plugins/";
         File pFile = new File(pluginPath + pluginName);
-        //if the plugin exists then let's get some information about it otherwise just return empty values
+        //.. if the plugin exists then let's get some information about it otherwise just return empty values
         if (pFile.exists()) {
             pluginInterface plugin = null; //the plugin to load
             String className = "";    //the classname should be like the filename without the .jar

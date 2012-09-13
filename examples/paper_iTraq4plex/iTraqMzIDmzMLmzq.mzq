@@ -1,0 +1,141 @@
+<MzQuantML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://psidev.info/psi/pi/mzQuantML/1.0.0-rc2 ../../schema/mzQuantML_1_0_0-rc2.xsd"
+ xmlns="http://psidev.info/psi/pi/mzQuantML/1.0.0-rc2"
+ version="1.0.0">
+	<!--1:1-->
+	<CvList>
+		<Cv id="PSI-MS" fullName="Proteomics Standards Initiative Mass Spectrometry Vocabularies"
+			uri="http://psidev.cvs.sourceforge.net/viewvc/*checkout*/psidev/psi/psi-ms/mzML/controlledVocabulary/psi-ms.obo"
+			version="3.32.0"/>
+		<Cv id="UO" fullName="Unit Ontology"
+			uri="http://obo.cvs.sourceforge.net/*checkout*/obo/obo/ontology/phenotype/unit.obo"/>
+		<Cv id="PSI-MOD" fullName="Proteomics Standards Initiative Protein Modifications Vocabularies" uri="http://psidev.cvs.sourceforge.net/psidev/psi/mod/data/PSI-MOD.obo" version="1.2"/>
+	        <Cv id="UNIMOD" uri="http://www.unimod.org/obo/unimod.obo" fullName="UNIMOD"/>
+	</CvList>
+
+	<!--1:1-->
+	<AnalysisSummary>
+		<!--optional, if missed, xtracker will use the default value false, true, false, false for feature, peptide, protein, protein group quantitation-->
+	        <cvParam accession="MS:1001837" cvRef="PSI-MS" name="iTraq quantitation analysis"/>
+        	<cvParam accession="MS:1002024" cvRef="PSI-MS" value="true" name="MS2 tag-based analysis feature level quantitationn"/>
+        	<cvParam accession="MS:1002025" cvRef="PSI-MS" value="true" name="MS2 tag-based analysis group features by peptide quantitation"/>
+        	<cvParam accession="MS:1002026" cvRef="PSI-MS" value="true" name="MS2 tag-based analysis protein level quantitation"/>
+        	<!--<cvParam accession="MS:1002027" cvRef="PSI-MS" value="false" name="MS2 tag-based analysis protein group level quantitation"/>-->
+	</AnalysisSummary>
+
+	<!--1:1-->
+	<InputFiles>
+		<RawFilesGroup id="raw1">
+			<RawFile location="paper_iTraq4plex/ksl_1_10.mzML" id="r1"/>
+		</RawFilesGroup>
+		
+		<IdentificationFiles>
+			<IdentificationFile location="paper_iTraq4plex/itraq.mzid" id="id_file1"/>
+		</IdentificationFiles>
+	</InputFiles>
+		
+	<!--1:1-->
+	<SoftwareList>
+		<Software id="xTRACKER" version="1"></Software>
+	</SoftwareList>
+	
+	<!--1:1-->
+	<DataProcessingList>
+		<DataProcessing id="DP1"  software_ref="xTRACKER" order="1">
+		<!--used as xtracker configuration file-->
+			<ProcessingMethod order="1">
+				<userParam name="Plugin type" value="load identification"/>
+				<userParam name="Plugin name" value="loadMzIdentML"/>
+				<userParam name="Plugin configuration file" value="paper_iTraq4plex/loadMzIdentML.xtp"/>
+			</ProcessingMethod>
+			<ProcessingMethod order="2">
+				<userParam name="Plugin type" value="load raw spectra"/>
+				<userParam name="Plugin name" value="loadRawMzML111"/>
+				<userParam name="Plugin configuration file" value="paper_iTraq4plex/loadMzML.xtp"/>
+			</ProcessingMethod>
+			<ProcessingMethod order="3">
+				<userParam name="Plugin type" value="feature detection and quantitation"/>
+				<userParam name="Plugin name" value="iTraqQuantitation"/>
+				<userParam name="Plugin configuration file" value="paper_iTraq4plex/iTraqQuantitationPSIMOD.xtp"/>
+				<!--define the inference methods, which must be the value in the set "mean","median","sum","weightedAverage"-->
+				<userParam name="Feature to peptide inference method" value="mean"/>
+				<userParam name="Peptide to protein inference method" value="weightedAverage"/>
+				<!--<userParam name="Protein to protein group inference method" value="sum"/>-->
+				<userParam name="Assay to Study Variables inference method" value="sum"/>
+				<userParam name="Protein ratio calculation infer from peptide ratio" value="true"/>
+			</ProcessingMethod>
+			<ProcessingMethod order="4">
+				<userParam name="Plugin type" value="Output"/>
+				<userParam name="Plugin name" value="outputMZQ"/>
+				<userParam name="Plugin configuration file" value="paper_iTraq4plex/outputMZQ.xtp"/>
+			</ProcessingMethod>
+		</DataProcessing>
+	</DataProcessingList>
+	
+	<!--1:1-->
+    	<AssayList id="AssayList1">
+        	<Assay rawFilesGroup_ref="raw1" name="114" id="_114">
+            		<Label>
+				<Modification massDelta="145">
+					<cvParam cvRef="PSI-MOD" accession="MOD:01522" name="iTRAQ4plex-114 reporter fragment" value="114"/>
+				</Modification>
+            		</Label>
+        	</Assay>
+        	<Assay rawFilesGroup_ref="raw1" name="115" id="_115">
+            		<Label>
+				<Modification massDelta="145">
+					<cvParam cvRef="PSI-MOD" accession="MOD:01523" name="iTRAQ4plex-115 reporter fragment" value="115"/>
+				</Modification>
+            		</Label>
+        	</Assay>
+        	<Assay rawFilesGroup_ref="raw1" name="116" id="_116">
+            		<Label>
+				<Modification massDelta="145">
+					<cvParam cvRef="PSI-MOD" accession="MOD:01524" name="iTRAQ4plex-116 reporter fragment" value="116"/>
+				</Modification>
+            		</Label>
+        	</Assay>
+        	<Assay rawFilesGroup_ref="raw1" name="117" id="_117">
+            		<Label>
+				<Modification massDelta="145">
+					<cvParam cvRef="PSI-MOD" accession="MOD:01525" name="iTRAQ4plex-117, mTRAQ heavy, reporter fragment" value="117"/>
+				</Modification>
+            		</Label>
+        	</Assay>
+    	</AssayList>
+
+	<!--1:1-->
+	<StudyVariableList>
+		<StudyVariable id="SV_group_A" name="GroupA">
+			<cvParam accession="MS:1001807" cvRef="PSI-MS"    value="1" name="StudyVariable attribute"/>
+			<Assay_refs>_114 _115</Assay_refs>
+		</StudyVariable>
+		<StudyVariable id="SV_group_B" name="GroupB">
+			<cvParam accession="MS:1001807" cvRef="PSI-MS"    value="1" name="StudyVariable attribute"/>
+			<Assay_refs>_116 _117</Assay_refs>
+		</StudyVariable>
+	</StudyVariableList>
+	
+	<RatioList>
+		<Ratio id="ratio_SV_A_B" numerator_ref="SV_group_A" denominator_ref="SV_group_B" >
+			<RatioCalculation>
+				<userParam name="Simple ratio calc"/>
+			</RatioCalculation>
+		</Ratio>
+	        <Ratio id="ratio_assay_115_114" denominator_ref="_114" numerator_ref="_115">
+            		<RatioCalculation>
+                		<userParam name="Simple ratio calc"/>
+            		</RatioCalculation>
+        	</Ratio>
+        	<Ratio id="ratio_assay_116_114" denominator_ref="_114" numerator_ref="_116">
+            		<RatioCalculation>
+                		<userParam name="Simple ratio calc"/>
+            		</RatioCalculation>
+        	</Ratio>
+        	<Ratio id="ratio_assay_117_114" denominator_ref="_114" numerator_ref="_117">
+            		<RatioCalculation>
+                		<userParam name="Simple ratio calc"/>
+            		</RatioCalculation>
+        	</Ratio>
+	</RatioList>
+</MzQuantML>

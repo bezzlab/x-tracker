@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<outputMZQ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="Plugins/outputMZQ.xsd">
+	<outputFilename>paper_iTraq4Plex/test.mzq</outputFilename>
+</outputMZQ>

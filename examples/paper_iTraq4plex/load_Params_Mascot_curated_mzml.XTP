@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+This is the Load_raw and load_identification files parameters file. 
+It specifies a list of raw data files together with their identification files.
+Also, modifications and mass shift induced by them are specified here since mascot does not report fixed modification mass shifts.
+Finally it specifies the threshold on "pep_delta" field to accept identifications. 
+-->
+<param xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="Plugins/loadMascotIdent.xsd">
+	<!--
+	Specifies the rawdata file names and the corresponding identification names. Note that paths are relative to the xTracker folder.
+	-->
+<inputFiles>
+        <datafile identification_file="paper_iTraq4plex/Mascot_ksl_1_10.xml">paper_iTraq4plex/ksl_1_10.mzML</datafile>
+</inputFiles>
+
+         
+<!-- Modifications (including amino-acid affected) and mass shifts considered in the search are reported below.
+	NOTE THAT MONOISOTOPIC MASSES ARE USED IN THIS FILE!!!
+ -->
+ <modificationData>
+	 <modification delta="42.010559">Acetyl (K)</modification>
+	 <modification delta="42.010559">Acetyl (N-term)</modification>
+	 <modification delta="-0.984024">Amidated (C-term)</modification>
+	 <modification delta="226.077591">Biotin (K)</modification>
+	 <modification delta="226.077591">Biotin (N-term)</modification>
+	 <modification delta="57.021469">Carbamidomethyl (C)</modification>
+	 <modification delta="43.005814">Carbamyl (K)</modification>
+	 <modification delta="43.005814">Carbamyl (N-term)</modification>
+	 <modification delta="58.005478">Carboxymethyl (C)</modification>
+	 <modification delta="21.981934">Cation:Na (C-term)</modification>
+	 <modification delta="21.981949">Cation:Na (DE)</modification>
+	 <modification delta="-18.010559">Deamidated (NQ)</modification>
+	 <modification delta="-1.007812">Dehydro (C)</modification>
+	 <modification delta="31.989822">Dioxidation (M)</modification>
+	 <modification delta="44.026215">Ethanolyl (C)</modification>
+	 <modification delta="1030.352936">ExacTagAmine (K)</modification>
+	 <modification delta="972.365219">ExacTagThiol (C)</modification>
+	 <modification delta="27.994919">Formyl (N-term)</modification>
+	 <modification delta="42.021805">Guanidinyl (K)</modification>
+	 <modification delta="14.01564">Methyl (C-term)</modification>
+	 <modification delta="14.015656">Methyl (DE)</modification>
+	 <modification delta="45.987717">Methylthio (C)</modification>
+	 <modification delta="99.06842">NIPCAM (C)</modification>
+	 <modification delta="15.994919">Oxidation (HW)</modification>
+	 <modification delta="15.994919">Oxidation (M)</modification>
+	 <modification delta="79.966324">Phospho (ST)</modification>
+	 <modification delta="79.966324">Phospho (Y)</modification>
+	 <modification delta="71.037109">Propionamide (C)</modification>
+	 <modification delta="105.057846">Pyridylethyl (C)</modification>
+	 <modification delta="79.956818">Sulfo (S)</modification>
+	 <modification delta="79.956818">Sulfo (T)</modification>
+	 <modification delta="79.956818">Sulfo (Y)</modification>
+	 <modification delta="224.152481">TMT (K)</modification>
+	 <modification delta="224.152481">TMT (N-term)</modification>
+	 <modification delta="225.155838">TMT2plex (K)</modification>
+	 <modification delta="225.155823">TMT2plex (N-term)</modification>
+	 <modification delta="229.162933">TMT6plex (K)</modification>
+	 <modification delta="229.162933">TMT6plex (N-term)</modification>
+         <modification delta="144.1020633">iTRAQ4plex (K)</modification>
+         <modification delta="144.102063">iTRAQ4plex (N-term)</modification>
+</modificationData>
+<!-- Modifications not supported yet.
+ <modification delta="42.010559">Acetyl (Protein N-term)</modification>
+ 
+ <modification delta="-0.984024">Amidated (Protein C-term)</modification>
+ <modification delta="-17.026535">Ammonia-loss (N-term C)</modification>
+ <modification delta="226.077591">Dehydrated (N-term C)</modification>
+
+
+
+ <modification delta="39.994919">Pyro-carbamidomethyl (N-term C)</modification>
+-->
+
+
+<!-- Identifications will be accepted if pep_score value is below this threshold. 
+	Ex.
+	 <pep_score_threshold>31</pep_score_threshold>
+
+-->
+
+<pep_score_threshold>50</pep_score_threshold>
+
+
+</param>

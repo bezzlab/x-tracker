@@ -1,0 +1,985 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  @(#)$Source: /vol/cvsroot/mascot/xml/schema/mascot_search_results_2.xsd,v $
+  @(#)$Revision: 1.15 $
+  @(#)$Name:  $
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msr="http://www.matrixscience.com/xmlns/schema/mascot_search_results_2" targetNamespace="http://www.matrixscience.com/xmlns/schema/mascot_search_results_2" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="mascot_search_results">
+		<xs:annotation>
+			<xs:documentation>Structured information parsed from a single Mascot search result file</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="header" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Information about the search</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="COM" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Search title</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Date" type="xs:dateTime">
+								<xs:annotation>
+									<xs:documentation>UTC date and time</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="USERNAME" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>User name</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="USEREMAIL" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>User email address</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="URI" type="xs:anyURI">
+								<xs:annotation>
+									<xs:documentation>URI for result report</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="FILENAME" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>File path to MS data</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="FORMAT" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>MS/MS peak list format</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="SEARCH" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Search type (from form)</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="MascotVer" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Mascot version</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="DB" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Sequence database name</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="FastaVer" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Fasta file name</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="NumSeqs" type="xs:long">
+								<xs:annotation>
+									<xs:documentation>Total number of entries in sequence database</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="NumResidues" type="xs:long">
+								<xs:annotation>
+									<xs:documentation>Total number of residues in sequence database</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="NumSeqsAfterTax" type="xs:long">
+								<xs:annotation>
+									<xs:documentation>Number of sequences after application of taxonomy filter</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="error_tolerant_num" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Number of entries searched in error tolerant mode</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:long">
+										<xs:minInclusive value="1"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="NumQueries">
+								<xs:annotation>
+									<xs:documentation>Number of queries</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:long">
+										<xs:minInclusive value="1"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="warning" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Warning messages</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:simpleContent>
+										<xs:extension base="xs:string">
+											<xs:attribute name="number" type="xs:integer" use="required"/>
+										</xs:extension>
+									</xs:simpleContent>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="decoy" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Decoy search statistics</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="NumHitsAboveIdentity" type="xs:long" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Number of matches above identity threshold in search of real database</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="NumDecoyHitsAboveIdentity" type="xs:long" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Number of matches above identity threshold in search of decoy database</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="NumHitsAboveHomology" type="xs:long" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Number of matches above homology threshold in search of real database, (MS/MS only)</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="NumDecoyHitsAboveHomology" type="xs:long" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Number of matches above homology threshold in search of decoy database, (MS/MS only)</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="HighestScoreProtein" type="xs:double" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Highest protein score in search of real database, (PMF only)</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="HighestScoreDecoyProtein" type="xs:double" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Highest protein score in search of decoy database, (PMF only)</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="fixed_mods" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Summary of fixed modification info.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="modification" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="name" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>modification name</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="delta" type="xs:double">
+											<xs:annotation>
+												<xs:documentation>mass delta</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="neutral_loss" type="xs:double" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Neutral loss</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="identifier" type="xs:string" use="required"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="variable_mods" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Summary of variable modification info.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="modification" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="name" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>modification name</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="delta" type="xs:double">
+											<xs:annotation>
+												<xs:documentation>mass delta</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="neutral_loss" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>Neutral loss</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="xs:double">
+														<xs:attribute name="identifier" type="xs:string" use="required"/>
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="identifier" type="xs:string" use="required"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="search_parameters" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Search parameters</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="TAXONOMY" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Taxonomy filter</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="CLE" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Enzyme</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="PFA">
+								<xs:annotation>
+									<xs:documentation>Maximum number of missed cleavages</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:integer">
+										<xs:minInclusive value="0"/>
+										<xs:maxInclusive value="9"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="MODS" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Fixed modifications</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="ICAT" type="xs:boolean" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>ICAT experiment</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="QUANTITATION" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Quantitation method</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="IT_MODS" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Variable modifications</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="TOL" type="xs:double">
+								<xs:annotation>
+									<xs:documentation>Peptide mass tolerance</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="TOLU">
+								<xs:annotation>
+									<xs:documentation>Peptide mass tolerance units</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="Da"/>
+										<xs:enumeration value="ppm"/>
+										<xs:enumeration value="%"/>
+										<xs:enumeration value="mmu"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CHARGE" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Peptide charge state</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="ITOL" type="xs:double" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Fragment mass tolerance</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="ITOLU" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Fragment mass tolerance units</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="Da"/>
+										<xs:enumeration value="mmu"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="MASS" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Monoisotopic or average</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="SEG" type="xs:double" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Protein mass window</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="INSTRUMENT" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Type of instrument</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="PEP_ISOTOPE_ERROR" type="xs:integer" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Isotope error mode</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="DECOY" type="xs:boolean" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Decoy database also searched</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="user_parameter" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>User defined parameters</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:simpleContent>
+										<xs:extension base="xs:string">
+											<xs:attribute name="name" type="xs:string" use="required"/>
+										</xs:extension>
+									</xs:simpleContent>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="format_parameters" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Report formatting parameters</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="sigthreshold" default="0.05">
+								<xs:annotation>
+									<xs:documentation>Significance threshold</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:double">
+										<xs:minInclusive value="0"/>
+										<xs:maxInclusive value="1"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="REPORT" type="xs:long" default="0">
+								<xs:annotation>
+									<xs:documentation>Max number of hits to report</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="mudpit" type="xs:boolean" default="0" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Use MudPIT protein scoring</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="ignoreionsscorebelow" default="0" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Ions score lower threshold</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:double">
+										<xs:minInclusive value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="show_same_sets" type="xs:boolean" default="0">
+								<xs:annotation>
+									<xs:documentation>Show all proteins that match the same set of peptides</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="showsubsets" type="xs:double" default="0">
+								<xs:annotation>
+									<xs:documentation>Show any proteins that match a sub-set of peptides</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="show_unassigned" type="xs:boolean" default="0" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Show peptide matches not
+assigned to protein hits</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="requireboldred" type="xs:boolean" default="0" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Require proteins to include at least one bold, red match</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="UNIGENE" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Cluster matches using the UniGene index for this species</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="use_homology" type="xs:boolean" default="0" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>If false, use identity threshold for calculating expect values. If true, use homology threshold</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="group_family" type="xs:boolean" default="0" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>If true, group proteins into families</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="percolate" type="xs:boolean" default="0" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>If true, recalculate scores and expect values using Percolator</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="masses" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="mass" minOccurs="26" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Mass values for elements, residues, termini, and variable modifications</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:simpleContent>
+										<xs:extension base="xs:double">
+											<xs:attribute name="name" type="xs:string" use="required"/>
+										</xs:extension>
+									</xs:simpleContent>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="hits" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The search results</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="hit" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Hits are numbered consecutively, but there may be no hits</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="protein" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>Each hit corresponds to one or more homologous proteins </xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="prot_desc" type="xs:string" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Description from Fasta title</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="prot_score" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Mascot protein score </xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:double">
+																<xs:minInclusive value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="prot_thresh" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Protein score significance threshold (PMF only)</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:double">
+																<xs:minInclusive value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="prot_expect" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Expectation value corresponding to protein score (PMF only)</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:double">
+																<xs:minInclusive value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="prot_mass" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Protein mass</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:double">
+																<xs:minInclusive value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="prot_matches" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Number of peptide matches</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:long">
+																<xs:minInclusive value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="prot_matches_sig" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Number of peptide matches at or above significance threshold</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:long">
+																<xs:minInclusive value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="prot_sequences" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Number of distinct peptide sequences</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:long">
+																<xs:minInclusive value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="prot_sequences_sig" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Number of distinct peptide sequences at or above significance threshold</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:long">
+																<xs:minInclusive value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="prot_cover" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Percentage coverage</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:double">
+																<xs:minInclusive value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="prot_len" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Length in residues</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:long">
+																<xs:minInclusive value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="prot_pi" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Calculated pI value</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:double">
+																<xs:minInclusive value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="prot_tax_str" type="xs:string" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Taxonomy</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="prot_tax_id" type="xs:long" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Taxonomy ID</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="prot_seq" type="xs:string" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Protein sequence</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="peptide" type="msr:peptideType" minOccurs="0" maxOccurs="unbounded"/>
+													<xs:element name="prot_empai" type="xs:double" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>emPAI value (MS/MS primary hit only)</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="quant_prot_ratio" minOccurs="0" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>Protein quantitation ratio (MS/MS primary hit only)</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:attribute name="name" type="xs:string" use="required"/>
+															<xs:attribute name="ratio" type="xs:string" use="optional"/>
+															<xs:attribute name="n" type="xs:string" use="optional"/>
+															<xs:attribute name="sd" type="xs:string" use="optional"/>
+															<xs:attribute name="significant" type="xs:string" use="optional"/>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+												<xs:attribute name="accession" type="xs:string" use="required"/>
+												<xs:attribute name="member" type="xs:string" use="optional"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="number" type="xs:long" use="required"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="unassigned" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Peptide matches not assigned to proteins</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="u_peptide" type="msr:peptideType" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="queries" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Query level information</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="query" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="query_moverz" type="xs:double">
+											<xs:annotation>
+												<xs:documentation>Supplied m/z</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="query_charge" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Supplied charge (string that may contain a list of charges)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="query_intensity" type="xs:double" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Supplied precursor intensity</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="StringTitle" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Scan title</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="SCANS" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Scan number range</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="RTINSECONDS" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Retention time range</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="qual_tol" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>peptol() qualifier</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="qual_seq" minOccurs="0" maxOccurs="20">
+											<xs:annotation>
+												<xs:documentation>seq() qualifier</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="xs:string">
+														<xs:attribute name="number" type="xs:integer" use="required"/>
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="qual_comp" minOccurs="0" maxOccurs="20">
+											<xs:annotation>
+												<xs:documentation>comp() qualifier</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="xs:string">
+														<xs:attribute name="number" type="xs:integer" use="required"/>
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="qual_tag" minOccurs="0" maxOccurs="20">
+											<xs:annotation>
+												<xs:documentation>tag() or etag() qualifier</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="xs:string">
+														<xs:attribute name="number" type="xs:integer" use="required"/>
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="query_TOL" type="xs:double" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Peptide mass tolerance</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="query_TOLU" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Peptide mass tolerance units</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:enumeration value="Da"/>
+													<xs:enumeration value="ppm"/>
+													<xs:enumeration value="%"/>
+													<xs:enumeration value="mmu"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="query_IT_MODS" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Variable modifications</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="query_INSTRUMENT" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Type of instrument</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TotalIonsIntensity" type="xs:double" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Sum of all the ions intensities</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="NumVals" type="xs:long" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Total number of ions</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="StringIons1" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Peak list for ions 1 as a string (any series)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="StringIons2" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Peak list for ions 2 as a string (N-term series)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="StringIons3" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Peak list for ions 3 as a string (C-term series)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="q_peptide" type="msr:peptideType" minOccurs="0" maxOccurs="unbounded"/>
+									</xs:sequence>
+									<xs:attribute name="number" type="xs:long" use="required"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="majorVersion" type="xs:unsignedShort" use="required" fixed="2"/>
+			<xs:attribute name="minorVersion" type="msr:minorVersion_t" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="peptideType">
+		<xs:annotation>
+			<xs:documentation>Peptide match details</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="pep_exp_mz" type="xs:double">
+				<xs:annotation>
+					<xs:documentation>Experimental m/z</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="pep_exp_mr" type="xs:double" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Experimental Mr</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="pep_exp_z" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Experimental charge</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:integer"/>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="pep_calc_mr" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Calculated Mr</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:double">
+						<xs:minInclusive value="0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="pep_delta" type="xs:double" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Mass error (calculated Mr - experimental Mr)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="pep_start" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>1 based residue count of peptide start position</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:long">
+						<xs:minInclusive value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="pep_end" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>1 based residue count of peptide end position</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:long">
+						<xs:minInclusive value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="pep_miss" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Number of missed cleavages</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:integer">
+						<xs:minInclusive value="0"/>
+						<xs:maxInclusive value="9"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="pep_score" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Mascot ions score</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:double">
+						<xs:minInclusive value="0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="pep_homol" type="xs:double" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Homology threshold (MS/MS only)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="pep_ident" type="xs:double" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Identity threshold (MS/MS only)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="pep_expect" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Expectation value corresponding to ions score</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:double">
+						<xs:minInclusive value="0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="pep_res_before" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The preceding residue, - if peptide is N-term of protein</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="pep_seq" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Sequence</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="pep_res_after" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The following residue, - if peptide is C-term of protein</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="pep_frame" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Frame number for translation of NA sequence</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:integer">
+						<xs:minInclusive value="1"/>
+						<xs:maxInclusive value="6"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="pep_var_mod" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Variable modification names as CSV </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="pep_var_mod_pos" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Variable modifications encoded as string</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="pep_num_match" type="xs:long" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Number of fragment ion matches used for scoring</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="pep_scan_title" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Query level scan title</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="quant_pep_ratio" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Peptide quantitation ratio (MS/MS primary hit only)</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="name" type="xs:string" use="required"/>
+					<xs:attribute name="ratio" type="xs:string" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="quant_pep_intensity" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Peptide quantitation component intensity (MS/MS primary hit only)</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="name" type="xs:string" use="required"/>
+					<xs:attribute name="intensity" type="xs:string" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="query" type="xs:long" use="required">
+			<xs:annotation>
+				<xs:documentation>1-based query number</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="rank" type="xs:long" use="optional">
+			<xs:annotation>
+				<xs:documentation>Rank for this match, from 1 to 10</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="isbold" type="xs:boolean" use="optional">
+			<xs:annotation>
+				<xs:documentation>True if this is the highest scoring protein hit containing any match to this query</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="isunique" type="xs:boolean" use="optional">
+			<xs:annotation>
+				<xs:documentation>True if this peptide sequence is unique to this protein hit (which may contain several same-set and sub-set proteins</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:simpleType name="minorVersion_t">
+		<xs:annotation>
+			<xs:documentation>Schema minor version number</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:unsignedShort">
+			<xs:maxInclusive value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

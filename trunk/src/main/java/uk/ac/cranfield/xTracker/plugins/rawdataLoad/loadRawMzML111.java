@@ -42,7 +42,7 @@ import uk.ac.cranfield.xTracker.xTracker;
  *
  * @author Jun Fan@cranfield,Faviel Gonzalez@liverpool
  */
-public class loadRawMzML111 implements rawData_loadPlugin {
+public class loadRawMzML111 extends rawData_loadPlugin {
 
     ArrayList<String> rawDataFiles = new ArrayList<String>();
     private final static String name = "loadRawMzML111";
@@ -270,16 +270,6 @@ public class loadRawMzML111 implements rawData_loadPlugin {
     public String getVersion() {
         return version;
     }
-
-    /**
-     * Method to retrieve the type of the plugin.
-     * @return A string with the plugin type.	
-     */
-    @Override
-    public String getType() {
-        return type;
-    }
-
     /**
      * Method to retrieve the description of the plugin.
      * @return A string with the plugin description.	

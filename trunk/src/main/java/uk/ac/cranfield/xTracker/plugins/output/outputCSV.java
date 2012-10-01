@@ -1,62 +1,80 @@
 package uk.ac.cranfield.xTracker.plugins.output;
 
-// Some useful imports for XML etc.
 import java.io.BufferedWriter;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import uk.ac.cranfield.xTracker.data.Identification;
 import uk.ac.liv.jmzqml.model.mzqml.Assay;
 import uk.ac.cranfield.xTracker.data.MSRun;
+import uk.ac.cranfield.xTracker.data.Study;
+import uk.ac.cranfield.xTracker.data.xFeature;
 import uk.ac.cranfield.xTracker.data.xPeptide;
 import uk.ac.cranfield.xTracker.data.xPeptideConsensus;
 import uk.ac.cranfield.xTracker.data.xProtein;
 import uk.ac.cranfield.xTracker.data.xRatio;
-import uk.ac.cranfield.xTracker.utils.XMLparser;
 import uk.ac.cranfield.xTracker.xTracker;
 import uk.ac.liv.jmzqml.model.mzqml.Ratio;
 import uk.ac.liv.jmzqml.model.mzqml.StudyVariable;
 
-public class outputCSV implements outPlugin {
+public class outputCSV extends outPlugin {
 
-    /**
-     * Prints the "3D" matrix with the results into a .csv file specified in the inputs of the plugin (in the xml file).
-     * @param InputData the data to be printed.
-     */
-//    public void start(Data inputData1, String paramFile) {
     @Override
     public void start(String paramFile) {
         //Let's first load the CSV output file name in from the xml parameter file.
         System.out.println("Output CSV plugin starts");
-        loadParams(paramFile);
+        outputFileName = getOutputFileName(paramFile);
+        if(outputFileName == null){
+            System.out.println("Can not get the output file name. There are several reasons: the wrong plugin parameter file using wrong xsd file, not defined in the parameter file");
+            System.exit(1);
+        }
         System.out.println(outputFileName);
         BufferedWriter out = null;
+        /**
+         * the map between msrun and assay IDs for that msrun
+         */
         HashMap<String,ArrayList<String>> msrun_assayIDs_map = new HashMap<String, ArrayList<String>>();
-        HashMap<String,StringBuilder> featureSbs = new HashMap<String, StringBuilder>();
+        /**
+         * the map between msrun and the corresponding hashmap between quantitation name and string builder for that msrun
+         */
+//        HashMap<String,HashMap<String,StringBuilder>> featureSbs = new HashMap<String, StringBuilder>();
+        HashMap<String,HashMap<String,StringBuilder>> featureSbs = new HashMap<String, HashMap<String, StringBuilder>>();
+        /**
+         * the list of study variables defined in the configuration file
+         */
         List<StudyVariable> svs = xTracker.study.getMzQuantML().getStudyVariableList().getStudyVariable();
-        //get assay ids
+        /**
+         * the list of assay IDs in all msruns
+         */
         ArrayList<String> allAssayIDs = new ArrayList<String>();
         for (MSRun msrun : xTracker.study.getMSRuns()) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("Feature quantiation in ");
-            sb.append(msrun.getID());
-            sb.append("\nFeature");
+            StringBuilder sbAssay = new StringBuilder();
+            sbAssay.append("\nFeature");
             ArrayList<String> assayIDs = new ArrayList<String>();
             for (Assay assay : msrun.getAssays()) {
                 assayIDs.add(assay.getId());
-                sb.append(",");
-                sb.append(assay.getId());
+                sbAssay.append(",");
+                sbAssay.append(assay.getId());
             }
-            sb.append("\n");
+            sbAssay.append("\n");
             msrun_assayIDs_map.put(msrun.getID(), assayIDs);
             allAssayIDs.addAll(assayIDs);
-            featureSbs.put(msrun.getID(), sb);
+            HashMap <String,StringBuilder> sbs = new HashMap<String, StringBuilder>();
+            for(String quantitationName:xTracker.study.getQuantitationNames()){
+                StringBuilder sb = new StringBuilder();
+                sb.append("Feature quantiation in ");
+                sb.append(msrun.getID());
+                sb.append("\n");
+                sb.append(quantitationName);
+                sb.append(sbAssay.toString());
+                sbs.put(quantitationName, sb);
+            }
+            featureSbs.put(msrun.getID(), sbs);
         }
         
-        //initialize strinb builders
+        //initialize string builders
         StringBuilder proteinSb = new StringBuilder();
         StringBuilder peptideSb = new StringBuilder();
         proteinSb.append("Protein quantitation\n"); 
@@ -146,15 +164,35 @@ public class outputCSV implements outPlugin {
                                 }
                             }
                             peptideSb.append("\n");
+                            //feature quantitiation
+                            if(xTracker.study.needFeatureQuantitation()){
+                                for (String msrunID : peptide.getMSRunIDs()) {
+                                    StringBuilder sb = featureSbs.get(msrunID).get(quantitationName);
+                                    for (xFeature feature : peptide.getFeatures(msrunID)) {
+                                        if (xTracker.study.getPipelineType() == Study.MS2_TYPE) {
+                                            for (Identification identification : feature.getIdentifications()) {
+                                                sb.append(feature.getId());
+                                                sb.append("-");
+                                                sb.append(identification.getMz());
+                                                sb.append("_");
+                                                sb.append(identification.getId());
+                                                for (String assayID : msrun_assayIDs_map.get(msrunID)) {
+                                                    sb.append(",");
+                                                    sb.append(identification.getQuantity(quantitationName, assayID));
+                                                }
+                                                sb.append("\n");
+                                            }
+                                        }
+                                    }
+                                    featureSbs.get(msrunID).put(quantitationName, sb);
+                                }
+                            }
                         }
                     }
                 }
                 peptideSb.append("\n");
             }
         }
-//        //feature, now skipped
-//        if(xTracker.study.getPipelineType()==Study.MS2_TYPE){
-//        }
         
         try {
             out = new BufferedWriter(new FileWriter(outputFileName));
@@ -166,41 +204,19 @@ public class outputCSV implements outPlugin {
                 out.append(proteinSb.toString());
                 out.append("\n");
             }
+            if(xTracker.study.needFeatureQuantitation()){
+                for(String msrun:featureSbs.keySet()){
+                    for (String quantitationName : xTracker.study.getQuantitationNames()) {
+                        out.append(featureSbs.get(msrun).get(quantitationName).toString());
+                        out.append("\n");
+                    }
+                }
+            }
             out.close();
         } catch (IOException e) {
             System.out.println("Problems while closing file " + outputFileName + "!\n" + e);
         }
         System.out.println("Output to CSV plugin done");
-    }
-
-    /**
-     * Loads the parameters
-     * @param dataFile a string with the xml file containing the parameters.
-     * A sample xml file follows:
-     * <?xml version="1.0" encoding="utf-8"?>
-     *   <!--
-     *       This is the outputCSV parameters file.
-     *       It specifies the filename of the CSV file where quantitative results have to be written to.
-     *   -->
-     *  <param>
-     *      <CSVfileName>./iTraqOutCSV.csv</CSVfileName>
-     *  </param>
-     *
-     */
-    private void loadParams(String dataFile) {
-        XMLparser parser = new XMLparser(dataFile);
-        parser.validate("param");
-        int i = 0;
-
-        NodeList itemList = parser.getElement("param").getChildNodes();
-        for (i = 0; i < itemList.getLength(); i++) {
-            Node item = itemList.item(i);
-            if (item.getNodeType() == Node.ELEMENT_NODE) {
-                if (item.getNodeName().equals("CSVfileName")) {
-                    outputFileName = item.getTextContent();
-                }
-            }
-        }
     }
 
     @Override
@@ -212,37 +228,25 @@ public class outputCSV implements outPlugin {
     public boolean supportMS2() {
         return true;
     }
-
     /**
      * Gets the plugin name.
-     * @return pluginName
+     * @return plugin name
      */
     @Override
     public String getName() {
         return name;
     }
-
     /**
      * Gets the plugin version.
-     * @return pluginVersion
+     * @return pluginv ersion
      */
     @Override
     public String getVersion() {
         return version;
     }
-
-    /**
-     * Gets the plugin type.
-     * @return pluginType
-     */
-    @Override
-    public String getType() {
-        return type;
-    }
-
     /**
      * Gets the plugin description.
-     * @return pluginDescription
+     * @return plugin description
      */
     @Override
     public String getDescription() {

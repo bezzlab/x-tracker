@@ -87,13 +87,14 @@ public class xTracker {
     public static void main(String[] args) {
 //        System.out.println(UnimodParser.getUnimodID("iTRAQ4plex"));
 //        System.exit(0);
-        new xTracker("paper_iTraq4plex\\iTraqMzIDmzMLmzq.mzq");
+//        new xTracker("paper_iTraq4plex\\iTraqMzIDmzMLmzTab.mzq");
+//        new xTracker("paper_iTraq4plex\\iTraqMzIDmzMLmzq.mzq");
 //        new xTracker("paper_iTraq4plex\\iTraqMzIDmzMLcsv.mzq");
 //        new xTracker("paper_iTraq4plex\\iTraqMzIDmgfCsv.mzq");
 //        new xTracker("paper_iTraq4plex\\iTraqMascotMzMLmzq.mzq");
 //        new xTracker("paper_iTraq4plex\\iTraqMascotMGFcsvSingle.mzq");
 //        new xTracker("paper_iTraq4plex\\iTraqMascotMGFmzqMultiple.mzq");
-        System.exit(0);
+//        System.exit(0);
         switch (args.length) {
             case 1: {
                 new xTracker(args[0]);
@@ -144,7 +145,7 @@ public class xTracker {
                 if(accession != null){
                     Matcher m = pattern.matcher(accession);
                     if (m.find()) {//accession found
-                        setFlagByAccession(Integer.parseInt(m.group(1)),cvParam.getValue());
+                        setFlagByAccession(Integer.parseInt(m.group(1)),cvParam);
                     }else{//accession not found 
                         setFlagByName(cvParam.getName(),cvParam.getValue());
                     }
@@ -289,8 +290,9 @@ public class xTracker {
      * @param accession PSI MS accession
      * @param value the flag value in the cvParam
      */
-    private void setFlagByAccession(int accession,String value){
+    private void setFlagByAccession(int accession,CvParam cvParam){
         boolean flag = false;
+        String value = cvParam.getValue();
         if(value != null && value.equalsIgnoreCase("true")) flag = true;
         switch(accession){
             case 1001834: //LC-MS label-free quantitation analysis
@@ -298,6 +300,7 @@ public class xTracker {
             case 1001839: //metabolic labeling 14N / 15N quantitation analysis
             case 1002018: //MS1 label-based analysis
                 study.setPipelineType(Study.MS1_TYPE);
+                study.setQuantitationMethod(cvParam);
                 return;
             case 1001836: //spectral counting quantitation analysis
             case 1001837: //iTRAQ quantitation analysis
@@ -306,6 +309,7 @@ public class xTracker {
             case 1002010: //TMT quantitation analysis
             case 1002023: //MS2 tag-based analysis
                 study.setPipelineType(Study.MS2_TYPE);
+                study.setQuantitationMethod(cvParam);
                 return;
             case 1002001: //MS1 label-based raw feature quantitation
             case 1002019: //label-free raw feature quantitation is_a: MS:1001834
@@ -379,6 +383,9 @@ public class xTracker {
         System.out.println("The plugin folder is "+PLUGIN_PATH);
         manager = new PluginManager();
         parseMzQuantML(filename);
+//        outputMzTab plugin = new outputMzTab();
+//        plugin.start("paper_iTraq4Plex/outputMzTab.xtp");
+//        System.exit(0);
         manager.execute();
         System.out.println("*************************************************");
         System.out.println("** xTracker finished execution without errors! **");

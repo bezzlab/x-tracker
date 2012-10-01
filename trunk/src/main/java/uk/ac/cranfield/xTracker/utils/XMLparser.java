@@ -15,6 +15,7 @@ import javax.xml.validation.Validator;
 import org.w3c.dom.Document;
 
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
@@ -107,6 +108,21 @@ public class XMLparser {
     public Node getElement(String tagName){
         if(isValidated()){
             return doc.getElementsByTagName(tagName).item(0);
+        }
+        return null;
+    }
+    
+    public String getElementContent(String baseTagName,String contentTagName){
+        Node node = getElement(baseTagName);
+        if (node == null) return null;
+        NodeList nodeList = node.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node item = nodeList.item(i);
+            if (item.getNodeType() == Node.ELEMENT_NODE) {
+                if (item.getNodeName().equals(contentTagName)) {
+                    return item.getTextContent();
+                }
+            }
         }
         return null;
     }

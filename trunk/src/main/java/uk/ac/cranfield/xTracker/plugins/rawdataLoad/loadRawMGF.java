@@ -23,7 +23,7 @@ import uk.ac.cranfield.xTracker.data.xSpectrumList;
 import uk.ac.cranfield.xTracker.utils.XMLparser;
 import uk.ac.cranfield.xTracker.xTracker;
 
-public class loadRawMGF implements rawData_loadPlugin {
+public class loadRawMGF extends rawData_loadPlugin {
     /**
      * Loads raw data from MGF files specified in the paramFile
      * The details of MGF format can be found at http://www.matrixscience.com/help/data_file_help.html
@@ -213,25 +213,15 @@ public class loadRawMGF implements rawData_loadPlugin {
 
     /**
      * Gets the plugin version.
-     * @return pluginVersion
+     * @return plugin version
      */
     @Override
     public String getVersion() {
         return version;
     }
-
-    /**
-     * Gets the plugin type.
-     * @return pluginType
-     */
-    @Override
-    public String getType() {
-        return type;
-    }
-
     /**
      * Gets the plugin description.
-     * @return pluginDescription
+     * @return plugin description
      */
     @Override
     public String getDescription() {

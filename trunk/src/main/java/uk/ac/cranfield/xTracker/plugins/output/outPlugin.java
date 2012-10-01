@@ -1,29 +1,28 @@
 package uk.ac.cranfield.xTracker.plugins.output;
 
 import uk.ac.cranfield.xTracker.plugins.pluginInterface;
+import uk.ac.cranfield.xTracker.utils.XMLparser;
+import uk.ac.cranfield.xTracker.xTracker;
 
-/**
- * The outPlugin interface.
- * <p>
- * It extends the generic pluginInterface and inherits all the methods of the pluginInterface
- * but it has the <code>start()</code> method which has as input an xQuant structure and as output a
- * void structure.
- * @see pluginInterface
- * @see xQuant 
- * @author Dr. Luca Bianco (l.bianco@cranfield.ac.uk) -- Cranfield Health, Cranfield University --
- * X-Tracker Project.
- */
-public interface outPlugin extends pluginInterface{
-   String type = uk.ac.cranfield.xTracker.xTracker.OUTPUT_TYPE;
-      /**
-     * The plugin start method invoked to load the data structures to work on.
-     * @param inputData is the xQuant structure, loaded with the quantPlugin, to work on. 
-     * @param paramFile is a string containing parameters. If no parameters are needed by the
-     * plugin then paramFile is an empty string. 
-     * @see xQuant
-     * 
+public abstract class outPlugin implements pluginInterface{
+    /**
+     * Gets the plugin type.
+     * @return plugin type
      */
-//    public void start(Data inputData, String paramFile);
+    @Override
+    public String getType(){
+        return xTracker.OUTPUT_TYPE;
+    }
+    
+    protected String getOutputFileName(String filename){
+        return getOutputFileName(filename, "output", "outputFilename");
+    }
+    
+    protected String getOutputFileName(String filename, String baseTag, String contentTag){
+        XMLparser parser = new XMLparser(filename);
+        parser.validate(baseTag);
+        return parser.getElementContent(baseTag, contentTag);
+    }
 }
 
 

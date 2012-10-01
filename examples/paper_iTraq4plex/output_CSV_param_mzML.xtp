@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<param xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Plugins/outputCSV.xsd">
-<CSVfileName>paper_iTraq4Plex/mzML.csv</CSVfileName>
-</param>
+<output xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Plugins/outputGeneral.xsd">
+	<outputFilename>paper_iTraq4Plex/mzML.csv</outputFilename>
+</output>

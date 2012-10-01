@@ -66,6 +66,11 @@
 				<userParam name="Plugin name" value="outputMZQ"/>
 				<userParam name="Plugin configuration file" value="paper_iTraq4plex/outputMZQ.xtp"/>
 			</ProcessingMethod>
+			<ProcessingMethod order="5">
+				<userParam name="Plugin type" value="output"/>
+				<userParam name="Plugin name" value="outputMzTab"/>
+				<userParam name="Plugin configuration file" value="paper_iTraq4plex/outputMzTab.xtp"/>
+			</ProcessingMethod>
 		</DataProcessing>
 	</DataProcessingList>
 	

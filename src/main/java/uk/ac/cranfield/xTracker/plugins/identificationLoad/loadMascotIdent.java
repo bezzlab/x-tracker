@@ -1,6 +1,8 @@
 package uk.ac.cranfield.xTracker.plugins.identificationLoad;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,10 +19,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.util.*;
+import uk.ac.ebi.pride.jmztab.MzTabParsingException;
 import uk.ac.liv.jmzqml.model.mzqml.Param;
 import uk.ac.liv.jmzqml.model.mzqml.SearchDatabase;
 import uk.ac.liv.jmzqml.model.mzqml.UserParam;
 import uk.ac.cranfield.xTracker.data.Identification;
+import uk.ac.cranfield.xTracker.data.Metadata;
 import uk.ac.cranfield.xTracker.data.xFeature;
 import uk.ac.cranfield.xTracker.data.xModification;
 import uk.ac.cranfield.xTracker.data.xPeptide;
@@ -31,7 +35,7 @@ import uk.ac.cranfield.xTracker.xTracker;
  * 
  * @author Jun Fan<j.fan@cranfield.ac.uk>
  */
-public class loadMascotIdent implements identData_loadPlugin {
+public class loadMascotIdent extends identData_loadPlugin {
     /**
      * reflect the relationship between raw spectral files and their corresponding identification files
      */
@@ -137,7 +141,7 @@ public class loadMascotIdent implements identData_loadPlugin {
                             }
                         }
                     }
-                    SearchDatabase sd = xTracker.study.getSearchDatabase(type);
+                    SearchDatabase sd = xTracker.study.getSearchDatabase(database);
                     if (sd == null) {//the first time to see the currect searchDatabaseRef
                         //autoResolving set to true in line 211 for DBSequence
                         sd = new SearchDatabase();
@@ -302,6 +306,7 @@ public class loadMascotIdent implements identData_loadPlugin {
                 }
             }
         }
+        populateMetadata();
         System.out.println("LoadMascotIdent completed!");
     }
     /**
@@ -498,12 +503,17 @@ public class loadMascotIdent implements identData_loadPlugin {
     }
 
     @Override
-    public String getType() {
-        return type;
+    public String getDescription() {
+        return description;
     }
 
     @Override
-    public String getDescription() {
-        return description;
+    void populateMetadata() {
+        try {
+            uk.ac.ebi.pride.jmztab.model.Param software = new uk.ac.ebi.pride.jmztab.model.Param("PSI-MS", "MS:1001207", "Mascot", "");
+            xTracker.study.getMetadata().addSoftware(software);
+        } catch (MzTabParsingException ex) {
+            Logger.getLogger(loadMascotIdent.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

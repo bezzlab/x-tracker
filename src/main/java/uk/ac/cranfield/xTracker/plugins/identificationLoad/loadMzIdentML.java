@@ -28,12 +28,14 @@ import uk.ac.cranfield.xTracker.data.xPeptide;
 import uk.ac.cranfield.xTracker.data.xProtein;
 import uk.ac.cranfield.xTracker.utils.XMLparser;
 import uk.ac.cranfield.xTracker.xTracker;
+import uk.ac.ebi.jmzidml.model.mzidml.AnalysisSoftware;
+import uk.ac.ebi.jmzidml.model.mzidml.AnalysisSoftwareList;
 
 /**
  *
  * @author Jun Fan@cranfield
  */
-public class loadMzIdentML implements identData_loadPlugin{
+public class loadMzIdentML extends identData_loadPlugin{
     /**
      * reflect the relationship between raw spectral files and their corresponding identification files
      */
@@ -82,6 +84,13 @@ public class loadMzIdentML implements identData_loadPlugin{
                     System.exit(1);
                 }
 
+                AnalysisSoftwareList softwareList = unmarshaller.unmarshal(MzIdentMLElement.AnalysisSoftwareList);
+                if(softwareList!=null){
+                    for(AnalysisSoftware software : softwareList.getAnalysisSoftware()){
+                        xParam swParam = new xParam(software.getSoftwareName());
+                        xTracker.study.getMetadata().addSoftware(swParam.convertToTabParam());
+                    }
+                }
                 AnalysisData analysisData = unmarshaller.unmarshal(MzIdentMLElement.AnalysisData);
                 List<SpectrumIdentificationList> silList = analysisData.getSpectrumIdentificationList();
                 for (SpectrumIdentificationList sil : silList) {
@@ -236,11 +245,6 @@ public class loadMzIdentML implements identData_loadPlugin{
     }
 
     @Override
-    public String getType() {
-        return type;
-    }
-
-    @Override
     public String getDescription() {
         return description;
     }
@@ -253,5 +257,12 @@ public class loadMzIdentML implements identData_loadPlugin{
     @Override
     public boolean supportMS2() {
         return true;
+    }
+    /**
+     * Metadata is set in-line
+     */
+    @Override
+    void populateMetadata() {
+        ;
     }
 }

@@ -1,5 +1,8 @@
 package uk.ac.cranfield.xTracker.data;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import uk.ac.ebi.pride.jmztab.MzTabParsingException;
 import uk.ac.liv.jmzqml.model.mzqml.CvParam;
 import uk.ac.ebi.jmzidml.model.mzidml.Param;
 import uk.ac.liv.jmzqml.model.mzqml.UserParam;
@@ -46,5 +49,19 @@ public class xParam {
         uk.ac.liv.jmzqml.model.mzqml.Param qparam = new uk.ac.liv.jmzqml.model.mzqml.Param();
         qparam.setParamGroup(abstractParam);
         return qparam;
+    }
+    
+    public uk.ac.ebi.pride.jmztab.model.Param convertToTabParam(){
+        uk.ac.ebi.pride.jmztab.model.Param tabParam = null;
+        try {
+            if (param.getCvParam() != null) {
+                tabParam = new uk.ac.ebi.pride.jmztab.model.Param(param.getCvParam().getCv().getId(), param.getCvParam().getAccession(), param.getCvParam().getName(),param.getCvParam().getValue());
+            }else{
+                tabParam = new uk.ac.ebi.pride.jmztab.model.Param(param.getUserParam().getName(), param.getUserParam().getValue());
+            }
+        } catch (MzTabParsingException ex) {
+            Logger.getLogger(xParam.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return tabParam;
     }
 }

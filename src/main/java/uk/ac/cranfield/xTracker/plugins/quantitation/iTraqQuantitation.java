@@ -26,7 +26,7 @@ import uk.ac.cranfield.xTracker.xTracker;
  *
  * @author Jun Fan@cranfield
  */
-public class iTraqQuantitation implements quantitationPlugin{
+public class iTraqQuantitation extends quantitationPlugin{
     private String name = "iTraq N-plex Feature Detection and Quantitation plugin";
     private String version = "1.0";
     private String description = "It is a general plugin that can deal with a generic number N (4 or 8) of iTraq reporter ions\n\tspecified in the mzQuantML configuration file with their M/Z values contained in the parameter file(.xtp).";
@@ -337,11 +337,6 @@ public class iTraqQuantitation implements quantitationPlugin{
     @Override
     public String getVersion() {
         return version;
-    }
-
-    @Override
-    public String getType() {
-        return type;
     }
 
     @Override

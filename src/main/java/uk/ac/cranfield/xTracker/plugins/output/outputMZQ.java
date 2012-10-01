@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import uk.ac.liv.jmzqml.model.mzqml.Assay;
 import uk.ac.liv.jmzqml.model.mzqml.CvParamRef;
 import uk.ac.liv.jmzqml.model.mzqml.DataMatrix;
@@ -29,7 +27,6 @@ import uk.ac.cranfield.xTracker.data.xPeptide;
 import uk.ac.cranfield.xTracker.data.xPeptideConsensus;
 import uk.ac.cranfield.xTracker.data.xProtein;
 import uk.ac.cranfield.xTracker.data.xRatio;
-import uk.ac.cranfield.xTracker.utils.XMLparser;
 import uk.ac.cranfield.xTracker.xTracker;
 import uk.ac.liv.jmzqml.model.mzqml.AbstractParam;
 import uk.ac.liv.jmzqml.model.mzqml.DataProcessing;
@@ -42,7 +39,7 @@ import uk.ac.liv.jmzqml.model.mzqml.UserParam;
  *
  * @author Jun Fan@cranfield
  */
-public class outputMZQ implements outPlugin{
+public class outputMZQ extends outPlugin{
     private String name = "Output mzQuantML";
     private String version = "1.0";
     private String description = "export the pipeline result along with the identifications into the mzQuantML file specified in the parameter file";
@@ -52,7 +49,11 @@ public class outputMZQ implements outPlugin{
     @Override
     public void start(String paramFile) {
         System.out.println(getName()+" starts");
-        loadParams(paramFile);
+        outputFilename = getOutputFileName(paramFile);
+        if(outputFilename == null){
+            System.out.println("Can not get the output file name. There are several reasons: the wrong plugin parameter file using wrong xsd file, not defined in the parameter file");
+            System.exit(1);
+        }
         System.out.println(outputFilename);
         MzQuantML mzq = xTracker.study.getMzQuantML();
         ProteinList proteinList = new ProteinList();
@@ -406,37 +407,41 @@ public class outputMZQ implements outPlugin{
         return "unrecognized method";       
     }
     
-    private void loadParams(String dataFile) {
-        XMLparser parser = new XMLparser(dataFile);
-        parser.validate("outputMZQ");
-        int i = 0;
-
-        NodeList itemList = parser.getElement("outputMZQ").getChildNodes();
-        for (i = 0; i < itemList.getLength(); i++) {
-            Node item = itemList.item(i);
-            if (item.getNodeType() == Node.ELEMENT_NODE) {
-                if (item.getNodeName().equals("outputFilename")) {
-                    outputFilename = item.getTextContent();
-                }
-            }
-        }
-    }
-    
-    @Override
-    public String getType() {
-        return type;
-    }
-
+//    private void loadParams(String dataFile) {
+//        XMLparser parser = new XMLparser(dataFile);
+//        parser.validate("outputMZQ");
+//        int i = 0;
+//
+//        NodeList itemList = parser.getElement("outputMZQ").getChildNodes();
+//        for (i = 0; i < itemList.getLength(); i++) {
+//            Node item = itemList.item(i);
+//            if (item.getNodeType() == Node.ELEMENT_NODE) {
+//                if (item.getNodeName().equals("outputFilename")) {
+//                    outputFilename = item.getTextContent();
+//                }
+//            }
+//        }
+//    }
+    /**
+     * Gets the plugin description.
+     * @return plugin description
+     */
     @Override
     public String getDescription() {
         return description;
     }
-
+    /**
+     * Gets the plugin name.
+     * @return plugin name
+     */
     @Override
     public String getName() {
         return name;
     }
-
+    /**
+     * Gets the plugin version.
+     * @return pluginv ersion
+     */
     @Override
     public String getVersion() {
         return version;

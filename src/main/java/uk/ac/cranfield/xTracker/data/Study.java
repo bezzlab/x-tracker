@@ -22,6 +22,23 @@ public class Study {
      */
     private String filename;
     /**
+     * the name of quantitation method defined in the AnalysisSummary in the configuration file
+     */
+    private CvParam quantitationMethod = null;
+
+    public CvParam getQuantitationMethod() {
+        return quantitationMethod;
+    }
+
+    public void setQuantitationMethod(CvParam quantitationMethod) {
+        if(this.quantitationMethod != null && (!this.quantitationMethod.getAccession().equals(quantitationMethod.getAccession()))){
+            System.out.println("More than one different quantitation methods defined in the AnalysisSummary");
+            System.exit(1);
+        }
+        this.quantitationMethod = quantitationMethod;
+    }
+    private Metadata metadata = new Metadata();
+    /**
      * the mzQuantML object of the configuration file
      */
     private MzQuantML mzQuantML;
@@ -508,5 +525,9 @@ public class Study {
      */
     public void addAssayRatio(Ratio ratio) {
         assayRatios.add(ratio);
+    }
+
+    public Metadata getMetadata() {
+        return metadata;
     }
 }

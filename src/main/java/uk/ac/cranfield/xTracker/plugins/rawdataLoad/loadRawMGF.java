@@ -40,7 +40,7 @@ public class loadRawMGF extends rawData_loadPlugin {
         loadParams(paramFile);
         //this involves with reading raw files which are stored in msrun, so the only case loop through msrun first
         for(MSRun msrun:xTracker.study.getMSRuns()){
-            HashMap<String,HashMap<String,Identification>> index = new HashMap<String, HashMap<String, Identification>>();
+            HashMap<String,HashMap<String,ArrayList<Identification>>> index = new HashMap<String, HashMap<String, ArrayList<Identification>>>();
             for (xProtein protein:xTracker.study.getProteins()){
                 ArrayList<xPeptideConsensus> peptideCons = protein.getPeptides();
                 for (xPeptideConsensus pepCon : peptideCons) {
@@ -51,14 +51,22 @@ public class loadRawMGF extends rawData_loadPlugin {
                             for (Identification identification : feature.getIdentifications()) {
                                 String location = identification.getSpectraDataLocation();
                                 if(!location.toLowerCase().endsWith(".mgf")) continue;
-                                HashMap <String,Identification> map;
+                                HashMap <String,ArrayList<Identification>> map;
                                 if(index.containsKey(location)){
                                     map = index.get(location);
                                 }else{
-                                    map = new HashMap<String, Identification>();
+                                    map = new HashMap<String, ArrayList<Identification>>();
                                     index.put(location, map);
                                 }
-                                map.put(identification.getSpectrumID(), identification);
+                                ArrayList<Identification> idents;
+                                final String specID = identification.getSpectrumID();
+                                if (map.containsKey(specID)){
+                                    idents = map.get(specID);
+                                }else{
+                                    idents = new ArrayList<Identification>();
+                                    map.put(specID, idents);
+                                }
+                                idents.add(identification);
                             }
                         }
                     }
@@ -67,7 +75,7 @@ public class loadRawMGF extends rawData_loadPlugin {
             if(index.keySet().isEmpty()) continue;
             for(RawFile rawfile:msrun.getRawFilesGroup().getRawFile()){
                 System.out.println(rawfile.getLocation());
-                HashMap<String,Identification> map = index.get(rawfile.getLocation());
+                HashMap<String,ArrayList<Identification>> map = index.get(rawfile.getLocation());
                 try{
                     BufferedReader in = new BufferedReader(new FileReader(rawfile.getLocation()));
                     //PEPMASS is a must-have parameter, check for every MS2 spectrum
@@ -161,7 +169,10 @@ public class loadRawMGF extends rawData_loadPlugin {
                                 System.exit(1);
                             }
                             if(map.containsKey(title)){
-                                map.get(title).setMs2spectrum(spec);
+                                for(Identification ident: map.get(title)){
+                                    ident.setMs2spectrum(spec);
+                                }
+//                                map.get(title).setMs2spectrum(spec);
                             }
                         }
                     }

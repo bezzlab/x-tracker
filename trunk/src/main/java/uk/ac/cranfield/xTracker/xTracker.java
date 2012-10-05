@@ -8,6 +8,7 @@ import java.io.FileWriter;
 
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -74,7 +75,8 @@ public class xTracker {
     /**
      * defines the location of plugins
      */
-    public static String PLUGIN_PATH = "Plugins/";
+//    public static String PLUGIN_PATH = "Plugins/";
+    public static ArrayList<String> folders = new ArrayList<String>();
     /**
      * the plugin manager, populated during parsing the configuration file and then execute
      */
@@ -85,26 +87,35 @@ public class xTracker {
     private final String MZQ_XSD = "mzQuantML_1_0_0-rc2.xsd";
 
     public static void main(String[] args) {
-//        System.out.println(UnimodParser.getUnimodID("iTRAQ4plex"));
+        folders.add(".");
+        folders.add("..");
+        folders.add("Plugins");
+        folders.add("../Plugins");
+        folders.add("Examples");
+        folders.add("../Examples");
+//        String basefile = "paper_iTraq4plex/iTraqMzIDmzMLmzq.mzq";
+//        String basefile = "paper_iTraq4plex/iTraqMzIDmgfCsv.mzq";
+//        String basefile = "paper_iTraq4plex/iTraqMascotMzMLmzq.mzq";
+//        String basefile = "paper_iTraq4plex/iTraqMascotMGFcsvSingle.mzq";
+//        String basefile = "paper_iTraq4plex/iTraqMascotMGFmzqMultiple.mzq";
+//        String filename = Utils.locateFile(basefile, folders);
+//        new xTracker(filename);
 //        System.exit(0);
-//        new xTracker("paper_iTraq4plex\\iTraqMzIDmzMLmzTab.mzq");
-//        new xTracker("paper_iTraq4plex\\iTraqMzIDmzMLmzq.mzq");
-//        new xTracker("paper_iTraq4plex\\iTraqMzIDmzMLcsv.mzq");
-//        new xTracker("paper_iTraq4plex\\iTraqMzIDmgfCsv.mzq");
-//        new xTracker("paper_iTraq4plex\\iTraqMascotMzMLmzq.mzq");
-//        new xTracker("paper_iTraq4plex\\iTraqMascotMGFcsvSingle.mzq");
-//        new xTracker("paper_iTraq4plex\\iTraqMascotMGFmzqMultiple.mzq");
-//        System.exit(0);
+        String filename;
         switch (args.length) {
             case 1: {
+                String basefile = args[0];
+                filename = Utils.locateFile(basefile, folders);
                 new xTracker(args[0]);
                 break;
             }
-            case 2: {
-                PLUGIN_PATH = args[1]+"/";
+            case 2: 
+                String basefile = args[0];
+                filename = Utils.locateFile(basefile, folders);
+                folders.add(args[1]);
                 new xTracker(args[0]);
                 break;
-            }
+            
             default: {
                 System.out.println("Usage: java xTracker <configuration.mzq> [plugin folder]");
                 System.out.println("The configuration file is in mzQuantML format, which defines the parameters of the pipeline");
@@ -130,12 +141,14 @@ public class xTracker {
         //assign to Study.mzQuantML
         study.setMzQuantML(mzQuantML);
         study.setFilename(filename);
-        //deal with the CVs
+        //deal with the CV resources
         for(Cv cv:mzQuantML.getCvList().getCv()){
             xTracker.study.addCv(cv.getId(),cv);
         }
 
         //Set pipeline type and quantitation level flags from AnalysisSummary
+        //AnalysisSummary 1..1, therefore if the mzq is valid, analysissummary always there
+        //similar situation applies to other 1..1 elements
         List<AbstractParam> paramList = mzQuantML.getAnalysisSummary().getParamGroup();
         Pattern pattern = Pattern.compile("^MS:(\\d+)");//PSI-MS CV accession pattern
         for(AbstractParam param: paramList){
@@ -180,7 +193,8 @@ public class xTracker {
                         if(name.equals("plugin name")){
                             pluginName = userParam.getValue();
                         }else if(name.equals("plugin configuration file")){
-                            pluginParam = userParam.getValue();
+                            //search for the parameter file in the pre-defined folders
+                            pluginParam = Utils.locateFile(userParam.getValue(), folders);
                         }else if(name.equals("plugin type")){
                             pluginType = userParam.getValue();
                         }else if(name.equals("feature to peptide inference method")){
@@ -202,13 +216,13 @@ public class xTracker {
                         }
                     }
                 }
+                //the parameter file has been searched and stored
                 System.out.println("step "+step+": plugin "+pluginName+" for "+pluginType+" with parameter file "+pluginParam);
                 if(pluginName.length()>0) manager.addPlugin(pluginName, pluginParam, pluginType);
             }
         }
         System.out.println("from feature to peptide:"+PEPTIDE_FEATURE_INFERENCE);
         System.out.println("from peptide to protein:"+PROTEIN_PEPTIDE_INFERENCE);
-//        System.out.println("from protein to protein group:"+PROTEIN_GROUP_PROTEIN_INFERENCE);
         System.out.println("from assay to study variable:"+SV_ASSAY_INFERENCE);
         if(!pipelineGenerated){
             System.out.println("No pipeline found for xTracker in the DataProcessingList, program terminated");
@@ -223,8 +237,10 @@ public class xTracker {
             MSRun msrun = new MSRun(rawFileGroup);
             study.addMSRun(rawFileGroup.getId(),msrun);
             List<RawFile> rawFileList = rawFileGroup.getRawFile();
+            //check the existance of the required files, the filenames get unchanged in msrun
             for(RawFile raw: rawFileList){
-                File file = new File(raw.getLocation());
+                String location = Utils.locateFile(raw.getLocation(),folders);
+                File file = new File(location);
                 if(!file.exists()){
                     System.out.println("The required raw spectral file "+file.getAbsolutePath()+ " can not be found");
                     System.exit(1);
@@ -241,12 +257,14 @@ public class xTracker {
         }
         List<IdentificationFile> idenList = identificationFiles.getIdentificationFile();
         for(IdentificationFile iden:idenList){
-            File file = new File(iden.getLocation());
+            String location = Utils.locateFile(iden.getLocation(), folders);
+            File file = new File(location);
             if (!file.exists()) {
                 System.out.println("The required identification file " + file.getAbsolutePath() + " can not be found");
                 System.exit(1);
             }
             System.out.println("Identification file: " + file.getAbsolutePath());
+            //similarly store the identification file name from the mzq file
             study.addIdentificationFile(iden.getLocation());
         }
         
@@ -380,12 +398,8 @@ public class xTracker {
     }
     
     public xTracker(String filename) {
-        System.out.println("The plugin folder is "+PLUGIN_PATH);
         manager = new PluginManager();
         parseMzQuantML(filename);
-//        outputMzTab plugin = new outputMzTab();
-//        plugin.start("paper_iTraq4Plex/outputMzTab.xtp");
-//        System.exit(0);
         manager.execute();
         System.out.println("*************************************************");
         System.out.println("** xTracker finished execution without errors! **");
@@ -491,28 +505,6 @@ public class xTracker {
             }
         }
         return retVal;
-    }
-    /**
-     * the old codes left since version 1.3, for the legacy purpose only
-     */
-    private void errorUsage() {
-        printUsage();
-        //Let's list now possible plugins (i.e. plugins that are in the folder Plugins\
-        File f = new File(PLUGIN_PATH);  //plugins
-        File[] files = f.listFiles();   //array of available plugins
-        if (files == null) {
-            System.out.println("There are no plugins in the fold " + f.getAbsolutePath());
-        } else {
-            System.out.println("\n\tThe following plugins are currently available (in \"Plugins\" folder):");
-            for (int i = 0; i < files.length; i++) {
-                if (files[i].isFile() && (files[i].getName().indexOf(".jar")) > 0) {
-                    System.out.println("\t - " + files[i].getName());
-                }
-            }
-        }
-        //Let's print the index.html help file
-//        printHtmlHelp("./Plugins/");
-        System.exit(0);
     }
     /**
      * the old codes left since version 1.3, for the legacy purpose only

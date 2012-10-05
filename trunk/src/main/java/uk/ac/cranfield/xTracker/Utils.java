@@ -37,6 +37,7 @@ import javax.swing.JOptionPane;
 //import cern.jet.stat.Descriptive;
 
 import com.thoughtworks.xstream.XStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -578,6 +579,36 @@ public class Utils {
 
     public static Object getObjectFromXMLFile(String filename, HashMap<String, Class> alias) {
         return convertFromXML(getStringFromFile(filename), alias);
+    }
+    
+    public static String getPath(String fullname){
+        int location  = fullname.lastIndexOf("/");
+        if (location >=0) return fullname.substring(0,location);
+        location =  fullname.lastIndexOf("\\");
+        if (location == -1) return "";
+        return fullname.substring(0,location);
+    }
+    
+    public static String getFilename(String fullname){
+        int location  = fullname.lastIndexOf("/");
+        if (location >=0) return fullname.substring(location+1);
+        location =  fullname.lastIndexOf("\\");
+        if (location == -1) return fullname;
+        return fullname.substring(location+1);
+    }
+    
+    public static String locateFile(String basename,ArrayList<String> folders){
+        if (basename.length()==0) return "";
+        File file;
+        for(String folder:folders){
+            String filename = folder+"/"+basename;
+            file = new File(filename);
+            if(file.exists()) return filename;
+        }
+        System.out.println("No such file "+basename+" exists in the following folder(s):");
+        System.out.println(folders.toString());
+        System.exit(1);
+        return null;
     }
 }
 

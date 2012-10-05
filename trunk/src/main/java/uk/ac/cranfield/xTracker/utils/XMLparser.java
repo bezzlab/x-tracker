@@ -17,6 +17,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import uk.ac.cranfield.xTracker.Utils;
+import uk.ac.cranfield.xTracker.xTracker;
 
 /**
  *
@@ -30,7 +32,7 @@ public class XMLparser {
         filename = fileName;
     }
     /**
-     * validate the xml file with the xsd file provided
+     * validate the xml file with the xsd file defined within the file
      * @param validatorTagName the tag where contains the location of the xsd file
      */
     public void validate(String validatorTagName){
@@ -70,8 +72,8 @@ public class XMLparser {
                 }
             }
             // load the xtracker WXS schema
-//            File xsdFile = new File(xTracker.PLUGIN_PATH+schemaLocation);
-            File xsdFile = new File(schemaLocation);
+            String location = Utils.locateFile(schemaLocation, xTracker.folders);
+            File xsdFile = new File(location);
             if (!xsdFile.exists()) {
                 System.out.println("ERROR: Can not find the specified xsd file " + schemaLocation + " for validation");
                 System.exit(1);
@@ -156,6 +158,8 @@ public class XMLparser {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             dbf.setNamespaceAware(true);
             DocumentBuilder db = dbf.newDocumentBuilder();
+//            String location = Utils.locateFile(xmlFile, xTracker.folders);
+//            Document doc = db.parse(location);
             Document doc = db.parse(xmlFile);
             doc.getDocumentElement().normalize();
             validator.validate(new DOMSource(doc));

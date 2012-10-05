@@ -55,7 +55,7 @@ public class PluginManager {
         }
         Collections.sort(plugins);
         //check whether all steps have been set
-        for(String type:packages.keySet()){
+        for(String type:types.keySet()){
             if(!flags.get(types.get(type))){
                 System.out.println("The "+type+" type plugin is missing");
                 System.exit(1);
@@ -64,18 +64,22 @@ public class PluginManager {
         
         System.out.println("Execute the pipeline");
         for (int i = 0; i < plugins.size(); i++) {
-//            pluginInterface plugin = plugins.get(i);
             System.out.println("");
             try {
                 Plugin plugin = plugins.get(i);
                 plugin.getPlugin().start(plugin.getParam());
-//                plugin.start(pluginParams.get(i));
             } catch (SecurityException ex) {
                 Logger.getLogger(PluginManager.class.getName()).log(Level.SEVERE, null, ex);
             } catch (Exception ex){
                 Logger.getLogger(PluginManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+    /**
+     * set flag for emPAI method which does not need spectral files
+     */
+    public void emPaiSpecial(){
+        flags.put(SPECTRA, Boolean.TRUE);
     }
     /**
      * get the package name from the type defined in the configuration file
@@ -102,7 +106,7 @@ public class PluginManager {
         return types.get(type);
     }
     /**
-     * add the plugin 
+     * add the plugin to the pipeline
      * @param pluginName
      * @param pluginParamFile
      * @param pluginType 
@@ -132,7 +136,11 @@ public class PluginManager {
         plugins.add(plugin);
     }
 }
-
+/**
+ * the comparison is implemented to order the plugin in the pipeline to follow order:
+ * identification, spectra, quantitation and output
+ * @author Jun Fan@cranfield
+ */
 class Plugin implements Comparable<Plugin> {
     /**
      * plugin name
@@ -170,7 +178,6 @@ class Plugin implements Comparable<Plugin> {
             plugin = (pluginInterface) ct.newInstance(new Object[0]);
             xTracker.SUPPORT_MS1 = xTracker.SUPPORT_MS1 & plugin.supportMS1();
             xTracker.SUPPORT_MS2 = xTracker.SUPPORT_MS2 & plugin.supportMS2();
-            //not in the core distribution, need to find the external jar file
         } catch (NoSuchMethodException ex) {
             Logger.getLogger(PluginManager.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SecurityException ex) {
@@ -178,11 +185,18 @@ class Plugin implements Comparable<Plugin> {
         } catch (Exception ex) {
             Logger.getLogger(PluginManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        File file = new File(param);
-        if (!file.exists()) {
-            System.out.println("Can not find the specified plugin parameter file "+file.getAbsolutePath());
-            System.exit(1);
+        //there should be parameter file required for spectra plugin as they are defined in the identification plugin parameter (relationship)
+        if(param.length()==0){
+            if(type!=PluginManager.SPECTRA){
+                System.out.println("The plugin in any type except loading spectra always needs a parameter file. However plugin "+name+" does not have one");
+                System.exit(1);
+            }
+        }else{
+            File file = new File(param);
+            if (!file.exists()) {
+                System.out.println("Can not find the specified plugin parameter file "+file.getAbsolutePath());
+                System.exit(1);
+            }
         }
     }
 

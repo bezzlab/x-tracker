@@ -19,12 +19,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.util.*;
+import uk.ac.cranfield.xTracker.Utils;
 import uk.ac.ebi.pride.jmztab.MzTabParsingException;
 import uk.ac.liv.jmzqml.model.mzqml.Param;
 import uk.ac.liv.jmzqml.model.mzqml.SearchDatabase;
 import uk.ac.liv.jmzqml.model.mzqml.UserParam;
 import uk.ac.cranfield.xTracker.data.Identification;
-import uk.ac.cranfield.xTracker.data.Metadata;
 import uk.ac.cranfield.xTracker.data.xFeature;
 import uk.ac.cranfield.xTracker.data.xModification;
 import uk.ac.cranfield.xTracker.data.xPeptide;
@@ -87,8 +87,11 @@ public class loadMascotIdent extends identData_loadPlugin {
     @Override
     public void start(String paramFile) {
         System.out.println(getName() + ": starting...");
+        //parse the parameter file and populate the field
         loadParams(paramFile);
+        //get the validator
         validator = XMLparser.getValidator(MASCOT_XSD);
+        //spectra_identification_map contain the original location of files defined in the parameter file
         for(String rawSpectra:spectra_identification_map.keySet()){
             String identFile = spectra_identification_map.get(rawSpectra);
             String msrunRaw = xTracker.study.getMSRunIDfromRawFile(rawSpectra);
@@ -103,14 +106,16 @@ public class loadMascotIdent extends identData_loadPlugin {
             }
             if(msrunIdent.equals(xTracker.study.UNASSIGNED)){//this identification file has not been parsed
                 xTracker.study.setIdentificationFileMSRunMap(identFile, msrunRaw);
-                boolean validFlag = XMLparser.validate(validator, identFile);
+                String identLocation = Utils.locateFile(identFile, xTracker.folders);
+//                boolean validFlag = XMLparser.validate(validator, identFile);
+                boolean validFlag = XMLparser.validate(validator, identLocation);
                 if(!validFlag){
-                    System.out.println("The identification file "+identFile+" is not a proper mzIdentML file");
+                    System.out.println("The identification file "+identFile+" is not a proper Mascot file");
                     System.exit(1);
                 }
                 System.out.println(identFile+" is valid, now start to parse...");
 
-                File file = new File(identFile);
+                File file = new File(identLocation);
                 //parse the mascot result XML file
                 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
                 dbf.setNamespaceAware(true);
@@ -119,14 +124,6 @@ public class loadMascotIdent extends identData_loadPlugin {
                     DocumentBuilder db = dbf.newDocumentBuilder();
                     Document doc = db.parse(file);
                     doc.getDocumentElement().normalize();
-                    try {
-                        validator.validate(new DOMSource(doc));
-                    } catch (SAXException e) {
-                        // instance document is invalid!
-                        System.out.println("\n\nERROR - could not validate the input file " + file + "!");
-                        System.out.print(e);
-                        System.exit(1);
-                    }
                     loadMascotMods(doc);
                     NodeList header = doc.getElementsByTagName("header").item(0).getChildNodes();
                     String fasta = "";
@@ -348,7 +345,8 @@ public class loadMascotIdent extends identData_loadPlugin {
 
     private void validatorInitialization() {
         try {
-            File xsdFile = new File(MASCOT_XSD);
+            String location = Utils.locateFile(MASCOT_XSD, xTracker.folders);
+            File xsdFile = new File(location);
             System.out.println(xsdFile.getAbsolutePath());
             if (!xsdFile.exists()) {
                 System.out.println("ERROR: Can not find the specified xsd file " + MASCOT_XSD + " to validate the Mascot XML file");

@@ -16,6 +16,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import uk.ac.cranfield.xTracker.Utils;
 import uk.ac.ebi.jmzml.model.mzml.CVParam;
 import uk.ac.ebi.jmzml.model.mzml.ParamGroup;
 import uk.ac.ebi.jmzml.model.mzml.Precursor;
@@ -74,7 +75,8 @@ public class loadRawMzML111 extends rawData_loadPlugin {
                                         MzMLUnmarshaller unmarshaller = xTracker.study.getMzMLUnmarshaller(rawfile);
                                         if(unmarshaller==null){
                                             System.out.println("Creating unmarshaller for the raw file:"+rawfile);
-                                            File file = new File(rawfile);
+                                            String location = Utils.locateFile(rawfile, xTracker.folders);
+                                            File file = new File(location);
                                             if(!file.exists()){
                                                 System.out.println("The required raw file "+file.getAbsolutePath()+" does not exist");
                                                 System.exit(1);

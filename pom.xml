@@ -113,7 +113,7 @@
                             </descriptorRefs>
                             <archive>
                                 <manifest>
-                                    <mainClass>uk.ac.cranfield.xTrakcer.xTracker</mainClass> 
+                                    <mainClass>uk.ac.cranfield.xTracker.xTracker</mainClass> 
                                 </manifest>
                             </archive>
                         </configuration>
@@ -130,7 +130,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath> 
                             <classpathPrefix>lib/</classpathPrefix> 
-                            <mainClass>uk.ac.cranfield.xTrakcer.xTracker</mainClass> 
+                            <mainClass>uk.ac.cranfield.xTracker.xTracker</mainClass> 
                         </manifest>
                     </archive>
                 </configuration>

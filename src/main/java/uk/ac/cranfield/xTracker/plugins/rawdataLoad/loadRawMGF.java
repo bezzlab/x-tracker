@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.regex.*;
 
 import java.util.List;
+import uk.ac.cranfield.xTracker.Utils;
 import uk.ac.liv.jmzqml.model.mzqml.RawFile;
 import uk.ac.cranfield.xTracker.data.Identification;
 import uk.ac.cranfield.xTracker.data.MSRun;
@@ -36,8 +37,6 @@ public class loadRawMGF extends rawData_loadPlugin {
     public void start(String paramFile) {
         System.out.println(getName() + ": starting...");
         String rawDataFile = "";
-        //let's load parameter file to process
-        loadParams(paramFile);
         //this involves with reading raw files which are stored in msrun, so the only case loop through msrun first
         for(MSRun msrun:xTracker.study.getMSRuns()){
             HashMap<String,HashMap<String,ArrayList<Identification>>> index = new HashMap<String, HashMap<String, ArrayList<Identification>>>();
@@ -77,7 +76,8 @@ public class loadRawMGF extends rawData_loadPlugin {
                 System.out.println(rawfile.getLocation());
                 HashMap<String,ArrayList<Identification>> map = index.get(rawfile.getLocation());
                 try{
-                    BufferedReader in = new BufferedReader(new FileReader(rawfile.getLocation()));
+                    String location = Utils.locateFile(rawfile.getLocation(), xTracker.folders);
+                    BufferedReader in = new BufferedReader(new FileReader(location));
                     //PEPMASS is a must-have parameter, check for every MS2 spectrum
                     boolean foundPepmass = false;
 
@@ -182,25 +182,6 @@ public class loadRawMGF extends rawData_loadPlugin {
             }
         }
         System.out.println(getName()+" finished");
-    }
-
-    /**
-     * Opens the dataFile xml file and loads raw data file names. The actual read in process is in the main start() function
-     * @param dataFile the parameter files
-     */
-    private void loadParams(String dataFile) {
-        XMLparser parser = new XMLparser(dataFile);
-        parser.validate("param");
-
-        NodeList itemList = parser.getElement("param").getChildNodes();
-        for (int i = 0; i < itemList.getLength(); i++) {
-            Node item = itemList.item(i);
-            if (item.getNodeType() == Node.ELEMENT_NODE) {
-                if (item.getNodeName().equals("datafile")) {
-                    rawDataFiles.add(item.getTextContent());
-                }
-            }
-        }
     }
 
     @Override

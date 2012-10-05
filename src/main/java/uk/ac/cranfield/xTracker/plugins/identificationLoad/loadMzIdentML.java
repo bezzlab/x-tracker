@@ -8,6 +8,7 @@ import java.util.List;
 import javax.xml.validation.Validator;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import uk.ac.cranfield.xTracker.Utils;
 import uk.ac.ebi.jmzidml.MzIdentMLElement;
 import uk.ac.ebi.jmzidml.model.mzidml.AnalysisData;
 import uk.ac.ebi.jmzidml.model.mzidml.DBSequence;
@@ -66,13 +67,15 @@ public class loadMzIdentML extends identData_loadPlugin{
             String msrunIdent = xTracker.study.getMSRunIDfromIdentificationFile(identFile);
             if(msrunIdent.equals(xTracker.study.UNASSIGNED)){//this identification file has not been parsed
                 xTracker.study.setIdentificationFileMSRunMap(identFile, msrunRaw);
-                boolean validFlag = XMLparser.validate(validator, identFile);
+                String identLocation = Utils.locateFile(identFile, xTracker.folders);
+                boolean validFlag = XMLparser.validate(validator, identLocation);
+//                boolean validFlag = XMLparser.validate(validator, identFile);
                 if(!validFlag){
                     System.out.println("The identification file "+identFile+" is not a proper mzIdentML file");
                     System.exit(1);
                 }
                 System.out.println(identFile+" is valid, now start to parse...");
-                MzIdentMLUnmarshaller unmarshaller = new MzIdentMLUnmarshaller(new File(identFile));
+                MzIdentMLUnmarshaller unmarshaller = new MzIdentMLUnmarshaller(new File(Utils.locateFile(identFile,xTracker.folders)));
                 boolean autoResolveFlag = MzIdentMLElement.SpectrumIdentificationItem.isAutoRefResolving()
                         && MzIdentMLElement.SpectrumIdentificationResult.isAutoRefResolving()
                         && MzIdentMLElement.PeptideEvidenceRef.isAutoRefResolving()
@@ -209,7 +212,7 @@ public class loadMzIdentML extends identData_loadPlugin{
     private void loadParams(String dataFile) {
         XMLparser parser = new XMLparser(dataFile);
         parser.validate("SpectralIdentificationList");
-        System.out.println("Validation successful");
+        System.out.println("Parameter file validation successful");
         
         NodeList itemList = parser.getElement("SpectralIdentificationList").getChildNodes();
         for (int i = 0; i < itemList.getLength(); i++) {
@@ -227,7 +230,8 @@ public class loadMzIdentML extends identData_loadPlugin{
                         System.exit(1);
                     }
                     if(spectra_identification_map.containsKey(spectra)) System.out.println("Warning: the spectra file "+spectra+" has more than one related identification files, now only consider identification file "+identification);
-                    //assign msrun id from raw file to the related identification file
+//                    spectra = Utils.locateFile(spectra, xTracker.folders);
+//                    identification = Utils.locateFile(identification, xTracker.folders);
                     spectra_identification_map.put(spectra,identification);
                 } 
             }
@@ -263,6 +267,5 @@ public class loadMzIdentML extends identData_loadPlugin{
      */
     @Override
     void populateMetadata() {
-        ;
     }
 }

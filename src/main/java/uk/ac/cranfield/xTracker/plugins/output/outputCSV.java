@@ -31,6 +31,7 @@ public class outputCSV extends outPlugin {
             System.exit(1);
         }
         System.out.println(outputFileName);
+        
         BufferedWriter out = null;
         /**
          * the map between msrun and assay IDs for that msrun

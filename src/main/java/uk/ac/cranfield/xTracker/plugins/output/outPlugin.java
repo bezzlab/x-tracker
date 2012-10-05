@@ -1,5 +1,6 @@
 package uk.ac.cranfield.xTracker.plugins.output;
 
+import uk.ac.cranfield.xTracker.Utils;
 import uk.ac.cranfield.xTracker.plugins.pluginInterface;
 import uk.ac.cranfield.xTracker.utils.XMLparser;
 import uk.ac.cranfield.xTracker.xTracker;
@@ -21,8 +22,12 @@ public abstract class outPlugin implements pluginInterface{
     protected String getOutputFileName(String filename, String baseTag, String contentTag){
         XMLparser parser = new XMLparser(filename);
         parser.validate(baseTag);
-        return parser.getElementContent(baseTag, contentTag);
+        String outfile = parser.getElementContent(baseTag, contentTag);
+        String path = Utils.getPath(outfile);
+        return Utils.locateFile(path, xTracker.folders)+"/"+Utils.getFilename(outfile);  
+//        return parser.getElementContent(baseTag, contentTag);
     }
+    
 }
 
 

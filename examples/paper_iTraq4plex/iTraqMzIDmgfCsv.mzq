@@ -39,7 +39,6 @@
             <ProcessingMethod order="2">
                 <userParam value="load raw spectra" name="Plugin type"/>
                 <userParam value="loadRawMGF" name="Plugin name"/>
-                <userParam value="paper_iTraq4plex/loadMGFgalaxy.xtp" name="Plugin configuration file"/>
             </ProcessingMethod>
 			<ProcessingMethod order="3">
 				<userParam name="Plugin type" value="feature detection and quantitation"/>
@@ -55,7 +54,7 @@
             <ProcessingMethod order="4">
                 <userParam value="Output" name="Plugin type"/>
                 <userParam value="outputCSV" name="Plugin name"/>
-                <userParam value="paper_iTraq4plex/output_CSV_param.xtp" name="Plugin configuration file"/>
+                <userParam value="paper_iTraq4plex/outputCSV.xtp" name="Plugin configuration file"/>
             </ProcessingMethod>
         </DataProcessing>
     </DataProcessingList>

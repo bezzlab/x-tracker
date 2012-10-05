@@ -70,15 +70,5 @@ Finally it specifies the threshold on "pep_delta" field to accept identification
 
  <modification delta="39.994919">Pyro-carbamidomethyl (N-term C)</modification>
 -->
-
-
-<!-- Identifications will be accepted if pep_score value is below this threshold. 
-	Ex.
-	 <pep_score_threshold>31</pep_score_threshold>
-
--->
-
 <pep_score_threshold>50</pep_score_threshold>
-
-
 </param>

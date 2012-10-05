@@ -3,8 +3,6 @@
 <inputFiles>
         <datafile identification_file="paper_iTraq4plex/Mascot_ksl_1_10.xml">paper_iTraq4plex/ksl_1_10.mgf</datafile>
 	<datafile identification_file="paper_iTraq4plex/Mascot_ksl_1_20.xml">paper_iTraq4plex/ksl_1_20.mgf</datafile>
-<!--        <datafile identification_file="paper_iTraq4Plex/Mascot_ksl_1_50.xml">paper_iTraq4Plex/ksl_1_50.mgf</datafile>
-	<datafile identification_file="paper_iTraq4Plex/Mascot_ksl_1_100re.xml">paper_iTraq4Plex/ksl_1_100re.mgf</datafile> -->
 </inputFiles>
 
          

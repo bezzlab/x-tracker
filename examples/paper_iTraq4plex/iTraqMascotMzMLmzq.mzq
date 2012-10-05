@@ -46,12 +46,11 @@
 			<ProcessingMethod order="1">
 				<userParam name="Plugin type" value="load identification"/>
 				<userParam name="Plugin name" value="loadMascotIdent"/>
-				<userParam name="Plugin configuration file" value="paper_iTraq4plex/load_Params_Mascot_curated_mzml.xtp"/>
+				<userParam name="Plugin configuration file" value="paper_iTraq4plex/loadMascot_mzml.xtp"/>
 			</ProcessingMethod>
 			<ProcessingMethod order="2">
 				<userParam name="Plugin type" value="load raw spectra"/>
 				<userParam name="Plugin name" value="loadRawMzML111"/>
-				<userParam name="Plugin configuration file" value="paper_iTraq4plex/loadMzML.xtp"/>
 			</ProcessingMethod>
 			<ProcessingMethod order="3">
 				<userParam name="Plugin type" value="feature detection and quantitation"/>

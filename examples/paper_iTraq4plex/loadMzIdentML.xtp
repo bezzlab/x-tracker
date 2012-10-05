@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SpectralIdentificationList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="Plugins/loadMzIdentML.xsd">
-	<SpectralIdentificationPair spectra="paper_iTraq4plex/ksl_1_10.mzML" identification="paper_iTraq4plex/itraq.mzid"/>
+	<SpectralIdentificationPair spectra="examples/paper_iTraq4plex/ksl_1_10.mzML" identification="examples/paper_iTraq4plex/itraq.mzid"/>
 </SpectralIdentificationList>

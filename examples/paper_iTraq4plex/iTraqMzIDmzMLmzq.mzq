@@ -20,17 +20,16 @@
         	<cvParam accession="MS:1002024" cvRef="PSI-MS" value="true" name="MS2 tag-based analysis feature level quantitationn"/>
         	<cvParam accession="MS:1002025" cvRef="PSI-MS" value="true" name="MS2 tag-based analysis group features by peptide quantitation"/>
         	<cvParam accession="MS:1002026" cvRef="PSI-MS" value="true" name="MS2 tag-based analysis protein level quantitation"/>
-        	<!--<cvParam accession="MS:1002027" cvRef="PSI-MS" value="false" name="MS2 tag-based analysis protein group level quantitation"/>-->
 	</AnalysisSummary>
 
 	<!--1:1-->
 	<InputFiles>
 		<RawFilesGroup id="raw1">
-			<RawFile location="paper_iTraq4plex/ksl_1_10.mzML" id="r1"/>
+			<RawFile location="examples/paper_iTraq4plex/ksl_1_10.mzML" id="r1"/>
 		</RawFilesGroup>
 		
 		<IdentificationFiles>
-			<IdentificationFile location="paper_iTraq4plex/itraq.mzid" id="id_file1"/>
+			<IdentificationFile location="examples/paper_iTraq4plex/itraq.mzid" id="id_file1"/>
 		</IdentificationFiles>
 	</InputFiles>
 		
@@ -46,17 +45,16 @@
 			<ProcessingMethod order="1">
 				<userParam name="Plugin type" value="load identification"/>
 				<userParam name="Plugin name" value="loadMzIdentML"/>
-				<userParam name="Plugin configuration file" value="paper_iTraq4plex/loadMzIdentML.xtp"/>
+				<userParam name="Plugin configuration file" value="examples/paper_iTraq4plex/loadMzIdentML.xtp"/>
 			</ProcessingMethod>
 			<ProcessingMethod order="2">
-				<userParam name="Plugin type" value="load raw SPECTRA"/>
+				<userParam name="Plugin type" value="load raw spectra"/>
 				<userParam name="Plugin name" value="loadRawMzML111"/>
-				<userParam name="Plugin configuration file" value="paper_iTraq4plex/loadMzML.xtp"/>
 			</ProcessingMethod>
 			<ProcessingMethod order="3">
 				<userParam name="Plugin type" value="feature detection and quantitation"/>
 				<userParam name="Plugin name" value="iTraqQuantitation"/>
-				<userParam name="Plugin configuration file" value="paper_iTraq4plex/iTraqQuantitationPSIMOD.xtp"/>
+				<userParam name="Plugin configuration file" value="examples/paper_iTraq4plex/iTraqQuantitationPSIMOD.xtp"/>
 				<!--define the inference methods, which must be the value in the set "mean","median","sum","weightedAverage"-->
 				<userParam name="Feature to peptide inference method" value="mean"/>
 				<userParam name="Peptide to protein inference method" value="weightedAverage"/>
@@ -67,12 +65,17 @@
 			<ProcessingMethod order="4">
 				<userParam name="Plugin type" value="output"/>
 				<userParam name="Plugin name" value="outputMZQ"/>
-				<userParam name="Plugin configuration file" value="paper_iTraq4plex/outputMZQ.xtp"/>
+				<userParam name="Plugin configuration file" value="examples/paper_iTraq4plex/outputMZQ.xtp"/>
 			</ProcessingMethod>
 			<ProcessingMethod order="5">
 				<userParam name="Plugin type" value="output"/>
 				<userParam name="Plugin name" value="outputCSV"/>
-				<userParam name="Plugin configuration file" value="paper_iTraq4plex/output_CSV_param_mzML.xtp"/>
+				<userParam name="Plugin configuration file" value="examples/paper_iTraq4plex/outputCSV.xtp"/>
+			</ProcessingMethod>
+			<ProcessingMethod order="6">
+				<userParam name="Plugin type" value="output"/>
+				<userParam name="Plugin name" value="outputMzTab"/>
+				<userParam name="Plugin configuration file" value="examples/paper_iTraq4plex/outputMzTab.xtp"/>
 			</ProcessingMethod>
 		</DataProcessing>
 	</DataProcessingList>

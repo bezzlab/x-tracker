@@ -98,19 +98,19 @@ public class xTracker {
 //        String basefile = "paper_iTraq4plex/iTraqMascotMzMLmzq.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMGFcsvSingle.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMGFmzqMultiple.mzq";
-//        String filename = Utils.locateFile(basefile, folders);
-//        new xTracker(filename);
-//        System.exit(0);
-        String filename;
+        String basefile = "emPai/emPaiMascotMultiple.mzq";
+        String filename = Utils.locateFile(basefile, folders);
+        new xTracker(filename);
+        System.exit(0);
         switch (args.length) {
             case 1: {
-                String basefile = args[0];
+//                String basefile = args[0];
                 filename = Utils.locateFile(basefile, folders);
                 new xTracker(args[0]);
                 break;
             }
             case 2: 
-                String basefile = args[0];
+//                String basefile = args[0];
                 filename = Utils.locateFile(basefile, folders);
                 folders.add(args[1]);
                 new xTracker(args[0]);
@@ -312,6 +312,7 @@ public class xTracker {
         boolean flag = false;
         String value = cvParam.getValue();
         if(value != null && value.equalsIgnoreCase("true")) flag = true;
+        if(accession == 1001836) manager.emPaiSpecial();
         switch(accession){
             case 1001834: //LC-MS label-free quantitation analysis
             case 1001835: //SILAC quantitation analysis

@@ -9,11 +9,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.XMLConstants;
 import javax.xml.validation.Validator;
 import javax.xml.transform.Source;
-import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import org.xml.sax.SAXException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -422,54 +420,59 @@ public class loadMascotIdent extends identData_loadPlugin {
         for(String key:modsFromMascot.keySet()){
             System.out.println("Modification: "+key+" with shift "+modsFromMascot.get(key));
         }
-        //<xs:element name="MODS" type="xs:string"> line 160
+        //<xs:element name="MODS" type="xs:string">
+        //as element, must be there, but could be empty
         NodeList fixed = doc.getElementsByTagName("MODS");
         if(fixed != null){
             String allFixMods = fixed.item(0).getTextContent();
-            String[] tokens = allFixMods.split(",");
-            for (int i = 0; i < tokens.length; i++) {
-                String token = tokens[i];
-                if (modsFromMascot.containsKey(token) || modsFromXtp.containsKey(token)) {
-                    int ind = token.indexOf("(");
-                    int ind1 = token.indexOf(")");
-                    String amino = token.substring(ind + 1, ind1);
-                    fixedModifications.put(amino, token); 
-                    if(amino.indexOf("-term")>-1){                      
-                        float shift;
-                        if (modsFromMascot.containsKey(token)) {
-                            shift = modsFromMascot.get(token);
-                        } else {//the existance is guaranteed from loadMascotMods (missing one will be reported there)
-                            shift = modsFromXtp.get(token);
-                        }
-                        xModification mod;
-                        if (amino.startsWith("N")) {
+            if(allFixMods.length()>0){
+                String[] tokens = allFixMods.split(",");
+                for (int i = 0; i < tokens.length; i++) {
+                    String token = tokens[i];
+                    if (modsFromMascot.containsKey(token) || modsFromXtp.containsKey(token)) {
+                        int ind = token.indexOf("(");
+                        int ind1 = token.indexOf(")");
+                        String amino = token.substring(ind + 1, ind1);
+                        fixedModifications.put(amino, token);
+                        if (amino.indexOf("-term") > -1) {
+                            float shift;
+                            if (modsFromMascot.containsKey(token)) {
+                                shift = modsFromMascot.get(token);
+                            } else {//the existance is guaranteed from loadMascotMods (missing one will be reported there)
+                                shift = modsFromXtp.get(token);
+                            }
+                            xModification mod;
+                            if (amino.startsWith("N")) {
 //                            mod = new xModificationOld(token, shift, false, xModificationOld.N_TERM_LOCATION);
-                            mod = new xModification(token, shift, xModification.N_TERM_LOCATION);
-                        } else {
+                                mod = new xModification(token, shift, xModification.N_TERM_LOCATION);
+                            } else {
 //                            mod = new xModification(token, shift, false, xModification.C_TERM_LOCATION);
-                            mod = new xModification(token, shift, xModification.C_TERM_LOCATION);
+                                mod = new xModification(token, shift, xModification.C_TERM_LOCATION);
+                            }
+                            fixedTerms.add(mod);
                         }
-                        fixedTerms.add(mod);
+                    } else {
+                        System.out.println("Error (loadMascotIdent): trying to add a fixed modification not specified in the parameters file (" + token + ").");
+                        System.exit(1);
                     }
-                } else {
-                    System.out.println("Error (loadMascotIdent): trying to add a fixed modification not specified in the parameters file (" + token + ").");
-                    System.exit(1);
                 }
             }
         }
-        //<xs:element name="IT_MODS" type="xs:string"> line 70
+        //<xs:element name="IT_MODS" type="xs:string">
         //the variable modifications are represented in pep_var_mod_pos element by numbers (indice)
         NodeList variable = doc.getElementsByTagName("IT_MODS");
         if(variable != null){
             String allVariableMods = variable.item(0).getTextContent();
-            String[] tokens = allVariableMods.split(",");
-            for (int i = 0; i < tokens.length; i++) {
-                String token = tokens[i];
-                if (modsFromMascot.containsKey(token) || modsFromXtp.containsKey(token)) {
-                    variableModifications.put(i+1,token);
-                } else {
-                    System.out.println("Error (loadMascotIdent): trying to add a variable modification not specified in the parameters file (" + token + ").");
-                    System.exit(1);
+            if(allVariableMods.length()>0){
+                String[] tokens = allVariableMods.split(",");
+                for (int i = 0; i < tokens.length; i++) {
+                    String token = tokens[i];
+                    if (modsFromMascot.containsKey(token) || modsFromXtp.containsKey(token)) {
+                        variableModifications.put(i + 1, token);
+                    } else {
+                        System.out.println("Error (loadMascotIdent): trying to add a variable modification not specified in the parameters file (" + token + ").");
+                        System.exit(1);
+                    }
                 }
             }
         }

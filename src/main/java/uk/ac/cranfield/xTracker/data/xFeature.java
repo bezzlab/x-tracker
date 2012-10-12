@@ -90,7 +90,7 @@ public class xFeature extends QuantitationLevel{
         feature.setId(getId());
         feature.setCharge(String.valueOf(charge));
         feature.setMz(getMZ());
-        feature.setRt(getRT()+"");
+        feature.setRt(String.valueOf(getRT()));
         return feature;
     }
     

@@ -47,7 +47,7 @@ public class Identification extends QuantitationLevel{
      */
     private List<Float> srmIons;
     
-    private double mz;
+    private double mz = 0d;
 //    private HashMap<String,Double> quantities;
 
     public Identification(String id, String spectraDataLocation, String spectrumID, SpectrumIdentificationItem sii, List<CvParam> cvParams, String identificationFile) {

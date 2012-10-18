@@ -44,8 +44,10 @@ public class PluginManager {
     }
     /**
      * after the pipeline has been generated, execute it
+     * @return the flag indicating whether the pipeline is successfully executed
      */
-    public void execute(){
+    public boolean execute(){
+        boolean flag = true;
         System.out.println("All required plugins support MS1: "+xTracker.SUPPORT_MS1);
         System.out.println("All required plugins support MS2: "+xTracker.SUPPORT_MS2);
         if((!xTracker.SUPPORT_MS1)&&(!xTracker.SUPPORT_MS2)){
@@ -70,10 +72,13 @@ public class PluginManager {
                 plugin.getPlugin().start(plugin.getParam());
             } catch (SecurityException ex) {
                 Logger.getLogger(PluginManager.class.getName()).log(Level.SEVERE, null, ex);
+                flag = false;
             } catch (Exception ex){
                 Logger.getLogger(PluginManager.class.getName()).log(Level.SEVERE, null, ex);
+                flag = false;
             }
         }
+        return flag;
     }
     /**
      * set flag for emPAI method which does not need spectral files

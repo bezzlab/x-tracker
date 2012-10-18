@@ -13,6 +13,7 @@ import uk.ac.liv.jmzqml.model.mzqml.FeatureList;
 import uk.ac.liv.jmzqml.model.mzqml.MzQuantML;
 import uk.ac.liv.jmzqml.model.mzqml.PeptideConsensus;
 import uk.ac.liv.jmzqml.model.mzqml.PeptideConsensusList;
+import uk.ac.liv.jmzqml.model.mzqml.Protein;
 import uk.ac.liv.jmzqml.model.mzqml.ProteinList;
 import uk.ac.liv.jmzqml.model.mzqml.QuantLayer;
 import uk.ac.liv.jmzqml.model.mzqml.Row;
@@ -200,7 +201,8 @@ public class outputMZQ extends outPlugin{
                                 for(Identification identification : feature.getIdentifications()){
                                     //FeatureList
                                     Feature qFeature = identification.convertToQfeature();
-                                    qFeature.setId(feature.getId()+"-"+qFeature.getId());
+                                    String id = feature.getId()+"-"+qFeature.getId();
+                                    qFeature.setId(id.replace("|", "-"));
                                     qFeature.setCharge(String.valueOf(feature.getCharge()));
                                     qFeature.setRt("null");
                                     featureLists.get(msrunID).getFeature().add(qFeature);
@@ -265,7 +267,10 @@ public class outputMZQ extends outPlugin{
             //ProteinList
             proteinList.setId("ProteinList");
             for(xProtein pro:proteinSet){
-                proteinList.getProtein().add(pro.getProtein());
+                Protein protein = pro.getProtein();
+                protein.setId(protein.getId().replace("|", "-"));
+                protein.setAccession(protein.getAccession().replace("|", "-"));
+                proteinList.getProtein().add(protein);
                 if (xTracker.study.needProteinQuantitation()) {
                     for (String quantitationName : xTracker.study.getQuantitationNames()) {
                         Row row = new Row();

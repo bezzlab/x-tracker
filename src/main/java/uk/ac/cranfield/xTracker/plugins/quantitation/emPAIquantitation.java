@@ -159,6 +159,7 @@ public class emPAIquantitation  extends quantitationPlugin{
         String line;
         String accession = "";
         StringBuilder seq = new StringBuilder();
+        System.out.println("Calculate observable peptides from fasta file:"+filename);
         try {
             FileReader fr = new FileReader(new File(filename));
             BufferedReader br = new BufferedReader(fr);

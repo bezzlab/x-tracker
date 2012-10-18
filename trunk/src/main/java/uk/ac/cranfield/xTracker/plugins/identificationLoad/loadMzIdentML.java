@@ -68,12 +68,12 @@ public class loadMzIdentML extends identData_loadPlugin{
             if(msrunIdent.equals(xTracker.study.UNASSIGNED)){//this identification file has not been parsed
                 xTracker.study.setIdentificationFileMSRunMap(identFile, msrunRaw);
                 String identLocation = Utils.locateFile(identFile, xTracker.folders);
-                boolean validFlag = XMLparser.validate(validator, identLocation);
 //                boolean validFlag = XMLparser.validate(validator, identFile);
-                if(!validFlag){
-                    System.out.println("The identification file "+identFile+" is not a proper mzIdentML file");
-                    System.exit(1);
-                }
+//                boolean validFlag = XMLparser.validate(validator, identLocation);
+//                if(!validFlag){
+//                    System.out.println("The identification file "+identFile+" is not a proper mzIdentML file");
+//                    System.exit(1);
+//                }
                 System.out.println(identFile+" is valid, now start to parse...");
                 MzIdentMLUnmarshaller unmarshaller = new MzIdentMLUnmarshaller(new File(Utils.locateFile(identFile,xTracker.folders)));
                 boolean autoResolveFlag = MzIdentMLElement.SpectrumIdentificationItem.isAutoRefResolving()
@@ -98,26 +98,25 @@ public class loadMzIdentML extends identData_loadPlugin{
                 List<SpectrumIdentificationList> silList = analysisData.getSpectrumIdentificationList();
                 for (SpectrumIdentificationList sil : silList) {
                     List<SpectrumIdentificationResult> sirList = sil.getSpectrumIdentificationResult();
-//          1.	For each available SpectrumIdentificationResult (SIR)
+//          1.	For each available SpectrumIdentificationResult (SIR) corresponding to one spectrum 
                     for (SpectrumIdentificationResult sir : sirList) {
 //              a.	Find the raw spectral file by using the location attribute from the SpectraData via the mandatory attribute spectraDataRef
                         //need to modify the MzIdentMLElement.cgf.xml line 184 autoRefResolving to true for SIR
-//                        System.out.println(sir.getSpectraData().getLocation());
                         //otherwise use the statement below
-//                System.out.println(unmarshaller.getElementAttributes(sir.getSpectraDataRef(),SpectraData.class).get("location"));
+                        // System.out.println(unmarshaller.getElementAttributes(sir.getSpectraDataRef(),SpectraData.class).get("location"));
+//                        System.out.println(sir.getSpectraData().getLocation());
 //              b.	The spectrum id is retrieved from the mandatory spectrumID attribute
 //                        System.out.println(sir.getSpectrumID());
 //              c.	The id is retrieved from the mandatory id attribute
 //                        System.out.println(sir.getId());
 //              d.	Find the top identification which passes the threshold:
-//              For each SSI under the current SIR
+//                        For each SSI under the current SIR
                         SpectrumIdentificationItem selected = null;
                         List<SpectrumIdentificationItem> siiList = sir.getSpectrumIdentificationItem();
                         for (SpectrumIdentificationItem sii : siiList) {
 //                  i.	If the mandatory passThreshold attribute is false, jump to the next SSI
 //                  ii.	If the mandatory rank attribute equals to 1, the top SSI is selected, break the loop;
-//                     else jump to next SSI
-//                    if(sii.getRank()==1) {
+//                         else jump to next SSI
                             if (sii.isPassThreshold() && sii.getRank() == 1) {
                                 selected = sii;
                                 break;
@@ -148,6 +147,7 @@ public class loadMzIdentML extends identData_loadPlugin{
 //                                    foundPE = true;
 //                          ii)retrieve protein id and accession from the mandatory attributes id and accession respectively from the referenced DBSequence in the PE
                                     DBSequence dbs = pe.getDBSequence();
+                                    //the search database in mzQuantML
                                     SearchDatabase sd = xTracker.study.getSearchDatabase(dbs.getSearchDatabaseRef());
                                     if(sd==null){//the first time to see the currect searchDatabaseRef
                                         //autoResolving set to true in line 211 for DBSequence
@@ -159,8 +159,8 @@ public class loadMzIdentML extends identData_loadPlugin{
                                         sd.setDatabaseName(param.convertToQparam());
                                         xTracker.study.addSearchDatabase(isd.getId(), sd);
                                     }
-//                                    protein = xTracker.study.retrieveProtein(dbs.getAccession(), dbs.getId(), sd);
-                                    proteins.add(xTracker.study.retrieveProtein(dbs.getAccession().replace("|", "-"), dbs.getId().replace("|", "-"), sd));
+                                    proteins.add(xTracker.study.retrieveProtein(dbs.getAccession(), dbs.getId(), sd));
+//                                    proteins.add(xTracker.study.retrieveProtein(dbs.getAccession().replace("|", "-"), dbs.getId().replace("|", "-"), sd));
                                 }
 //                      c) if no non-decoy PE exists, an artificial protein is generated to be specific for the peptide
 //                                if (!foundPE) {

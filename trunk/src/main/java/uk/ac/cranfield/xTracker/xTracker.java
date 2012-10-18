@@ -98,7 +98,8 @@ public class xTracker {
 //        String basefile = "paper_iTraq4plex/iTraqMascotMzMLmzq.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMGFcsvSingle.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMGFmzqMultiple.mzq";
-        String basefile = "emPai/emPaiMascotMultiple.mzq";
+//        String basefile = "emPai/emPaiMascotMultiple.mzq";
+        String basefile = "emPai/emPaiMzID.mzq";
         String filename = Utils.locateFile(basefile, folders);
         new xTracker(filename);
         System.exit(0);
@@ -401,9 +402,13 @@ public class xTracker {
     public xTracker(String filename) {
         manager = new PluginManager();
         parseMzQuantML(filename);
-        manager.execute();
+        boolean flag = manager.execute();
         System.out.println("*************************************************");
-        System.out.println("** xTracker finished execution without errors! **");
+        if(flag){
+            System.out.println("** xTracker finished execution without errors! **");
+        }else{
+            System.out.println("** There is some error within the pipeline **");
+        }
         System.out.println("*************************************************");
     }
 

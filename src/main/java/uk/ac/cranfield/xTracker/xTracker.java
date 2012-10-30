@@ -87,7 +87,6 @@ public class xTracker {
     private final String MZQ_XSD = "mzQuantML_1_0_0-rc2.xsd";
 
     public static void main(String[] args) {
-        folders.add(".");
         folders.add("..");
         folders.add("Plugins");
         folders.add("../Plugins");
@@ -98,23 +97,17 @@ public class xTracker {
 //        String basefile = "paper_iTraq4plex/iTraqMascotMzMLmzq.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMGFcsvSingle.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMGFmzqMultiple.mzq";
-//        String basefile = "emPai/emPaiMascotMultiple.mzq";
-        String basefile = "emPai/emPaiMzID.mzq";
-        String filename = Utils.locateFile(basefile, folders);
-        new xTracker(filename);
+        String basefile = "emPai/emPaiMascotMultiple.mzq";
+//        String basefile = "emPai/emPaiMzID.mzq";
+        new xTracker(basefile);
         System.exit(0);
         switch (args.length) {
             case 1: {
-//                String basefile = args[0];
-                filename = Utils.locateFile(basefile, folders);
                 new xTracker(args[0]);
                 break;
             }
             case 2: 
-//                String basefile = args[0];
-                filename = Utils.locateFile(basefile, folders);
-                folders.add(args[1]);
-                new xTracker(args[0]);
+                new xTracker(args[0],args[1]);
                 break;
             
             default: {
@@ -139,7 +132,7 @@ public class xTracker {
         //load the mzQuantML file into memory
         MzQuantMLUnmarshaller unmarshaller = new MzQuantMLUnmarshaller(filename);
         MzQuantML mzQuantML = unmarshaller.unmarshall();
-        //assign to Study.mzQuantML
+        //save the current mzQuantML to be used as a base in the outputing stage
         study.setMzQuantML(mzQuantML);
         study.setFilename(filename);
         //deal with the CV resources
@@ -222,9 +215,9 @@ public class xTracker {
                 if(pluginName.length()>0) manager.addPlugin(pluginName, pluginParam, pluginType);
             }
         }
-        System.out.println("from feature to peptide:"+PEPTIDE_FEATURE_INFERENCE);
-        System.out.println("from peptide to protein:"+PROTEIN_PEPTIDE_INFERENCE);
-        System.out.println("from assay to study variable:"+SV_ASSAY_INFERENCE);
+//        System.out.println("from feature to peptide:"+PEPTIDE_FEATURE_INFERENCE);
+//        System.out.println("from peptide to protein:"+PROTEIN_PEPTIDE_INFERENCE);
+//        System.out.println("from assay to study variable:"+SV_ASSAY_INFERENCE);
         if(!pipelineGenerated){
             System.out.println("No pipeline found for xTracker in the DataProcessingList, program terminated");
             System.exit(1);
@@ -234,6 +227,7 @@ public class xTracker {
         InputFiles inputFiles = mzQuantML.getInputFiles();
         //raw files
         List<RawFilesGroup> rawFileGroups = inputFiles.getRawFilesGroup();
+        int numberRaw = 0;
         for(RawFilesGroup rawFileGroup:rawFileGroups){
             MSRun msrun = new MSRun(rawFileGroup);
             study.addMSRun(rawFileGroup.getId(),msrun);
@@ -248,10 +242,12 @@ public class xTracker {
                 }
                 System.out.println("Raw file: "+file.getAbsolutePath() );
                 study.addRawfileMSRunMap(raw.getLocation(),rawFileGroup.getId());
+                numberRaw++;
             }
         }
         //identification files
         IdentificationFiles identificationFiles = inputFiles.getIdentificationFiles();
+        int numberIdent = 0;
         if(identificationFiles==null){
             System.out.println("No identification files defined in the mzq configuration file, the pipeline can not be executed.");
             System.exit(1);
@@ -267,8 +263,14 @@ public class xTracker {
             System.out.println("Identification file: " + file.getAbsolutePath());
             //similarly store the identification file name from the mzq file
             study.addIdentificationFile(iden.getLocation());
+            numberIdent++;
         }
         
+        if(numberIdent!=numberRaw){
+            System.out.println("The number of identification files is "+numberIdent+" which is different to the number of raw files "+numberRaw);
+            System.out.println("At the moment, only one-to-one spectral identification relationship is supported");
+            System.exit(1);
+        }
         //Assays
         List<Assay> assayList = mzQuantML.getAssayList().getAssay();
         for(Assay assay:assayList){
@@ -282,10 +284,21 @@ public class xTracker {
         RatioList ratioList = mzQuantML.getRatioList();
         if(ratioList!=null){
             if(!study.requirePeptideQuantitation()){
-                System.out.println("Ratio calculation is defined, which however can not applied to peptide or protein as they are set to do no quantitation");
+                System.out.println("Ratio calculation is defined, which however can not applied to peptide or protein as they are not required for quantitation");
                 System.exit(1);
             }
             for (Ratio qratio : ratioList.getRatio()) {
+                CvParam denominatorType = qratio.getDenominatorDataType().getCvParam();
+                CvParam numeratorType = qratio.getNumeratorDataType().getCvParam();
+                //after CvParam equals function implementation, the type of the element in RatioMeasurements will be changed from String to CvParam
+//                study.addRatioMeasurement(numeratorType);
+                study.addRatioMeasurement(numeratorType.getName());
+//                if(!denominatorType.equals(numeratorType)){
+                if(!denominatorType.getName().equals(numeratorType.getName())){
+                    System.out.println("Warning: for ratio "+qratio.getId()+" numerator and denominator are from different measurement");
+//                    study.addRatioMeasurement(denominatorType);
+                    study.addRatioMeasurement(denominatorType.getName());
+                }
                 xRatio ratio = new xRatio(qratio);
                 study.addRatio(ratio);
                 if(ratio.getType().equals(xRatio.ASSAY)) study.addAssayRatio(qratio);
@@ -313,7 +326,7 @@ public class xTracker {
         boolean flag = false;
         String value = cvParam.getValue();
         if(value != null && value.equalsIgnoreCase("true")) flag = true;
-        if(accession == 1001836) manager.emPaiSpecial();
+        if(accession == 1001836) manager.spectralCountingSpecial();
         switch(accession){
             case 1001834: //LC-MS label-free quantitation analysis
             case 1001835: //SILAC quantitation analysis
@@ -400,7 +413,13 @@ public class xTracker {
     }
     
     public xTracker(String filename) {
+        this(filename,".");
+    }
+    
+    public xTracker(String basefile,String workdir) {
+        folders.add(0,workdir);
         manager = new PluginManager();
+        String filename = Utils.locateFile(basefile, folders);
         parseMzQuantML(filename);
         boolean flag = manager.execute();
         System.out.println("*************************************************");

@@ -1,7 +1,9 @@
 package uk.ac.cranfield.xTracker.plugins.quantitation;
 
+import java.util.ArrayList;
 import uk.ac.cranfield.xTracker.plugins.pluginInterface;
 import uk.ac.cranfield.xTracker.xTracker;
+import uk.ac.liv.jmzqml.model.mzqml.CvParam;
 
 /**
  *
@@ -17,5 +19,11 @@ public abstract class quantitationPlugin implements pluginInterface {
      * xTracker.study.addQuantitationName("iTRAQ intensities", "");
      * xTracker.study.addQuantitationName("peptide raw area", "MS:1001130");
      */
-    abstract public void setQuantitationNames();
+    public void setQuantitationNames(){
+        for(CvParam param:getQuantitationNames()){
+            xTracker.study.addQuantitationName(param);
+        }
+    }
+    
+    abstract public ArrayList<CvParam> getQuantitationNames();
 }

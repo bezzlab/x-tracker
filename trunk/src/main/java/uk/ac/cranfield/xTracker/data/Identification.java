@@ -57,7 +57,6 @@ public class Identification extends QuantitationLevel{
         this.sii = sii;
         this.cvParams = cvParams;
         this.identificationFile = identificationFile;
-//        quantities = new HashMap<String, Double>();
     }
     /**
      * Get the mz value

@@ -129,21 +129,45 @@
 			<RatioCalculation>
 				<userParam name="Simple ratio calc"/>
 			</RatioCalculation>
+			<NumeratorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</NumeratorDataType>
+			<DenominatorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</DenominatorDataType>
 		</Ratio>
 	        <Ratio id="ratio_assay_115_114" denominator_ref="_114" numerator_ref="_115">
             		<RatioCalculation>
                 		<userParam name="Simple ratio calc"/>
             		</RatioCalculation>
+			<NumeratorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</NumeratorDataType>
+			<DenominatorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</DenominatorDataType>
         	</Ratio>
         	<Ratio id="ratio_assay_116_114" denominator_ref="_114" numerator_ref="_116">
             		<RatioCalculation>
                 		<userParam name="Simple ratio calc"/>
             		</RatioCalculation>
+			<NumeratorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</NumeratorDataType>
+			<DenominatorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</DenominatorDataType>
         	</Ratio>
         	<Ratio id="ratio_assay_117_114" denominator_ref="_114" numerator_ref="_117">
             		<RatioCalculation>
                 		<userParam name="Simple ratio calc"/>
             		</RatioCalculation>
+			<NumeratorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</NumeratorDataType>
+			<DenominatorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</DenominatorDataType>
         	</Ratio>
 	</RatioList>
 </MzQuantML>

@@ -24,6 +24,7 @@ import uk.ac.cranfield.xTracker.data.xPeptideConsensus;
 import uk.ac.cranfield.xTracker.data.xProtein;
 import uk.ac.cranfield.xTracker.utils.XMLparser;
 import uk.ac.cranfield.xTracker.xTracker;
+import uk.ac.liv.jmzqml.model.mzqml.CvParam;
 
 /**
  *
@@ -79,8 +80,8 @@ public class emPAIquantitation  extends quantitationPlugin{
                                 if (mz == 0) {
                                     continue;
                                 }
-                                //mz = (mw+(n-1)*h)/n
-                                double mw = mz * charge - (charge - 1) * hmass;
+                                //mz = (mw+n*h)/n
+                                double mw = mz * charge - charge * hmass;
                                 if (mw > upperLimit) {
                                     upperLimit = (int) Math.ceil(mw / 100) * 100;
                                 } else if (mw < lowerLimit) {
@@ -204,8 +205,11 @@ public class emPAIquantitation  extends quantitationPlugin{
     }
 
     @Override
-    public void setQuantitationNames() {
-        xTracker.study.addQuantitationName(EMPAI_VALUE, "MS:1001905");
+    public ArrayList<CvParam> getQuantitationNames(){
+        ArrayList<CvParam> params = new ArrayList<CvParam>();
+        CvParam param = xTracker.study.createMSCvParam(EMPAI_VALUE, "MS:1001905");
+        params.add(param);
+        return params;
     }
 
     @Override

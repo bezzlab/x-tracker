@@ -18,28 +18,28 @@
         	<cvParam accession="MS:1002026" cvRef="PSI-MS" value="true" name="MS2 tag-based analysis protein level quantitation"/>
         	<!--<cvParam accession="MS:1002027" cvRef="PSI-MS" value="false" name="MS2 tag-based analysis protein group level quantitation"/>-->
 	</AnalysisSummary>
-    <InputFiles>
-        <RawFilesGroup id="raw1">
-            <RawFile location="paper_iTraq4plex/ksl_1_20.mgf" id="r1"/>
-        </RawFilesGroup>
-        <IdentificationFiles>
-            <IdentificationFile location="paper_iTraq4plex/itraqOmssa.mzid" id="id_file1"/>
-        </IdentificationFiles>
-    </InputFiles>
-    <SoftwareList>
-        <Software version="1" id="xTRACKER"/>
-    </SoftwareList>
-    <DataProcessingList>
-        <DataProcessing order="1" software_ref="xTRACKER" id="DP1">
-            <ProcessingMethod order="1">
-                <userParam value="load identification" name="Plugin type"/>
-                <userParam value="loadMzIdentML" name="Plugin name"/>
-                <userParam value="paper_iTraq4plex/loadMzIdentMLgalaxy.xtp" name="Plugin configuration file"/>
-            </ProcessingMethod>
-            <ProcessingMethod order="2">
-                <userParam value="load raw spectra" name="Plugin type"/>
-                <userParam value="loadRawMGF" name="Plugin name"/>
-            </ProcessingMethod>
+    	<InputFiles>
+        	<RawFilesGroup id="raw1">
+            		<RawFile location="paper_iTraq4plex/ksl_1_20.mgf" id="r1"/>
+        	</RawFilesGroup>
+        	<IdentificationFiles>
+            		<IdentificationFile location="paper_iTraq4plex/itraqOmssa.mzid" id="id_file1"/>
+        	</IdentificationFiles>
+    	</InputFiles>
+    	<SoftwareList>
+        	<Software version="1" id="xTRACKER"/>
+    	</SoftwareList>
+    	<DataProcessingList>
+        	<DataProcessing order="1" software_ref="xTRACKER" id="DP1">
+            		<ProcessingMethod order="1">
+                		<userParam value="load identification" name="Plugin type"/>
+                		<userParam value="loadMzIdentML" name="Plugin name"/>
+                		<userParam value="paper_iTraq4plex/loadMzIdentMLgalaxy.xtp" name="Plugin configuration file"/>
+            		</ProcessingMethod>
+            		<ProcessingMethod order="2">
+                		<userParam value="load raw spectra" name="Plugin type"/>
+                		<userParam value="loadRawMGF" name="Plugin name"/>
+            		</ProcessingMethod>
 			<ProcessingMethod order="3">
 				<userParam name="Plugin type" value="feature detection and quantitation"/>
 				<userParam name="Plugin name" value="iTraqQuantitation"/>
@@ -51,43 +51,43 @@
 				<userParam name="Assay to Study Variables inference method" value="sum"/>
 				<userParam name="Protein ratio calculation infer from peptide ratio" value="true"/>
 			</ProcessingMethod>
-            <ProcessingMethod order="4">
-                <userParam value="Output" name="Plugin type"/>
-                <userParam value="outputCSV" name="Plugin name"/>
-                <userParam value="paper_iTraq4plex/outputCSV.xtp" name="Plugin configuration file"/>
-            </ProcessingMethod>
-        </DataProcessing>
-    </DataProcessingList>
-    <AssayList id="AssayList1">
-        <Assay rawFilesGroup_ref="raw1" name="114" id="_114">
-            <Label>
-                <Modification>
-                    <cvParam accession="" cvRef="PSI-MS" name="iTRAQ_114"/>
-                </Modification>
-            </Label>
-        </Assay>
-        <Assay rawFilesGroup_ref="raw1" name="115" id="_115">
-            <Label>
-                <Modification>
-                    <cvParam accession="" cvRef="PSI-MS" name="iTRAQ_115"/>
-                </Modification>
-            </Label>
-        </Assay>
-        <Assay rawFilesGroup_ref="raw1" name="116" id="_116">
-            <Label>
-                <Modification>
-                    <cvParam accession="" cvRef="PSI-MS" name="iTRAQ_116"/>
-                </Modification>
-            </Label>
-        </Assay>
-        <Assay rawFilesGroup_ref="raw1" name="117" id="_117">
-            <Label>
-                <Modification>
-                    <cvParam accession="" cvRef="PSI-MS" name="iTRAQ_117"/>
-                </Modification>
-            </Label>
-        </Assay>
-    </AssayList>
+            		<ProcessingMethod order="4">
+                		<userParam value="Output" name="Plugin type"/>
+                		<userParam value="outputCSV" name="Plugin name"/>
+                		<userParam value="paper_iTraq4plex/outputCSV.xtp" name="Plugin configuration file"/>
+            		</ProcessingMethod>
+        	</DataProcessing>
+    	</DataProcessingList>
+    	<AssayList id="AssayList1">
+        	<Assay rawFilesGroup_ref="raw1" name="114" id="_114">
+            		<Label>
+                		<Modification>
+                    			<cvParam accession="" cvRef="PSI-MS" name="iTRAQ_114"/>
+                		</Modification>
+            		</Label>
+        	</Assay>
+        	<Assay rawFilesGroup_ref="raw1" name="115" id="_115">
+            		<Label>
+                		<Modification>
+                    			<cvParam accession="" cvRef="PSI-MS" name="iTRAQ_115"/>
+                		</Modification>
+            		</Label>
+        	</Assay>
+        	<Assay rawFilesGroup_ref="raw1" name="116" id="_116">
+            		<Label>
+                		<Modification>
+                    			<cvParam accession="" cvRef="PSI-MS" name="iTRAQ_116"/>
+                		</Modification>
+            		</Label>
+        	</Assay>
+        	<Assay rawFilesGroup_ref="raw1" name="117" id="_117">
+            		<Label>
+                		<Modification>
+                    			<cvParam accession="" cvRef="PSI-MS" name="iTRAQ_117"/>
+                		</Modification>
+            		</Label>
+        	</Assay>
+    	</AssayList>
 
 	<StudyVariableList>
 		<StudyVariable id="SV_group_A" name="GroupA">
@@ -105,21 +105,45 @@
 			<RatioCalculation>
 				<userParam name="Simple ratio calc"/>
 			</RatioCalculation>
+			<NumeratorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</NumeratorDataType>
+			<DenominatorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</DenominatorDataType>
 		</Ratio>
 	        <Ratio id="ratio_assay_115_114" denominator_ref="_114" numerator_ref="_115">
             		<RatioCalculation>
                 		<userParam name="Simple ratio calc"/>
             		</RatioCalculation>
+			<NumeratorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</NumeratorDataType>
+			<DenominatorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</DenominatorDataType>
         	</Ratio>
         	<Ratio id="ratio_assay_116_114" denominator_ref="_114" numerator_ref="_116">
             		<RatioCalculation>
                 		<userParam name="Simple ratio calc"/>
             		</RatioCalculation>
+			<NumeratorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</NumeratorDataType>
+			<DenominatorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</DenominatorDataType>
         	</Ratio>
         	<Ratio id="ratio_assay_117_114" denominator_ref="_114" numerator_ref="_117">
             		<RatioCalculation>
                 		<userParam name="Simple ratio calc"/>
             		</RatioCalculation>
+			<NumeratorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</NumeratorDataType>
+			<DenominatorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</DenominatorDataType>
         	</Ratio>
 	</RatioList>
 </MzQuantML>

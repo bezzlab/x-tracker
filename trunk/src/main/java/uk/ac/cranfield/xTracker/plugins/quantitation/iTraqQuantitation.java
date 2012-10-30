@@ -21,6 +21,7 @@ import uk.ac.cranfield.xTracker.data.xSpectrumList;
 import uk.ac.cranfield.xTracker.utils.MS2QuantitationMethod;
 import uk.ac.cranfield.xTracker.utils.XMLparser;
 import uk.ac.cranfield.xTracker.xTracker;
+import uk.ac.liv.jmzqml.model.mzqml.CvParam;
 
 /**
  *
@@ -40,12 +41,13 @@ public class iTraqQuantitation extends quantitationPlugin{
     private double upperLimit;
     private double lowerLimit;
     private String integrationMethod;
-    private final String ITRAQ_INTENSITY = "iTRAQ intensities";
+//    private final String REPORTER_ION_INTENSITY = "iTRAQ intensities";
+    private final String REPORTER_ION_INTENSITY = "reporter ion intensity";
     
     @Override
     public void start(String paramFile) {
         HashSet<String> quantitationNames = new HashSet<String> ();
-        quantitationNames.add(ITRAQ_INTENSITY);
+        quantitationNames.add(REPORTER_ION_INTENSITY);
         System.out.println(getName()+" starts");
         loadParam(paramFile);
         checkParameterValues();
@@ -153,7 +155,7 @@ public class iTraqQuantitation extends quantitationPlugin{
                                 }
                                 for (int i = 0; i < ionMZs.size(); i++) {
                                     double mz = ionMZs.get(i);
-                                    identification.addQuantity(ITRAQ_INTENSITY, mz_assayID_maps.get(msrunID).get(mz), corrected.get(i, 0));
+                                    identification.addQuantity(REPORTER_ION_INTENSITY, mz_assayID_maps.get(msrunID).get(mz), corrected.get(i, 0));
                                 }
                             }//end of identification
 //                            if (xTracker.study.requireFeatureQuantitation()) {
@@ -190,8 +192,11 @@ public class iTraqQuantitation extends quantitationPlugin{
     }
     
     @Override
-    public void setQuantitationNames(){
-        xTracker.study.addQuantitationName(ITRAQ_INTENSITY, "");
+    public ArrayList<CvParam> getQuantitationNames(){
+        ArrayList<CvParam> params = new ArrayList<CvParam>();
+        CvParam param = xTracker.study.createMSCvParam(REPORTER_ION_INTENSITY, "MS:1001847");
+        params.add(param);
+        return params;
     }
     /**
      * Computes the coefficients matrix for purity correction.

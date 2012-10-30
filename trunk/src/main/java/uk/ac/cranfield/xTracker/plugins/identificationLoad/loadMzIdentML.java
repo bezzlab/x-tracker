@@ -68,14 +68,14 @@ public class loadMzIdentML extends identData_loadPlugin{
             if(msrunIdent.equals(xTracker.study.UNASSIGNED)){//this identification file has not been parsed
                 xTracker.study.setIdentificationFileMSRunMap(identFile, msrunRaw);
                 String identLocation = Utils.locateFile(identFile, xTracker.folders);
-//                boolean validFlag = XMLparser.validate(validator, identFile);
-//                boolean validFlag = XMLparser.validate(validator, identLocation);
-//                if(!validFlag){
-//                    System.out.println("The identification file "+identFile+" is not a proper mzIdentML file");
-//                    System.exit(1);
-//                }
+                boolean validFlag = XMLparser.validate(validator, identLocation);
+                if(!validFlag){
+                    System.out.println("The identification file "+identFile+" is not a proper mzIdentML file");
+                    System.exit(1);
+                }
                 System.out.println(identFile+" is valid, now start to parse...");
                 MzIdentMLUnmarshaller unmarshaller = new MzIdentMLUnmarshaller(new File(Utils.locateFile(identFile,xTracker.folders)));
+                //the following autoResulve should not be a problem if using the attached MzIdentML element configuration file
                 boolean autoResolveFlag = MzIdentMLElement.SpectrumIdentificationItem.isAutoRefResolving()
                         && MzIdentMLElement.SpectrumIdentificationResult.isAutoRefResolving()
                         && MzIdentMLElement.PeptideEvidenceRef.isAutoRefResolving()
@@ -83,7 +83,7 @@ public class loadMzIdentML extends identData_loadPlugin{
                         && MzIdentMLElement.CvParam.isAutoRefResolving()
                         && MzIdentMLElement.DBSequence.isAutoRefResolving();
                 if (!autoResolveFlag) {
-                    System.out.println("The auto resolving is not allowed for SIR, SII, PE or PERef, please allow them in the configuration file MzIdentMLElement.cfg.xml");
+                    System.out.println("The auto resolving is not allowed for SIR, SII, CvParam, DBSequence, PE or PERef, please allow them in the configuration file MzIdentMLElement.cfg.xml");
                     System.exit(1);
                 }
 
@@ -94,6 +94,7 @@ public class loadMzIdentML extends identData_loadPlugin{
                         xTracker.study.getMetadata().addSoftware(swParam.convertToTabParam());
                     }
                 }
+                
                 AnalysisData analysisData = unmarshaller.unmarshal(MzIdentMLElement.AnalysisData);
                 List<SpectrumIdentificationList> silList = analysisData.getSpectrumIdentificationList();
                 for (SpectrumIdentificationList sil : silList) {
@@ -130,7 +131,10 @@ public class loadMzIdentML extends identData_loadPlugin{
                             if (peptide != null) {
 //                      a) retrieve the peptide sequence and modification(s) from the subelement PeptideSequence and Modification respectively from the referenced peptide
 //                                System.out.println(peptide.getPeptideSequence());
-                                Identification identification = new Identification(sir.getId(), sir.getSpectraData().getLocation(), sir.getSpectrumID(), selected, sir.getCvParam(), identFile); 
+//                                System.out.println("SIR:"+sir.getId()+" peptide: "+peptide.getId());
+                                //currently using the spectral file location from the parameter file, not the getSpectraData.getLocation() assuming the 1-to-1 relationship
+//                                Identification identification = new Identification(sir.getId(), sir.getSpectraData().getLocation(), sir.getSpectrumID(), selected, sir.getCvParam(), identFile); 
+                                Identification identification = new Identification(sir.getId(),rawSpectra , sir.getSpectrumID(), selected, sir.getCvParam(), identFile); 
                                 identification.setMz(selected.getExperimentalMassToCharge());
 //                      b) for each available PeptideEvidence (PE)
                                 List<PeptideEvidenceRef> peRefList = selected.getPeptideEvidenceRef();
@@ -173,6 +177,7 @@ public class loadMzIdentML extends identData_loadPlugin{
                                 for(Modification iMod:iMods){
                                     mods.add(new xModification(iMod));
                                 }
+
                                 for(xProtein protein:proteins){
                                     xPeptide pep = protein.getPeptide(peptide.getPeptideSequence(), mods,peptide.getId());
 //                                    xPeptide pep = protein.getPeptide(peptide.getPeptideSequence(), mods);
@@ -196,10 +201,12 @@ public class loadMzIdentML extends identData_loadPlugin{
                 
             //if(msrunIdent.equals(xTracker.study.UNASSIGNED))
             }else{//the mzIdentML has been done
-                if(!msrunIdent.equals(msrunRaw)){
-                    System.out.println("Warning: one mzIdentML file "+identFile+" has been related to more than one RawFilesGroup: "+msrunIdent+" "+msrunRaw);
-                    System.exit(1);
-                }
+                System.out.println("This identification file has been linked to spectral file other than "+rawSpectra);
+                System.exit(1);
+//                if(!msrunIdent.equals(msrunRaw)){
+//                    System.out.println("Warning: one mzIdentML file "+identFile+" has been related to more than one RawFilesGroup: "+msrunIdent+" "+msrunRaw);
+//                    System.exit(1);
+//                }
             }
         }
         System.out.println("Load mzIdentML plugin done");

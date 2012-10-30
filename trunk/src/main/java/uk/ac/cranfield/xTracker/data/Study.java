@@ -3,6 +3,7 @@ package uk.ac.cranfield.xTracker.data;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import uk.ac.ebi.jmzml.xml.io.MzMLUnmarshaller;
 import uk.ac.liv.jmzqml.model.mzqml.Cv;
 import uk.ac.liv.jmzqml.model.mzqml.CvParam;
@@ -111,6 +112,19 @@ public class Study {
      * the list of all ratios based on assays defined in the mzQuantML configuration file
      */
     private ArrayList<Ratio> assayRatios = new ArrayList<Ratio>();
+    
+    private HashSet<String> ratioMeasurements = new HashSet<String>();
+//    private HashSet<CvParam> ratioMeasurements = new HashSet<CvParam>();
+    
+    public HashSet<String> getRatioMeasurements(){
+//    public HashSet<CvParam> getRatioMeasurements(){
+        return ratioMeasurements;
+    }
+    
+    public void addRatioMeasurement(String measurement){
+//    public void addRatioMeasurement(CvParam measurement){
+        ratioMeasurements.add(measurement);
+    }
     /**
      * return the list of all ratios based on assays
      * @return 
@@ -466,10 +480,19 @@ public class Study {
      * @param name
      * @param accession 
      */
-    public void addQuantitationName(String name,String accession){
-        CvParamRef ref = createCvParam(name, accession);
-        quantitationNames.put(name, ref);
+    public void addQuantitationName(CvParam param){
+        CvParamRef ref = new CvParamRef();
+        ref.setCvParam(param);
+        quantitationNames.put(param.getName(), ref);
     }
+
+//    public void addQuantitationName(String name,String accession){
+////        CvParamRef ref = createMSCvParam(name, accession);
+//        CvParamRef ref = new CvParamRef();
+//        CvParam param = createMSCvParam(name, accession);
+//        ref.setCvParam(param);
+//        quantitationNames.put(name, ref);
+//    }
     /**
      * Get all quantitation labels
      * @return 
@@ -494,7 +517,7 @@ public class Study {
      * @param accession the PSI-MS term accession
      * @return 
      */
-    public CvParamRef createCvParam(String name, String accession) {
+    public CvParam createMSCvParam(String name, String accession) {
         CvParam param = new CvParam();
         param.setName(name);
         param.setAccession(accession);
@@ -508,9 +531,7 @@ public class Study {
             getMzQuantML().getCvList().getCv().add(cv);
         }
         param.setCvRef(cv);
-        CvParamRef ref = new CvParamRef();
-        ref.setCvParam(param);
-        return ref;
+        return param;
     }
     /**
      * add the ratio to the list which may be based on either assay or SV

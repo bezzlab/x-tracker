@@ -158,21 +158,45 @@
 			<RatioCalculation>
 				<userParam name="Simple ratio calc"/>
 			</RatioCalculation>
+			<NumeratorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</NumeratorDataType>
+			<DenominatorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</DenominatorDataType>
 		</Ratio>
 		<Ratio id="ratio_SV_114_116" numerator_ref="SV_group_114" denominator_ref="SV_group_116" >
 			<RatioCalculation>
 				<userParam name="Simple ratio calc"/>
 			</RatioCalculation>
+			<NumeratorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</NumeratorDataType>
+			<DenominatorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</DenominatorDataType>
 		</Ratio>
 		<Ratio id="ratio_SV_114_117" numerator_ref="SV_group_114" denominator_ref="SV_group_117" >
 			<RatioCalculation>
 				<userParam name="Simple ratio calc"/>
 			</RatioCalculation>
+			<NumeratorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</NumeratorDataType>
+			<DenominatorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</DenominatorDataType>
 		</Ratio>
 	        <Ratio id="ratio_assay_i1_114_i2_114" denominator_ref="i1_114" numerator_ref="i2_114">
             		<RatioCalculation>
                 		<userParam name="Simple ratio calc"/>
             		</RatioCalculation>
+			<NumeratorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</NumeratorDataType>
+			<DenominatorDataType>
+                        	<cvParam cvRef="PSI-MS" accession="MS:1001847" name="reporter ion intensity"/>
+			</DenominatorDataType>
         	</Ratio>
 	</RatioList>
 

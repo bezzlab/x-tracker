@@ -40,7 +40,7 @@ public class xModification{
             Param param = new Param();
             param.setParam(cvParam);
             params.add(new xParam(param));
-            if(cvParam.getAccession().indexOf("UNIMOD")>-1){
+            if(cvParam.getAccession().indexOf("UNIMOD")>-1 || cvParam.getCvRef().equalsIgnoreCase("UNIMOD")){
                 name = cvParam.getName();
             }
         }

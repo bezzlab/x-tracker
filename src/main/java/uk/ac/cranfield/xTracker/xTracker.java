@@ -97,8 +97,9 @@ public class xTracker {
 //        String basefile = "paper_iTraq4plex/iTraqMascotMzMLmzq.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMGFcsvSingle.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMGFmzqMultiple.mzq";
-        String basefile = "emPai/emPaiMascotMultiple.mzq";
+//        String basefile = "emPai/emPaiMascotMultiple.mzq";
 //        String basefile = "emPai/emPaiMzID.mzq";
+        String basefile = "f:/Data/D1-iTRAQ-4plex/Jun/psTest.mzq";
         new xTracker(basefile);
         System.exit(0);
         switch (args.length) {

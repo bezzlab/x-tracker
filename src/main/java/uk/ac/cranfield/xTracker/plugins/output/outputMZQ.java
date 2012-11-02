@@ -93,6 +93,7 @@ public class outputMZQ extends outPlugin{
             HashMap<String, QuantLayer> featureQLs = new HashMap<String, QuantLayer>();
             if (xTracker.study.needFeatureQuantitation()) {
                 for (String quantitationName : xTracker.study.getQuantitationNames()) {
+//                    quantitationName = quantitationName.replace(" ", "_");
                     QuantLayer ql = new QuantLayer();
                     if(xTracker.study.getPipelineType()==Study.MS2_TYPE){
                         ql.setId("MS2AssayQuantLayer_" + msrun.getID() + "_" + quantitationName);
@@ -208,6 +209,7 @@ public class outputMZQ extends outPlugin{
                                     //FeatureList quantitation
                                     if (xTracker.study.needFeatureQuantitation()) {
                                         for (String quantitationName : xTracker.study.getQuantitationNames()) {
+//                                            quantitationName = quantitationName.replace(" ", "_");
                                             Row row = new Row();
                                             row.setObjectRef(qFeature);
                                             HashMap<String, Double> quants = identification.getQuantities(quantitationName);
@@ -269,6 +271,7 @@ public class outputMZQ extends outPlugin{
                 for(String msrunID:msrun_featureQL_map.keySet()){
                     HashMap<String,QuantLayer> featureQLs = msrun_featureQL_map.get(msrunID);
                     for (QuantLayer ql : featureQLs.values()) {
+                        ql.setId(ql.getId().replace(" ", "_"));
                         featureLists.get(msrunID).getMS2AssayQuantLayer().add(ql);
                     }
                 }
@@ -324,20 +327,20 @@ public class outputMZQ extends outPlugin{
             }
             if(xTracker.study.needProteinQuantitation()){
                 for (QuantLayer ql:proteinQLs.values()) {
+                    ql.setId(ql.getId().replace(" ", "_"));
                     proteinList.getAssayQuantLayer().add(ql);
                 }
                 
                 if(svs.size()>1){
                     for (QuantLayer svQL: svQLs.values()){
+                        svQL.setId(svQL.getId().replace(" ", "_"));
                         proteinList.getStudyVariableQuantLayer().add(svQL);
                     }
                 }
                 
                 if (xTracker.study.isRatioRequired()) {
+                    proteinRatioQL.setId(proteinRatioQL.getId().replace(" ", "_"));
                     proteinList.setRatioQuantLayer(proteinRatioQL);
-//                    for (QuantLayer ratioQL : proteinRatioQLs.values()) {
-//                        proteinList.setRatioQuantLayer(ratioQL);
-//                    }
                 }
             }
             
@@ -347,13 +350,12 @@ public class outputMZQ extends outPlugin{
             pcList.setFinalResult(true);
             if(xTracker.study.needPeptideQuantitation()){
                 for (QuantLayer ql:peptideQLs.values()) {
+                    ql.setId(ql.getId().replace(" ", "_"));
                     pcList.getAssayQuantLayer().add(ql);
                 }
                 if(!xTracker.study.getAssayRatios().isEmpty()){
+                    peptideRatioQL.setId(peptideRatioQL.getId().replace(" ", "_"));
                     pcList.setRatioQuantLayer(peptideRatioQL);
-//                    for (QuantLayer ratioQL: peptideRatioQLs.values()){
-//                        pcList.setRatioQuantLayer(ratioQL);
-//                    }
                 }
             }
             mzq.getPeptideConsensusList().add(pcList);
@@ -363,6 +365,7 @@ public class outputMZQ extends outPlugin{
             }
             //FeatureList
             for(FeatureList featureList:featureLists.values()){
+                featureList.setId(featureList.getId().replace(" ", "_"));
                 mzq.getFeatureList().add(featureList);
             }
             //data processing inference methods

@@ -599,12 +599,18 @@ public class Utils {
     
     public static String locateFile(String basename,ArrayList<String> folders){
         if (basename.length()==0) return "";
-        File file;
+        File file = new File(basename);
+        if(file.exists()) return basename;
         for(String folder:folders){
             String filename = folder+"/"+basename;
             file = new File(filename);
             if(file.exists()) return filename;
         }
+        //not found so far, give the final attempt that use the file name of basename plus the working folder, which is always the first element in the folders
+        //maybe needed, but will be only available after the extensive test and it is really needed
+//        String filename = folders.get(0)+"/"+getFilename(basename);
+//        file = new File(filename);
+//        if(file.exists()) return filename;
         System.out.println("No such file "+basename+" exists in the following folder(s):");
         System.out.println(folders.toString());
         System.exit(1);

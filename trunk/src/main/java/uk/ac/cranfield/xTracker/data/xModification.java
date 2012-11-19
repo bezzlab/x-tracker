@@ -69,10 +69,11 @@ public class xModification{
         if (position != NOT_DEFINED) qmod.setLocation(position);
         if(fromMzIdentML){
             for(xParam param:params){
-                uk.ac.liv.jmzqml.model.mzqml.AbstractParam qParam = param.convertToQparam().getParamGroup();
-                if (qParam instanceof uk.ac.liv.jmzqml.model.mzqml.CvParam) {
-                    qmod.getCvParam().add((uk.ac.liv.jmzqml.model.mzqml.CvParam)qParam);
-                }
+                if(param.convertToQparam().getCvParam()!=null) qmod.getCvParam().add(param.convertToQparam().getCvParam());
+//                uk.ac.liv.jmzqml.model.mzqml.AbstractParam qParam = param.convertToQparam().getParamGroup();
+//                if (qParam instanceof uk.ac.liv.jmzqml.model.mzqml.CvParam) {
+//                    qmod.getCvParam().add((uk.ac.liv.jmzqml.model.mzqml.CvParam)qParam);
+//                }
             }
         }else{
             //the modification name in mascot is something like iTraq (N-term)

@@ -98,7 +98,13 @@ public class outputMzTab extends outPlugin{
             for(MSRun msrun:xTracker.study.getMSRuns()){
                 for(xProtein protein:xTracker.study.getProteins()){
                     SearchDatabase sd = (SearchDatabase) protein.getProtein().getSearchDatabaseRef();
-                    String database = sd.getDatabaseName().getParamGroup().getName();
+//                    String database = sd.getDatabaseName().getParamGroup().getName();
+                    String database;
+                    if(sd.getDatabaseName().getCvParam()!=null){
+                        database = sd.getDatabaseName().getCvParam().getName();
+                    }else{
+                        database = sd.getDatabaseName().getUserParam().getName();
+                    }
                     String dbVersion = sd.getVersion();
                     if(xTracker.study.needProteinQuantitation()){
                         Protein tabProt = new Protein();

@@ -38,6 +38,7 @@ public class Study {
         }
         this.quantitationMethod = quantitationMethod;
     }
+    
     private Metadata metadata = new Metadata();
     /**
      * the mzQuantML object of the configuration file

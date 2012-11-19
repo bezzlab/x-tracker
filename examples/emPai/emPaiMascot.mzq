@@ -1,6 +1,6 @@
 <MzQuantML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://psidev.info/psi/pi/mzQuantML/1.0.0-rc2 ../../schema/mzQuantML_1_0_0-rc2.xsd"
- xmlns="http://psidev.info/psi/pi/mzQuantML/1.0.0-rc2"
+ xsi:schemaLocation="http://psidev.info/psi/pi/mzQuantML/1.0.0-rc3 ../../schema/mzQuantML_1_0_0-rc3.xsd"
+ xmlns="http://psidev.info/psi/pi/mzQuantML/1.0.0-rc3"
  version="1.0.0">
 	<!--1:1-->
 	<CvList>
@@ -17,10 +17,9 @@
 	<AnalysisSummary>
 		<!--optional, if missed, xtracker will use the default value false, true, false, false for feature, peptide, protein, protein group quantitation-->
 	        <cvParam accession="MS:1001836" cvRef="PSI-MS" name="spectral counting quantitation analysis"/>
-        	<cvParam accession="MS:1002024" cvRef="PSI-MS" value="false" name="MS2 tag-based analysis feature level quantitationn"/>
-        	<cvParam accession="MS:1002025" cvRef="PSI-MS" value="false" name="MS2 tag-based analysis group features by peptide quantitation"/>
-        	<cvParam accession="MS:1002026" cvRef="PSI-MS" value="true" name="MS2 tag-based analysis protein level quantitation"/>
-        	<!--<cvParam accession="MS:1002027" cvRef="PSI-MS" value="false" name="MS2 tag-based analysis protein group level quantitation"/>-->
+        	<cvParam accession="MS:1002015" cvRef="PSI-MS" value="false" name="spectral count peptide level quantitation"/>
+        	<cvParam accession="MS:1002016" cvRef="PSI-MS" value="true" name="spectral count protein level quantitation"/>
+        	<cvParam accession="MS:1002017" cvRef="PSI-MS" value="false" name="spectral count proteingroup level quantitation"/>
 	</AnalysisSummary>
 
 	<!--1:1-->

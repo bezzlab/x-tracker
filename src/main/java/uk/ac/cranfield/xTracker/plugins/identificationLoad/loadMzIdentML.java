@@ -190,8 +190,17 @@ public class loadMzIdentML extends identData_loadPlugin{
 //                                        feature = new xFeature(protein.getAccession(), pep.getSeq(), selected.getChargeState());
                                         pep.addFeature(msrunRaw,feature);
                                     }
-                                    identification.setFeature_ref(feature.getId());
-                                    feature.addIdentification(identification);
+                                    boolean existing = false;
+                                    for(Identification existingIden:feature.getIdentifications()){
+                                        if(existingIden.getId().equals(identification.getId())){
+                                            existing = true;
+                                            break;
+                                        }
+                                    }
+                                    if(!existing){
+                                        identification.setFeature_ref(feature.getId());
+                                        feature.addIdentification(identification);
+                                    }
                                 }
                             }//peptide found
                         }//if sii not null

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import uk.ac.liv.jmzqml.model.mzqml.Assay;
 import uk.ac.liv.jmzqml.model.mzqml.CvParamRef;
 import uk.ac.liv.jmzqml.model.mzqml.DataMatrix;
@@ -48,6 +50,10 @@ public class outputMZQ extends outPlugin{
     private String description = "export the pipeline result along with the identifications into the mzQuantML file specified in the parameter file";
     private String outputFilename;
     private HashMap<String,FeatureList> featureLists = new HashMap<String, FeatureList>();
+//  NCName         ::=     (Letter | '_') (NCNameChar)*
+//  NCNameChar     ::=     Letter | Digit | '.' | '-' | '_' | CombiningChar | Extender 
+    final private Pattern patternNCName = Pattern.compile("([^\\w\\.\\-]+)");
+    final private Pattern patternFirstPosition = Pattern.compile("^[a-zA-Z_]");
     
     @Override
     public void start(String paramFile) {
@@ -194,6 +200,7 @@ public class outputMZQ extends outPlugin{
                 for (xPeptideConsensus pepCon : peptideCons) {
                     for (xPeptide peptide : pepCon.getPeptides()) {
                         PeptideConsensus pc = peptide.convertToQpeptideConsensus();
+                        pc.setId(getCorrectNCName(pc.getId()));
                         pc.setSearchDatabaseRef(protein.getProtein().getSearchDatabaseRef());
                         for (String msrunID : peptide.getMSRunIDs()) {
                             for (xFeature feature : peptide.getFeatures(msrunID)) {
@@ -202,7 +209,8 @@ public class outputMZQ extends outPlugin{
                                     Feature qFeature = identification.convertToQfeature();
                                     String id = feature.getId()+"-"+qFeature.getId();
                                     //"|" is widely used in protein accessions, which is not allowed in mzQuantML, so need to be replaced with "-" here
-                                    qFeature.setId(id.replace("|", "-"));
+                                    qFeature.setId(getCorrectNCName(id));
+//                                    qFeature.setId(id.replace("|", "-"));
                                     qFeature.setCharge(String.valueOf(feature.getCharge()));
                                     qFeature.setRt("null");
                                     featureLists.get(msrunID).getFeature().add(qFeature);
@@ -271,7 +279,8 @@ public class outputMZQ extends outPlugin{
                 for(String msrunID:msrun_featureQL_map.keySet()){
                     HashMap<String,QuantLayer> featureQLs = msrun_featureQL_map.get(msrunID);
                     for (QuantLayer ql : featureQLs.values()) {
-                        ql.setId(ql.getId().replace(" ", "_"));
+//                        ql.setId(ql.getId().replace(" ", "_"));
+                        ql.setId(getCorrectNCName(ql.getId()));
                         featureLists.get(msrunID).getMS2AssayQuantLayer().add(ql);
                     }
                 }
@@ -280,8 +289,10 @@ public class outputMZQ extends outPlugin{
             proteinList.setId("ProteinList");
             for(xProtein pro:proteinSet){
                 Protein protein = pro.getProtein();
-                protein.setId(protein.getId().replace("|", "-"));
-                protein.setAccession(protein.getAccession().replace("|", "-"));
+//                protein.setId(protein.getId().replace("|", "-"));
+//                protein.setAccession(protein.getAccession().replace("|", "-"));
+                protein.setId(getCorrectNCName(protein.getId()));
+                protein.setAccession(getCorrectNCName(protein.getAccession()));
                 proteinList.getProtein().add(protein);
                 if (xTracker.study.needProteinQuantitation()) {
                     for (String quantitationName : xTracker.study.getQuantitationNames()) {
@@ -327,19 +338,22 @@ public class outputMZQ extends outPlugin{
             }
             if(xTracker.study.needProteinQuantitation()){
                 for (QuantLayer ql:proteinQLs.values()) {
-                    ql.setId(ql.getId().replace(" ", "_"));
+//                    ql.setId(ql.getId().replace(" ", "_"));
+                    ql.setId(getCorrectNCName(ql.getId()));
                     proteinList.getAssayQuantLayer().add(ql);
                 }
                 
                 if(svs.size()>1){
                     for (QuantLayer svQL: svQLs.values()){
-                        svQL.setId(svQL.getId().replace(" ", "_"));
+//                        svQL.setId(svQL.getId().replace(" ", "_"));
+                        svQL.setId(getCorrectNCName(svQL.getId()));
                         proteinList.getStudyVariableQuantLayer().add(svQL);
                     }
                 }
                 
                 if (xTracker.study.isRatioRequired()) {
-                    proteinRatioQL.setId(proteinRatioQL.getId().replace(" ", "_"));
+//                    proteinRatioQL.setId(proteinRatioQL.getId().replace(" ", "_"));
+                    proteinRatioQL.setId(getCorrectNCName(proteinRatioQL.getId()));
                     proteinList.setRatioQuantLayer(proteinRatioQL);
                 }
             }
@@ -350,11 +364,13 @@ public class outputMZQ extends outPlugin{
             pcList.setFinalResult(true);
             if(xTracker.study.needPeptideQuantitation()){
                 for (QuantLayer ql:peptideQLs.values()) {
-                    ql.setId(ql.getId().replace(" ", "_"));
+//                    ql.setId(ql.getId().replace(" ", "_"));
+                    ql.setId(getCorrectNCName(ql.getId()));
                     pcList.getAssayQuantLayer().add(ql);
                 }
                 if(!xTracker.study.getAssayRatios().isEmpty()){
-                    peptideRatioQL.setId(peptideRatioQL.getId().replace(" ", "_"));
+//                    peptideRatioQL.setId(peptideRatioQL.getId().replace(" ", "_"));
+                    peptideRatioQL.setId(getCorrectNCName(peptideRatioQL.getId()));
                     pcList.setRatioQuantLayer(peptideRatioQL);
                 }
             }
@@ -365,7 +381,8 @@ public class outputMZQ extends outPlugin{
             }
             //FeatureList
             for(FeatureList featureList:featureLists.values()){
-                featureList.setId(featureList.getId().replace(" ", "_"));
+//                featureList.setId(featureList.getId().replace(" ", "_"));
+                featureList.setId(getCorrectNCName(featureList.getId()));
                 mzq.getFeatureList().add(featureList);
             }
             //data processing inference methods
@@ -465,7 +482,22 @@ public class outputMZQ extends outPlugin{
         }
         return "unrecognized method";       
     }
-    
+
+    private String getCorrectNCName(String input){
+//        String ret = id;
+//        String[] special = {"|","(",")"," ","_",":",","};
+//        for(String toBeReplaced:special){
+//            ret = ret.replace(toBeReplaced, "-");
+//        }
+//        return ret;
+        Matcher match = patternNCName.matcher(input);
+        input = match.replaceAll("_");
+        Matcher matchFirstPosition = patternFirstPosition.matcher(input);
+        if(!matchFirstPosition.find()){
+            return "_"+input;
+        }
+        return input;
+    }
 //    private void loadParams(String dataFile) {
 //        XMLparser parser = new XMLparser(dataFile);
 //        parser.validate("outputMZQ");

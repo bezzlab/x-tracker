@@ -1,4 +1,4 @@
-<MzQuantML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<MzQuantML creationDate="2012-11-02T16:00:00" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:schemaLocation="http://psidev.info/psi/pi/mzQuantML/1.0.0-rc3 ../../schema/mzQuantML_1_0_0-rc3.xsd"
  xmlns="http://psidev.info/psi/pi/mzQuantML/1.0.0-rc3"
  version="1.0.0">
@@ -6,7 +6,7 @@
 	<CvList>
 		<Cv id="PSI-MS" fullName="Proteomics Standards Initiative Mass Spectrometry Vocabularies"
 			uri="http://psidev.cvs.sourceforge.net/viewvc/*checkout*/psidev/psi/psi-ms/mzML/controlledVocabulary/psi-ms.obo"
-			version="3.32.0"/>
+			version="3.39.0"/>
 		<Cv id="UO" fullName="Unit Ontology"
 			uri="http://obo.cvs.sourceforge.net/*checkout*/obo/obo/ontology/phenotype/unit.obo"/>
 		<Cv id="PSI-MOD" fullName="Proteomics Standards Initiative Protein Modifications Vocabularies" uri="http://psidev.cvs.sourceforge.net/psidev/psi/mod/data/PSI-MOD.obo" version="1.2"/>
@@ -35,12 +35,14 @@
 		
 	<!--1:1-->
 	<SoftwareList>
-		<Software id="xTRACKER" version="1"></Software>
+		<Software id="x-Tracker" version="2.0-ALPHA">
+	        	<cvParam accession="MS:1002123" cvRef="PSI-MS" name="x-Tracker generic tool for quantitative proteomics"/>
+		</Software>
 	</SoftwareList>
 	
 	<!--1:1-->
 	<DataProcessingList>
-		<DataProcessing id="DP1"  software_ref="xTRACKER" order="1">
+		<DataProcessing id="DP1"  software_ref="x-Tracker" order="1">
 		<!--used as xtracker configuration file-->
 			<ProcessingMethod order="1">
 				<userParam name="Plugin type" value="load identification"/>

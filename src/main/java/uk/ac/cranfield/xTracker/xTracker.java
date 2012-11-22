@@ -51,7 +51,7 @@ public class xTracker {
     /**
      * the main data structure
      */
-    public static Study study = new Study();
+    public static Study study;
     /**
      * the flags of the pipeline
      */
@@ -92,16 +92,18 @@ public class xTracker {
         folders.add("../Plugins");
         folders.add("Examples");
         folders.add("../Examples");
+        //TODO: use external validator which though is at low priority
 //        String basefile = "paper_iTraq4plex/iTraqMzIDmzMLmzq.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMzIDmgfCsv.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMzMLmzq.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMGFcsvSingle.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMGFmzqMultiple.mzq";
-        String basefile = "emPai/emPaiMascotMultiple.mzq";
+//        String basefile = "emPai/emPaiMascotMultiple.mzq";
 //        String basefile = "emPai/emPaiMzID.mzq";
+//        String basefile = "emPai/emPaiMascot.mzq";
 //        String basefile = "f:/Data/D1-iTRAQ-4plex/Jun/psTest.mzq";
-        new xTracker(basefile);
-        System.exit(0);
+//        new xTracker(basefile);
+//        System.exit(0);
         switch (args.length) {
             case 1: {
                 new xTracker(args[0]);
@@ -170,8 +172,18 @@ public class xTracker {
             if(pipelineGenerated) break;//all pipeline for xtracker is expected to under one DataProcessing
             Object tmp=dp.getSoftwareRef();
             if(tmp==null) continue;
-            String swName = ((Software)tmp).getId();
-            if(!swName.equalsIgnoreCase("xtracker")) continue;
+//            String swName = ((Software)tmp).getId();
+//            if(!swName.equalsIgnoreCase("xtracker")) continue;
+            boolean isXtracker = false;
+            for(CvParam cvParam: ((Software)tmp).getCvParam()){
+                if(!((Cv)cvParam.getCvRef()).getId().equals("PSI-MS")) continue;
+                String accession = cvParam.getAccession().toUpperCase();
+                if(accession.equals("1002123") || accession.equals("MS:1002123")){
+                    isXtracker =  true;
+                    break;
+                }
+            }
+            if(!isXtracker) continue;
             System.out.println("Pipeline consists of");
             pipelineGenerated = true;
             List<ProcessingMethod> pmList = dp.getProcessingMethod();
@@ -421,6 +433,7 @@ public class xTracker {
         folders.add(0,workdir);
         manager = new PluginManager();
         String filename = Utils.locateFile(basefile, folders);
+        study = new Study();
         parseMzQuantML(filename);
         boolean flag = manager.execute();
         System.out.println("*************************************************");

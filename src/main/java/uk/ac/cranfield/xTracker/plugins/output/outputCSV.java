@@ -197,12 +197,12 @@ public class outputCSV extends outPlugin {
         
         try {
             out = new BufferedWriter(new FileWriter(outputFileName));
-            if(xTracker.study.needPeptideQuantitation()){
-                out.append(peptideSb.toString());
-                out.append("\n");
-            }
             if(xTracker.study.needProteinQuantitation()){
                 out.append(proteinSb.toString());
+                out.append("\n");
+            }
+            if(xTracker.study.needPeptideQuantitation()){
+                out.append(peptideSb.toString());
                 out.append("\n");
             }
             if(xTracker.study.needFeatureQuantitation()){

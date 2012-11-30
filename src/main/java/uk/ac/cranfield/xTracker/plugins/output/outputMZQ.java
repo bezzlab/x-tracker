@@ -36,6 +36,7 @@ import uk.ac.liv.jmzqml.model.mzqml.CvParam;
 import uk.ac.liv.jmzqml.model.mzqml.DataProcessing;
 import uk.ac.liv.jmzqml.model.mzqml.ProcessingMethod;
 import uk.ac.liv.jmzqml.model.mzqml.Ratio;
+import uk.ac.liv.jmzqml.model.mzqml.RatioQuantLayer;
 import uk.ac.liv.jmzqml.model.mzqml.Software;
 import uk.ac.liv.jmzqml.model.mzqml.StudyVariable;
 import uk.ac.liv.jmzqml.model.mzqml.UserParam;
@@ -75,8 +76,8 @@ public class outputMZQ extends outPlugin{
         HashMap<String,QuantLayer> proteinQLs = new HashMap<String,QuantLayer>();
 //        HashMap<String,QuantLayer> peptideRatioQLs = new HashMap<String,QuantLayer>();
 //        HashMap<String,QuantLayer> proteinRatioQLs = new HashMap<String,QuantLayer>();
-        QuantLayer peptideRatioQL = new QuantLayer();
-        QuantLayer proteinRatioQL = new QuantLayer();
+        RatioQuantLayer peptideRatioQL = new RatioQuantLayer();
+        RatioQuantLayer proteinRatioQL = new RatioQuantLayer();
         HashMap<String,QuantLayer> svQLs = new HashMap<String,QuantLayer>();
         HashMap<String,ArrayList<String>> msrun_assayIDs_map = new HashMap<String, ArrayList<String>>();
         HashMap<String,HashMap<String, QuantLayer>> msrun_featureQL_map = new HashMap<String, HashMap<String, QuantLayer>>();
@@ -116,10 +117,10 @@ public class outputMZQ extends outPlugin{
             msrun_featureQL_map.put(msrun.getID(), featureQLs);
         }
         
-        CvParam proteinRatioCvParam = xTracker.study.createMSCvParam("Protein ratio", "MS:1001134");
+        CvParam proteinRatioCvParam = xTracker.study.createMSCvParam("protein ratio", "MS:1001134");
         CvParamRef proteinRatioCvParamRef = new CvParamRef();
         proteinRatioCvParamRef.setCvParam(proteinRatioCvParam);
-        CvParam peptideRatioCvParam = xTracker.study.createMSCvParam("Peptide ratio", "MS:1001132");
+        CvParam peptideRatioCvParam = xTracker.study.createMSCvParam("peptide ratio", "MS:1001132");
         CvParamRef peptideRatioCvParamRef = new CvParamRef();
         peptideRatioCvParamRef.setCvParam(peptideRatioCvParam);
 
@@ -175,14 +176,14 @@ public class outputMZQ extends outPlugin{
             //peptide only does assay ratio
             if (!xTracker.study.getAssayRatios().isEmpty()) {
                 peptideRatioQL.setId("RatioQuantLayer_Peptides");
-                peptideRatioQL.setDataType(peptideRatioCvParamRef);
+//                peptideRatioQL.setDataType(peptideRatioCvParamRef);
                 peptideRatioQL.getColumnIndex().addAll(xTracker.study.getAssayRatios());
                 DataMatrix pepRatioMatrix = new DataMatrix();
                 peptideRatioQL.setDataMatrix(pepRatioMatrix);
             }
             //protein ratio can include ratio for study variables
             proteinRatioQL.setId("RatioQuantLayer_Proteins");
-            proteinRatioQL.setDataType(proteinRatioCvParamRef);
+//            proteinRatioQL.setDataType(proteinRatioCvParamRef);
             proteinRatioQL.getColumnIndex().addAll(mzq.getRatioList().getRatio());
             DataMatrix proRatioMatrix = new DataMatrix();
             proteinRatioQL.setDataMatrix(proRatioMatrix);

@@ -21,11 +21,13 @@ public class xParam {
     
     public uk.ac.liv.jmzqml.model.mzqml.Param convertToQparam(){
         AbstractParam abstractParam;
-        if (param.getCvParam() != null) {
+        final uk.ac.ebi.jmzidml.model.mzidml.CvParam iCvParam = param.getCvParam();
+        if (iCvParam != null) {
             abstractParam = new CvParam();
-            abstractParam.setName(param.getCvParam().getName());
+            abstractParam.setName(iCvParam.getName());
             //autoResolving set to true in line 175 for CvParam
-            uk.ac.ebi.jmzidml.model.mzidml.Cv iCv= param.getCvParam().getCv();
+            uk.ac.ebi.jmzidml.model.mzidml.Cv iCv= iCvParam.getCv();
+            //cv is the library of CV terms, e.g. PSI-MS, UO
             Cv cv = xTracker.study.getCv(iCv.getId());
             if(cv==null){
                 cv = new Cv();
@@ -37,9 +39,14 @@ public class xParam {
                 xTracker.study.getMzQuantML().getCvList().getCv().add(cv);
             }
             ((CvParam) abstractParam).setCvRef(cv);
-//            ((CvParam) abstractParam).setCvRef(param.getCvParam().getCv());
-            ((CvParam) abstractParam).setAccession(param.getCvParam().getAccession());
-            abstractParam.setValue(param.getCvParam().getValue());
+            ((CvParam) abstractParam).setAccession(iCvParam.getAccession());
+            abstractParam.setValue(iCvParam.getValue());
+            if(iCvParam.getUnitCvRef()!=null){
+//            if(iCvParam.getUnitCv()!=null){
+                ((CvParam) abstractParam).setUnitAccession(iCvParam.getUnitAccession());
+                ((CvParam) abstractParam).setUnitName(iCvParam.getUnitName());
+                ((CvParam) abstractParam).setUnitCvRef(iCvParam.getUnitCvRef());
+            }
         } else {//userParam
             abstractParam = new UserParam();
             abstractParam.setValue(param.getUserParam().getValue());

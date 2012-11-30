@@ -18,9 +18,9 @@
 	        <!--<cvParam accession="MS:1001837" cvRef="PSI-MS" name="iTraq quantitation analysis"/>-->
 	        <cvParam accession="MS:1002023" cvRef="PSI-MS" name="MS2 tag-based analysis"/>
 		<!--optional, if missed, xtracker will use the default value false, true, false, false for feature, peptide, protein, protein group quantitation-->
-        	<cvParam accession="MS:1002024" cvRef="PSI-MS" value="true" name="MS2 tag-based analysis feature level quantitation"/>
-        	<cvParam accession="MS:1002025" cvRef="PSI-MS" value="true" name="MS2 tag-based analysis group features by peptide quantitation"/>
-        	<cvParam accession="MS:1002026" cvRef="PSI-MS" value="true" name="MS2 tag-based analysis protein level quantitation"/>
+        	<cvParam accession="MS:1002024" cvRef="PSI-MS" value="true" name="MS2 tag-based feature level quantitation"/>
+        	<cvParam accession="MS:1002025" cvRef="PSI-MS" value="true" name="MS2 tag-based peptide level quantitation"/>
+        	<cvParam accession="MS:1002026" cvRef="PSI-MS" value="true" name="MS2 tag-based protein level quantitation"/>
         	<cvParam accession="MS:1002027" cvRef="PSI-MS" value="false" name="MS2 tag-based proteingroup level quantitation"/>
 	</AnalysisSummary>
 
@@ -42,7 +42,7 @@
 	<!--1:1-->
 	<SoftwareList>
 		<Software id="x-Tracker" version="2.0-ALPHA">
-	        	<cvParam accession="MS:1002123" cvRef="PSI-MS" name="x-Tracker generic tool for quantitative proteomics"/>
+	        	<cvParam accession="MS:1002123" cvRef="PSI-MS" name="x-Tracker"/>
 		</Software>
 	</SoftwareList>
 	
@@ -140,19 +140,15 @@
 	<!--1:1-->
 	<StudyVariableList>
 		<StudyVariable id="SV_group_114" name="Group114">
-			<cvParam accession="MS:1001807" cvRef="PSI-MS"    value="1" name="StudyVariable attribute"/>
 			<Assay_refs>i1_114 i2_114</Assay_refs>
 		</StudyVariable>
 		<StudyVariable id="SV_group_115" name="Group115">
-			<cvParam accession="MS:1001807" cvRef="PSI-MS"    value="1" name="StudyVariable attribute"/>
 			<Assay_refs>i1_115 i2_115</Assay_refs>
 		</StudyVariable>
 		<StudyVariable id="SV_group_116" name="Group116">
-			<cvParam accession="MS:1001807" cvRef="PSI-MS"    value="1" name="StudyVariable attribute"/>
 			<Assay_refs>i1_116 i2_116</Assay_refs>
 		</StudyVariable>
 		<StudyVariable id="SV_group_117" name="Group117">
-			<cvParam accession="MS:1001807" cvRef="PSI-MS"    value="1" name="StudyVariable attribute"/>
 			<Assay_refs>i1_117 i2_117</Assay_refs>
 		</StudyVariable>
 	</StudyVariableList>

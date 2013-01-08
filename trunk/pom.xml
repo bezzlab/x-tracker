@@ -62,6 +62,11 @@
             <artifactId>jmztab</artifactId>
             <version>1.0.8</version>
         </dependency>
+        <dependency>
+            <groupId>Jama</groupId>
+            <artifactId>Jama</artifactId>
+            <version>1.0.2</version>
+        </dependency>
     </dependencies>
 
     <repositories>

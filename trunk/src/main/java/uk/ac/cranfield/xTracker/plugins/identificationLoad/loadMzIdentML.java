@@ -164,7 +164,6 @@ public class loadMzIdentML extends identData_loadPlugin{
                                         xTracker.study.addSearchDatabase(isd.getId(), sd);
                                     }
                                     proteins.add(xTracker.study.retrieveProtein(dbs.getAccession(), dbs.getId(), sd));
-//                                    proteins.add(xTracker.study.retrieveProtein(dbs.getAccession().replace("|", "-"), dbs.getId().replace("|", "-"), sd));
                                 }
 //                      c) if no non-decoy PE exists, an artificial protein is generated to be specific for the peptide
 //                                if (!foundPE) {

@@ -68,18 +68,18 @@
 			</ProcessingMethod>
 			<ProcessingMethod order="4">
 				<userParam name="Plugin type" value="output"/>
-				<userParam name="Plugin name" value="outputMZQ"/>
-				<userParam name="Plugin configuration file" value="examples/paper_iTraq4plex/outputMZQ.xtp"/>
-			</ProcessingMethod>
-			<ProcessingMethod order="5">
-				<userParam name="Plugin type" value="output"/>
 				<userParam name="Plugin name" value="outputCSV"/>
 				<userParam name="Plugin configuration file" value="examples/paper_iTraq4plex/outputCSV.xtp"/>
 			</ProcessingMethod>
-			<ProcessingMethod order="6">
+			<ProcessingMethod order="5">
 				<userParam name="Plugin type" value="output"/>
 				<userParam name="Plugin name" value="outputMzTab"/>
 				<userParam name="Plugin configuration file" value="examples/paper_iTraq4plex/outputMzTab.xtp"/>
+			</ProcessingMethod>
+			<ProcessingMethod order="6">
+				<userParam name="Plugin type" value="output"/>
+				<userParam name="Plugin name" value="outputMZQ"/>
+				<userParam name="Plugin configuration file" value="examples/paper_iTraq4plex/outputMZQ.xtp"/>
 			</ProcessingMethod>
 		</DataProcessing>
 	</DataProcessingList>

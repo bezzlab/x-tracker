@@ -8,6 +8,7 @@ import uk.ac.ebi.jmzml.xml.io.MzMLUnmarshaller;
 import uk.ac.liv.jmzqml.model.mzqml.Cv;
 import uk.ac.liv.jmzqml.model.mzqml.CvParam;
 import uk.ac.liv.jmzqml.model.mzqml.CvParamRef;
+import uk.ac.liv.jmzqml.model.mzqml.IdentificationFile;
 import uk.ac.liv.jmzqml.model.mzqml.MzQuantML;
 import uk.ac.liv.jmzqml.model.mzqml.Protein;
 import uk.ac.liv.jmzqml.model.mzqml.Ratio;
@@ -115,6 +116,8 @@ public class Study {
     private ArrayList<Ratio> assayRatios = new ArrayList<Ratio>();
     
     private HashSet<String> ratioMeasurements = new HashSet<String>();
+    
+    private HashMap<String,IdentificationFile> identificationFiles = new HashMap<String, IdentificationFile>(); 
 //    private HashSet<CvParam> ratioMeasurements = new HashSet<CvParam>();
     
     public HashSet<String> getRatioMeasurements(){
@@ -343,8 +346,10 @@ public class Study {
      * add the identification file with the unassigned MSRun id.
      * @param identificationFile 
      */
-    public void addIdentificationFile(String identificationFile){
-        identificationFile_msrun_map.put(identificationFile, UNASSIGNED);
+//    public void addIdentificationFile(String identificationFile){
+    public void addIdentificationFile(IdentificationFile identificationFile){
+        identificationFiles.put(identificationFile.getLocation(), identificationFile);
+        identificationFile_msrun_map.put(identificationFile.getLocation(), UNASSIGNED);
     }
     /**
      * assign the MSRun ID to the identification file
@@ -352,6 +357,11 @@ public class Study {
      */
     public void setIdentificationFileMSRunMap(String identificationFile,String MSRunId){
         identificationFile_msrun_map.put(identificationFile,MSRunId);
+    }
+    
+    public IdentificationFile getIdentificationFile(String location){
+        if(identificationFiles.containsKey(location)) return identificationFiles.get(location);
+        return null;
     }
     /**
      * get the msrun id from the raw file

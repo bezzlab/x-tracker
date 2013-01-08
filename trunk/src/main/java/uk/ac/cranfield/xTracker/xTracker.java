@@ -93,7 +93,7 @@ public class xTracker {
         folders.add("Examples");
         folders.add("../Examples");
         //TODO: use external validator which though is at low priority
-//        String basefile = "paper_iTraq4plex/iTraqMzIDmzMLmzq.mzq";
+        String basefile = "paper_iTraq4plex/iTraqMzIDmzMLmzq.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMzIDmgfCsv.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMzMLmzq.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMGFcsvSingle.mzq";
@@ -102,8 +102,8 @@ public class xTracker {
 //        String basefile = "emPai/emPaiMzID.mzq";
 //        String basefile = "emPai/emPaiMascot.mzq";
 //        String basefile = "f:/Data/D1-iTRAQ-4plex/Jun/psTest.mzq";
-//        new xTracker(basefile);
-//        System.exit(0);
+        new xTracker(basefile);
+        System.exit(0);
         switch (args.length) {
             case 1: {
                 new xTracker(args[0]);
@@ -275,7 +275,8 @@ public class xTracker {
             }
             System.out.println("Identification file: " + file.getAbsolutePath());
             //similarly store the identification file name from the mzq file
-            study.addIdentificationFile(iden.getLocation());
+//            study.addIdentificationFile(iden.getLocation());
+            study.addIdentificationFile(iden);
             numberIdent++;
         }
         

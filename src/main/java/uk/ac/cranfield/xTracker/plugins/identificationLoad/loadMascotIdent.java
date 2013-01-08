@@ -269,7 +269,6 @@ public class loadMascotIdent extends identData_loadPlugin {
                                             }else{
                                                 mascotPos = mascotPos.substring(2, mascotPos.length() - 2);
                                             }
-//                                            proteinId = proteinId.replace("|", "-");
                                             xProtein protein = xTracker.study.retrieveProtein(proteinId, proteinId, sd);
                                             xPeptide peptide = protein.getPeptide(peptideSeq, mascotPos, mods);
 //                                            xPeptide peptide = protein.getPeptide(peptideSeq, mods);

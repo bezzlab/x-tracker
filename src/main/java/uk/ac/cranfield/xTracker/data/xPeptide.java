@@ -110,7 +110,7 @@ public class xPeptide extends QuantitationLevel {
      */
     public PeptideConsensus convertToQpeptideConsensus(){
         PeptideConsensus pc = new PeptideConsensus();
-        pc.setId(getPeptideID().replace("|", "-"));
+        pc.setId(getPeptideID());
         pc.setPeptideSequence(seq);
         //set charge
         HashSet<Integer> charges = new HashSet<Integer>();

@@ -415,10 +415,10 @@ public class loadMascotIdent extends identData_loadPlugin {
                if(modName!=null && delta != Float.NaN) modsFromMascot.put(modName, delta);
             }
         }
-        System.out.println("Modification information in the mascot xml file");
-        for(String key:modsFromMascot.keySet()){
-            System.out.println("Modification: "+key+" with shift "+modsFromMascot.get(key));
-        }
+//        System.out.println("Modification information in the mascot xml file");
+//        for(String key:modsFromMascot.keySet()){
+//            System.out.println("Modification: "+key+" with shift "+modsFromMascot.get(key));
+//        }
         //<xs:element name="MODS" type="xs:string">
         //as element, must be there, but could be empty
         NodeList fixed = doc.getElementsByTagName("MODS");

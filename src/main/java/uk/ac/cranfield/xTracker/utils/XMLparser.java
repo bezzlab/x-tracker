@@ -36,13 +36,13 @@ public class XMLparser {
      * @param validatorTagName the tag where contains the location of the xsd file
      */
     public void validate(String validatorTagName){
-        if ((filename.indexOf(".xtc") < 0) 
-                && (filename.indexOf(".xtp") < 0)
-                && (filename.indexOf(".xml") < 0)) {
-            System.out.println("ERROR: The supposed xml file "+filename+" does not have a valid extension which should be .xtc, .xtp or .xml");
-            System.exit(1);
-            return;
-        }
+//        if ((filename.indexOf(".xtc") < 0) 
+//                && (filename.indexOf(".xtp") < 0)
+//                && (filename.indexOf(".xml") < 0)) {
+//            System.out.println("ERROR: The supposed xml file "+filename+" does not have a valid extension which should be .xtc, .xtp or .xml");
+//            System.exit(1);
+//            return;
+//        }
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
         try {

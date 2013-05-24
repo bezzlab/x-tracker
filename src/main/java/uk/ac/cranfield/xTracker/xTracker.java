@@ -85,6 +85,8 @@ public class xTracker {
      * the name of the xsd file for mzQuantML format
      */
     private final String MZQ_XSD = "mzQuantML_1_0_0.xsd";
+    
+    public static String OUTPUT = "";
 
     public static void main(String[] args) {
         folders.add("..");
@@ -110,6 +112,11 @@ public class xTracker {
                 break;
             }
             case 2: 
+                new xTracker(args[0],args[1]);
+                break;
+
+            case 3: 
+                OUTPUT = args[2];
                 new xTracker(args[0],args[1]);
                 break;
             

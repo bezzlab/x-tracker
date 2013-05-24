@@ -61,7 +61,11 @@ public class outputMZQ extends outPlugin{
     public void start(String paramFile) {
         System.out.println(getName()+" starts");
         //get the output file name
-        outputFilename = getOutputFileName(paramFile);
+        if(xTracker.OUTPUT.length()>0){
+            outputFilename = xTracker.OUTPUT;
+        }else{
+            outputFilename = getOutputFileName(paramFile);
+        }
         if(outputFilename == null){
             System.out.println("Can not get the output file name. There are several reasons: the wrong plugin parameter file using wrong xsd file, not defined in the parameter file");
             System.exit(1);

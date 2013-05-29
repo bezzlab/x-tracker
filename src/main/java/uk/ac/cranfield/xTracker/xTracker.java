@@ -103,6 +103,7 @@ public class xTracker {
 //        String basefile = "emPai/emPaiMascotMultiple.mzq";
 //        String basefile = "emPai/emPaiMzID.mzq";
 //        String basefile = "emPai/emPaiMascot.mzq";
+//        String basefile = "emPai/emPaiMascotUniqueCharge.mzq";
 //        String basefile = "f:/Data/D1-iTRAQ-4plex/Jun/psTest.mzq";
 //        new xTracker(basefile);
 //        System.exit(0);

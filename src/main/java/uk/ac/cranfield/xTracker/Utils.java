@@ -42,7 +42,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * The collection of useful tools which can be used in many situations, not only in this project 
+ * The collection of useful tools which can be used in many situations, not only in this project
  * @author Jun Fan
  * @version 0.1
  */
@@ -89,14 +89,14 @@ public class Utils {
     }
 
     /**
-     * @return the euclidean distance between 1D matrices @param first and @param second 
+     * @return the euclidean distance between 1D matrices @param first and @param second
      */
 //	public static double euclideanDistance(DoubleMatrix1D first,DoubleMatrix1D second){
 //		if(first.size()!=second.size()) return Double.NaN;
 //		double value = first.aggregate(second, new DoubleDoubleFunction(){
 //			public double apply(double arg0, double arg1) {
 //				return arg0+arg1;
-//			}}, 
+//			}},
 //			new DoubleDoubleFunction(){
 //				public double apply(double arg0, double arg1) {
 //					return (arg0-arg1)*(arg0-arg1);
@@ -104,7 +104,7 @@ public class Utils {
 //		return Math.sqrt(value);
 //	}
     /**
-     * @return the mean of a double array @param arr 
+     * @return the mean of a double array @param arr
      */
     public static double mean(double[] arr) {
         double sum = 0;
@@ -113,7 +113,7 @@ public class Utils {
         }
         return sum / arr.length;
     }
-    
+
     public static double mean(List<Double> list){
         if(list.isEmpty()) return Double.NaN;
         return sum(list)/list.size();
@@ -133,7 +133,7 @@ public class Utils {
             return (list.get(middle - 1) + list.get(middle)) / 2.0;
         }
     }
-    
+
     public static double sum(List<Double> list) {
         double ret = 0;
         for(double d:list){
@@ -142,8 +142,12 @@ public class Utils {
         return ret;
     }
 
+    public static double log2(double x) {
+        return Math.log(x)/Math.log(2);
+    }
+
     /**
-     * a static method to return @return a file chooser starting from @param path which would require 
+     * a static method to return @return a file chooser starting from @param path which would require
      * a confirmation when overwriting an existing file
      */
     public static FileChooserWithGenericFileFilter createOverwriteFileChooser(String path) {
@@ -174,12 +178,12 @@ public class Utils {
 
     /**
      * do a PCA analysis on @param matrix which is centred and
-     * @return the object which contains eigen value and vectors 
+     * @return the object which contains eigen value and vectors
      */
 //	public static EigenvalueDecomposition PCA(DoubleMatrix2D matrix){
 //		final int col = matrix.columns();
 //		final int row = matrix.rows();
-//		//1. calculate the mean 
+//		//1. calculate the mean
 //		double [] columnMean = new double [col];
 //		for (int i=0; i< col; i++){
 //			columnMean[i] = matrix.viewColumn(i).zSum()/row;
@@ -190,18 +194,18 @@ public class Utils {
 //			for (int j=0; j< col; j++)
 //				matrix.set(i, j, matrix.get(i,j) - columnMean[j]);
 ////		System.out.println("centered matrix: " + matrix + "\n");
-//		
+//
 //		//3. compute the covariance matrix
 //		DoubleMatrix2D cov = new DenseDoubleMatrix2D(col,col);
 //		for(int i=0;i<col;i++){
 //			DoubleArrayList first = new DoubleArrayList(matrix.viewColumn(i).toArray());
 //			for(int j=0;j<col;j++){
 //				DoubleArrayList second = new DoubleArrayList(matrix.viewColumn(j).toArray());
-//				cov.set(i, j, Descriptive.covariance(first, second)); 
+//				cov.set(i, j, Descriptive.covariance(first, second));
 //			}
 //		}
 ////		System.out.println("Covariance matrix: " + cov + "\n");
-////		
+////
 //		//4. Compute eigenvalues and eigenvectors of the covariance matrix.
 //		EigenvalueDecomposition evd = new EigenvalueDecomposition(cov);
 //		return evd;
@@ -242,7 +246,7 @@ public class Utils {
 
     /**
      * Get the extension of a file.
-     * @param f The file to get the extension from 
+     * @param f The file to get the extension from
      */
     public static String getExtension(File f) {
         String ext = null;
@@ -266,8 +270,8 @@ public class Utils {
 
     /** Returns an ImageIcon, or null if the path was invalid. */
     protected static ImageIcon createImageIcon(String path) {
-//    	The getResource method causes the class loader to look through 
-//    	the directories and JAR files in the program's class path, 
+//    	The getResource method causes the class loader to look through
+//    	the directories and JAR files in the program's class path,
 //    	returning a URL as soon as it finds the desired file
         java.net.URL imgURL = Utils.class.getResource(path);
         if (imgURL != null) {
@@ -370,7 +374,7 @@ public class Utils {
 //    	String Fmt2Month [] ={
 //    			"0","1","2","3","4","5","6","7","8","9","10","11"};
 
-        /* CHECK HOW MANY YEARS ARE 
+        /* CHECK HOW MANY YEARS ARE
          * THERE AFTER JAN 1 1900, IS DAY  0
          */
 
@@ -397,7 +401,7 @@ public class Utils {
             }
         }
 
-        /** Check the days left after 
+        /** Check the days left after
          *  the years have been extracted
          */
         if (years % 4 == 0) {
@@ -446,7 +450,7 @@ public class Utils {
             } //END SWITCH
         }
 
-        years = 1900 + years; //very important 
+        years = 1900 + years; //very important
 
         System.out.println("YEAR :" + years);
         System.out.println("MONTH :" + months);
@@ -459,7 +463,7 @@ public class Utils {
         // SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
         // String dt  = formatter.format(new Date(days+"-"+Fmt1Month[months-1]+"-"+years));
         // DateFormat df = DateFormat.getDateInstance();
-        // Date date = df.parse("07/10/96 4:5 PM, PDT") ; 
+        // Date date = df.parse("07/10/96 4:5 PM, PDT") ;
         // Date date = df.parse("\""+days+"/"+months+"/"+years+"\"");
         //System.out.println(date);
         return days + "-" + Fmt1Month[months - 1] + "-" + years;
@@ -510,7 +514,7 @@ public class Utils {
     }
 
     /**
-     * @return the XML string of the converted @param object using the given @param alias setting instead of class name 
+     * @return the XML string of the converted @param object using the given @param alias setting instead of class name
      */
     public static String convertToXML(Object obj, HashMap<String, Class<?>> alias) {
 //		XStream xstream = new XStream(new DomDriver());
@@ -544,7 +548,7 @@ public class Utils {
     }
 
     /**
-     * @return the corresponding object converted from @param XMLStr which used alias when saved. 
+     * @return the corresponding object converted from @param XMLStr which used alias when saved.
      * @see {@link #convertFromXML(String, HashMap)}
      */
     public static Object convertFromXML(String XMLStr, HashMap<String, Class> alias) {
@@ -580,7 +584,7 @@ public class Utils {
     public static Object getObjectFromXMLFile(String filename, HashMap<String, Class> alias) {
         return convertFromXML(getStringFromFile(filename), alias);
     }
-    
+
     public static String getPath(String fullname){
         int location  = fullname.lastIndexOf("/");
         if (location >=0) return fullname.substring(0,location);
@@ -588,7 +592,7 @@ public class Utils {
         if (location == -1) return "";
         return fullname.substring(0,location);
     }
-    
+
     public static String getFilename(String fullname){
         int location  = fullname.lastIndexOf("/");
         if (location >=0) return fullname.substring(location+1);
@@ -596,7 +600,7 @@ public class Utils {
         if (location == -1) return fullname;
         return fullname.substring(location+1);
     }
-    
+
     public static String locateFile(String basename,ArrayList<String> folders){
         if (basename.length()==0) return "";
         File file = new File(basename);

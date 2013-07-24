@@ -37,7 +37,7 @@ public class GenericInferenceMethod {
         }
         return tmp;
     }
-    
+
     /**
      * initialize the ret value
      */
@@ -52,7 +52,7 @@ public class GenericInferenceMethod {
      * The sum method
      * @param lowLevelQuant
      * @param assayIDs
-     * @return 
+     * @return
      */
     public static HashMap<String,Double> sum(ArrayList<HashMap<String, Double>> lowLevelQuant, ArrayList<String> assayIDs) {
         HashMap<String,Double> ret = initializeRet(assayIDs);
@@ -67,7 +67,7 @@ public class GenericInferenceMethod {
      * The median method
      * @param lowLevelQuant
      * @param assayIDs
-     * @return 
+     * @return
      */
     public static HashMap<String,Double> median(ArrayList<HashMap<String, Double>> lowLevelQuant, ArrayList<String> assayIDs){
         HashMap<String,Double> ret = initializeRet(assayIDs);
@@ -83,7 +83,7 @@ public class GenericInferenceMethod {
      * The mean method
      * @param lowLevelQuant
      * @param assayIDs
-     * @return 
+     * @return
      */
     public static HashMap<String,Double> mean(ArrayList<HashMap<String, Double>> lowLevelQuant, ArrayList<String> assayIDs){
         HashMap<String,Double> ret = initializeRet(assayIDs);
@@ -98,8 +98,8 @@ public class GenericInferenceMethod {
      * Calculate the weighted mean
      * @param lowLevelQuant
      * @param assayIDs
-     * @param count  
-     * @return 
+     * @param count
+     * @return
      */
     public static HashMap<String,Double> weightedAverage(ArrayList<HashMap<String, Double>> lowLevelQuant, ArrayList<String> assayIDs, ArrayList<Integer> count){
         HashMap<String,Double> ret = initializeRet(assayIDs);
@@ -112,12 +112,12 @@ public class GenericInferenceMethod {
                 }
             }
         }
-        
+
         int totalCount = 0;
         for(int abc:count){
             totalCount += abc;
         }
-        
+
         for(String assayID:assayIDs){
             ArrayList<Double> list = tmp.get(assayID);
             int len = list.size();
@@ -128,6 +128,37 @@ public class GenericInferenceMethod {
             }
             ret.put(assayID, sum/totalCount);
         }
+        return ret;
+    }
+    /**
+     * The intensity weighted average method for calculating protein ratios from peptide ratios
+     * @param ratioValues
+     * @param ratioIDs
+     * @return
+     */
+    public static HashMap<String,Double> intensityWeightedAverage(ArrayList<HashMap<String, Double>> ratioValues, ArrayList<String> ratioIDs, ArrayList<Double> weights){
+        HashMap<String,Double> ret = initializeRet(ratioIDs);
+        HashMap<String, ArrayList<Double>> tmp = assignMiddleStructure(ratioIDs, ratioValues);
+
+        for(String ratioID:ratioIDs) {
+            ArrayList<Double> ratios  = tmp.get(ratioID);
+
+            double numerator = 0;
+            double denominator = 0;
+
+            // ratios and weights are ordered, the same indices refer to the same peptide
+            for (int i=0; i<ratios.size(); i++) {
+                numerator += ratios.get(i)*weights.get(i);
+                denominator += weights.get(i);
+            }
+
+            if (denominator > 0) {
+                ret.put(ratioID, numerator/denominator);
+            } else {
+                ret.put(ratioID, 0.0);
+            }
+        }
+
         return ret;
     }
 }

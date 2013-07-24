@@ -43,7 +43,7 @@ public class iTraqQuantitation extends quantitationPlugin{
     private String integrationMethod;
 //    private final String REPORTER_ION_INTENSITY = "iTRAQ intensities";
     private final String REPORTER_ION_INTENSITY = "reporter ion intensity";
-    
+
     @Override
     public void start(String paramFile) {
         HashSet<String> quantitationNames = new HashSet<String> ();
@@ -85,7 +85,8 @@ public class iTraqQuantitation extends quantitationPlugin{
             mz_assayID_maps.put(msrun.getID(), mz_assayID_map);
             allAssayID_map.put(msrun.getID(), assayIDs);
         }
-        
+
+        // Feature integration loop
         for (xProtein protein : xTracker.study.getProteins()) {
             for (xPeptideConsensus pepCon : protein.getPeptides()) {
                 for (xPeptide peptide : pepCon.getPeptides()) {
@@ -108,7 +109,7 @@ public class iTraqQuantitation extends quantitationPlugin{
                                         if (mzValues[j] > maxValue) {
                                             //if using trapzoid area method, needs add one extra data point at both side
                                             //which located at the limit m/z
-                                            // same slope (h2-h1)/(mz2-mz1) = (hx-h1)/(maxValue-mz1)  h=>intensity 
+                                            // same slope (h2-h1)/(mz2-mz1) = (hx-h1)/(maxValue-mz1)  h=>intensity
                                             if(integrationMethod.equals("Area")){
                                                 double heightMaxValue = (intenValues[j]-intenValues[j-1])/(mzValues[j]-mzValues[j-1])*(maxValue-mzValues[j-1])+intenValues[j-1];
                                                 peaks.addElem(maxValue, heightMaxValue);
@@ -163,10 +164,10 @@ public class iTraqQuantitation extends quantitationPlugin{
 //                            }
                         }//end of feature
                     }
-                    if (xTracker.study.requirePeptideQuantitation()) {
-                        peptide.calculateQuantitation(quantitationNames, allAssayID_list,xTracker.PEPTIDE_FEATURE_INFERENCE);
-                        if(xTracker.study.isRatioRequired()) peptide.calculateRatioDirectlyFromQuantities(quantitationNames);
-                    }
+//                    if (xTracker.study.requirePeptideQuantitation()) {
+//                        peptide.calculateQuantitation(quantitationNames, allAssayID_list,xTracker.PEPTIDE_FEATURE_INFERENCE);
+//                        if(xTracker.study.isRatioRequired()) peptide.calculateRatioDirectlyFromQuantities(quantitationNames);
+//                    }
                 }//end of peptide
 //                if (xTracker.study.requireProteinQuantitation()) {
 //                    pepCon.calculateQuantitation(quantitationNames, allAssayID_list,QuantitationLevel.SUM);
@@ -174,11 +175,28 @@ public class iTraqQuantitation extends quantitationPlugin{
 //                    System.out.println("Peptide consensus");
 //                }
             }//end of peptideConsensus
+
+        }
+
+        // Peptide quantitation loop
+        for (xProtein protein : xTracker.study.getProteins()) {
+            for (xPeptideConsensus pepCon : protein.getPeptides()) {
+                for (xPeptide peptide : pepCon.getPeptides()) {
+                     if (xTracker.study.requirePeptideQuantitation()) {
+                        peptide.calculateQuantitation(quantitationNames, allAssayID_list,xTracker.PEPTIDE_FEATURE_INFERENCE);
+                        if(xTracker.study.isRatioRequired()) peptide.calculateRatioDirectlyFromQuantities(quantitationNames);
+                    }
+                }
+            }
+        }
+
+        // Protein quantitation loop
+        for (xProtein protein : xTracker.study.getProteins()) {
             if (xTracker.study.requireProteinQuantitation()) {
                 protein.calculateQuantitation(quantitationNames, allAssayID_list,xTracker.PROTEIN_PEPTIDE_INFERENCE);
                 if(xTracker.study.isRatioRequired()){
                     if(xTracker.study.isRatioInferFromPeptide()){
-                        protein.calculateRatioFromPeptideRatios(quantitationNames);
+                        protein.calculateRatioFromPeptideRatios(quantitationNames,xTracker.PROTEIN_PEPTIDE_RATIO_INFERENCE);
                     }else{
                         protein.calculateRatioDirectlyFromQuantities(quantitationNames);
                     }
@@ -190,7 +208,7 @@ public class iTraqQuantitation extends quantitationPlugin{
         }
         System.out.println("iTraq quantitation plugin done");
     }
-    
+
     @Override
     public ArrayList<CvParam> getQuantitationNames(){
         ArrayList<CvParam> params = new ArrayList<CvParam>();

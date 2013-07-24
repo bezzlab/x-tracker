@@ -37,7 +37,7 @@ import uk.ac.liv.jmzqml.model.mzqml.Ratio;
 import uk.ac.liv.jmzqml.model.mzqml.RatioList;
 
 /**
- * xTracker is the main class of the whole project. 
+ * xTracker is the main class of the whole project.
  * It contains the main and it manages plugins and data structures.
  * <p>
  * It loads the four plugins and checks if they are of the correct type before running each one of them.
@@ -70,6 +70,7 @@ public class xTracker {
      */
     public static int PEPTIDE_FEATURE_INFERENCE = QuantitationLevel.SUM;
     public static int PROTEIN_PEPTIDE_INFERENCE = QuantitationLevel.MEDIAN;
+    public static int PROTEIN_PEPTIDE_RATIO_INFERENCE = QuantitationLevel.MEDIAN;
     public static int SV_ASSAY_INFERENCE = QuantitationLevel.MEAN;
     public static int PROTEIN_GROUP_PROTEIN_INFERENCE = QuantitationLevel.SUM;
     /**
@@ -85,7 +86,7 @@ public class xTracker {
      * the name of the xsd file for mzQuantML format
      */
     private final String MZQ_XSD = "mzQuantML_1_0_0.xsd";
-    
+
     public static String OUTPUT = "";
 
     public static void main(String[] args) {
@@ -112,15 +113,15 @@ public class xTracker {
                 new xTracker(args[0]);
                 break;
             }
-            case 2: 
+            case 2:
                 new xTracker(args[0],args[1]);
                 break;
 
-            case 3: 
+            case 3:
                 OUTPUT = args[2];
                 new xTracker(args[0],args[1]);
                 break;
-            
+
             default: {
                 System.out.println("Usage: java xTracker <configuration.mzq> [plugin folder]");
                 System.out.println("The configuration file is in mzQuantML format, which defines the parameters of the pipeline");
@@ -164,7 +165,7 @@ public class xTracker {
                     Matcher m = pattern.matcher(accession);
                     if (m.find()) {//accession found
                         setFlagByAccession(Integer.parseInt(m.group(1)),cvParam);
-                    }else{//accession not found 
+                    }else{//accession not found
                         setFlagByName(cvParam.getName(),cvParam.getValue());
                     }
                 }
@@ -172,7 +173,7 @@ public class xTracker {
         }
         study.autoSetQuantitationFlag();
         System.out.println("This is a MS"+study.getPipelineType()+" pipeline");
-        
+
         //get pipeline configuration from DataProcessingList element which is mandotary
         List<DataProcessing> dpList = mzQuantML.getDataProcessingList().getDataProcessing();
         boolean pipelineGenerated = false;
@@ -220,6 +221,8 @@ public class xTracker {
 //                            PROTEIN_GROUP_PROTEIN_INFERENCE = getInferenceMethod(userParam.getValue());
                         }else if(name.equals("assay to study variables inference method")){
                             SV_ASSAY_INFERENCE = getInferenceMethod(userParam.getValue());
+                        }else if (name.equals("protein ratio from peptide ratio calculation method")) {
+                            PROTEIN_PEPTIDE_RATIO_INFERENCE = getInferenceMethod(userParam.getValue());
                         }else if(name.equals("protein ratio calculation infer from peptide ratio")){
                             String value = userParam.getValue();
                             if(value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")){
@@ -243,7 +246,7 @@ public class xTracker {
             System.out.println("No pipeline found for xTracker in the DataProcessingList, program terminated");
             System.exit(1);
         }
-        
+
         //the defined spectra and identification files
         InputFiles inputFiles = mzQuantML.getInputFiles();
         //raw files
@@ -287,7 +290,7 @@ public class xTracker {
             study.addIdentificationFile(iden);
             numberIdent++;
         }
-        
+
         if(numberIdent!=numberRaw){
             System.out.println("The number of identification files is "+numberIdent+" which is different to the number of raw files "+numberRaw);
             System.out.println("At the moment, only one-to-one spectral identification relationship is supported");
@@ -301,7 +304,7 @@ public class xTracker {
             MSRun msrun = study.getMSRun(((RawFilesGroup)obj).getId());
             msrun.addAssay(assay);
         }
-        
+
         //Ratios
         RatioList ratioList = mzQuantML.getRatioList();
         if(ratioList!=null){
@@ -330,13 +333,14 @@ public class xTracker {
     /**
      * convert the string into integer which is due to the java 6 does not support switch on String which Java 7 does
      * @param value
-     * @return 
+     * @return
      */
     private int getInferenceMethod(String value) {
         if(value.equalsIgnoreCase("mean")) return QuantitationLevel.MEAN;
         if(value.equalsIgnoreCase("median")) return QuantitationLevel.MEDIAN;
         if(value.equalsIgnoreCase("sum")) return QuantitationLevel.SUM;
         if(value.equalsIgnoreCase("weightedAverage")) return QuantitationLevel.WEIGHTED_AVERAGE;
+        if(value.equalsIgnoreCase("intensityWeightedAverage")) return QuantitationLevel.INTENSITY_WEIGHTED_AVERAGE;
         return -1;
     }
     /**
@@ -433,11 +437,11 @@ public class xTracker {
             return;
         }
     }
-    
+
     public xTracker(String filename) {
         this(filename,".");
     }
-    
+
     public xTracker(String basefile,String workdir) {
         folders.add(0,workdir);
         manager = new PluginManager();
@@ -517,7 +521,7 @@ public class xTracker {
     }
 
     /**
-     * Given a plugin name in input, this plugin retrieves information about it like type, name, description. 
+     * Given a plugin name in input, this plugin retrieves information about it like type, name, description.
      * @param pluginName the plugin name (without .jar extension)
      * @return a String array where:
      * retVal[0] is pluginType

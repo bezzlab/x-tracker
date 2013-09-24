@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<iTraqQuantitation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="Plugins/iTraqQuantitation.xsd">
+	<AssayParamList>
+		<AssayParam>
+			<AssayName>iTRAQ_113</AssayName><!-- this should be equal to the name in cvParam/Modification/Label/Assay-->
+			<mzValue>113.107324</mzValue><!--this value should be got from the kit-->
+			<CorrectionFactors>
+				<factor deltaMass="-2">0</factor>
+				<factor deltaMass="-1">0</factor>
+				<factor deltaMass="+1">6.89</factor>
+				<factor deltaMass="+2">0.24</factor>
+			</CorrectionFactors>
+		</AssayParam>
+		<AssayParam>
+			<AssayName>iTRAQ_114</AssayName><!-- this should be equal to the name in cvParam/Modification/Label/Assay-->
+			<mzValue>114.110679</mzValue><!--this value should be got from the kit-->
+			<CorrectionFactors>
+				<factor deltaMass="-2">0</factor>
+				<factor deltaMass="-1">0.94</factor>
+				<factor deltaMass="+1">5.9</factor>
+				<factor deltaMass="+2">0.16</factor>
+			</CorrectionFactors>
+		</AssayParam>
+		<AssayParam>
+			<AssayName>iTRAQ_115</AssayName>
+			<mzValue>115.107714</mzValue>
+			<CorrectionFactors>
+				<factor deltaMass="-2">0</factor>
+				<factor deltaMass="-1">1.88</factor>
+				<factor deltaMass="+1">4.9</factor>
+				<factor deltaMass="+2">0.1</factor>
+			</CorrectionFactors>
+		</AssayParam>
+		<AssayParam>
+			<AssayName>iTRAQ_116</AssayName>
+			<mzValue>116.111069</mzValue>
+			<CorrectionFactors>
+				<factor deltaMass="-2">0</factor>
+				<factor deltaMass="-1">2.82</factor>
+				<factor deltaMass="+1">3.9</factor>
+				<factor deltaMass="+2">0.07</factor>
+			</CorrectionFactors>
+		</AssayParam>
+		<AssayParam>
+			<AssayName>iTRAQ_117</AssayName>
+			<mzValue>117.114424</mzValue>
+			<CorrectionFactors>
+				<factor deltaMass="-2">0.06</factor>
+				<factor deltaMass="-1">3.77</factor>
+				<factor deltaMass="+1">2.88</factor>
+				<factor deltaMass="+2">0</factor>
+			</CorrectionFactors>
+		</AssayParam>
+		<AssayParam>
+			<AssayName>iTRAQ_118</AssayName>
+			<mzValue>118.111459</mzValue>
+			<CorrectionFactors>
+				<factor deltaMass="-2">0.09</factor>
+				<factor deltaMass="-1">4.71</factor>
+				<factor deltaMass="+1">1.91</factor>
+				<factor deltaMass="+2">0</factor>
+			</CorrectionFactors>
+		</AssayParam>
+		<AssayParam>
+			<AssayName>iTRAQ_119</AssayName>
+			<mzValue>119.114814</mzValue>
+			<CorrectionFactors>
+				<factor deltaMass="-2">0.14</factor>
+				<factor deltaMass="-1">5.66</factor>
+				<factor deltaMass="+1">0.87</factor>
+				<factor deltaMass="+2">0</factor>
+			</CorrectionFactors>
+		</AssayParam>
+		<AssayParam>
+			<AssayName>iTRAQ_121</AssayName>
+			<mzValue>121.121523</mzValue>
+			<CorrectionFactors>
+				<factor deltaMass="-2">0.27</factor>
+				<factor deltaMass="-1">7.44</factor>
+				<factor deltaMass="+1">0.18</factor>
+				<factor deltaMass="+2">0</factor>
+			</CorrectionFactors>
+		</AssayParam>
+	</AssayParamList>
+	<Setting>
+		<mzRange>
+    		<minus>0.05</minus>
+    		<plus>0.05</plus>
+		</mzRange>
+		<IntegrationMethod>SumIntensities</IntegrationMethod><!--the method used to calculate the area of the peak-->
+	</Setting>
+</iTraqQuantitation>

@@ -403,13 +403,15 @@ class IntensityWeights {
             this.weight = weight;
         }
 
-        public WeightBin(double maxValue, double weight) {
-            this.maxValue = maxValue;
+        public WeightBin(double value, double weight) {
+            this.minValue = value;
+            this.maxValue = value;
             this.weight = weight;
         }
 
         public WeightBin(double minValue, double maxValue, double weight) {
             this.maxValue = maxValue;
+            this.minValue = minValue;
             this.weight = weight;
         }
 

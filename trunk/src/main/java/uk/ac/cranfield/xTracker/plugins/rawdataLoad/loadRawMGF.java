@@ -2,9 +2,6 @@
 package uk.ac.cranfield.xTracker.plugins.rawdataLoad;
 
 //Some useful imports
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +18,6 @@ import uk.ac.cranfield.xTracker.data.xPeptide;
 import uk.ac.cranfield.xTracker.data.xProtein;
 import uk.ac.cranfield.xTracker.data.xSpectrum;
 import uk.ac.cranfield.xTracker.data.xSpectrumList;
-import uk.ac.cranfield.xTracker.utils.XMLparser;
 import uk.ac.cranfield.xTracker.xTracker;
 
 public class loadRawMGF extends rawData_loadPlugin {
@@ -58,7 +54,7 @@ public class loadRawMGF extends rawData_loadPlugin {
                                     index.put(location, map);
                                 }
                                 ArrayList<Identification> idents;
-                                final String specID = identification.getSpectrumID();
+                                final String specID = identification.getSpectrumID().trim();
                                 if (map.containsKey(specID)){
                                     idents = map.get(specID);
                                 }else{

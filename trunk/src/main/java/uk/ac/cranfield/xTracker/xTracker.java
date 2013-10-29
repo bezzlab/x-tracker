@@ -101,14 +101,14 @@ public class xTracker {
 //        String basefile = "paper_iTraq4plex/iTraqMascotMzMLmzq.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMGFcsvSingle.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMGFmzqMultiple.mzq";
-        String basefile = "mcp_iTraq8plex/iTraq8plexMascot.mzq";
+//        String basefile = "mcp_iTraq8plex/iTraq8plexMascot.mzq";
 //        String basefile = "emPai/emPaiMascotMultiple.mzq";
 //        String basefile = "emPai/emPaiMzID.mzq";
 //        String basefile = "emPai/emPaiMascot.mzq";
 //        String basefile = "emPai/emPaiMascotUniqueCharge.mzq";
 //        String basefile = "f:/Data/D1-iTRAQ-4plex/Jun/psTest.mzq";
-        new xTracker(basefile);
-        System.exit(0);
+//        new xTracker(basefile);
+//        System.exit(0);
         switch (args.length) {
             case 1: {
                 new xTracker(args[0]);

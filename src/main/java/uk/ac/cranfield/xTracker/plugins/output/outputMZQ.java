@@ -196,9 +196,18 @@ public class outputMZQ extends outPlugin{
 
         if(xTracker.study.getPipelineType()==Study.MS2_TYPE){
             HashSet<xProtein> proteinSet = new HashSet<xProtein>();
+            HashMap<xProtein,ArrayList<PeptideConsensus>> proteinPcRefs = new HashMap<xProtein, ArrayList<PeptideConsensus>>();
+//            HashMap<String,ArrayList<PeptideConsensus>> proteinPcRefs = new HashMap<String, ArrayList<PeptideConsensus>>();
 
             for (xProtein protein : xTracker.study.getProteins()) {
                 proteinSet.add(protein);
+                ArrayList<PeptideConsensus> pcRefs;
+                if (proteinPcRefs.containsKey(protein)){
+                    pcRefs = proteinPcRefs.get(protein);
+                }else{
+                    pcRefs = new ArrayList<PeptideConsensus>();
+                    proteinPcRefs.put(protein, pcRefs);
+                }
                 ArrayList<xPeptideConsensus> peptideCons = protein.getPeptides();
                 if (peptideCons == null) {
                     continue;
@@ -206,6 +215,7 @@ public class outputMZQ extends outPlugin{
                 for (xPeptideConsensus pepCon : peptideCons) {
                     for (xPeptide peptide : pepCon.getPeptides()) {
                         PeptideConsensus pc = peptide.convertToQpeptideConsensus();
+                        pcRefs.add(pc);
                         pc.setId(getCorrectNCName(pc.getId()));
                         pc.setSearchDatabaseRef(protein.getProtein().getSearchDatabaseRef());
                         for (String msrunID : peptide.getMSRunIDs()) {
@@ -300,6 +310,7 @@ public class outputMZQ extends outPlugin{
             proteinList.setId("ProteinList");
             for(xProtein pro:proteinSet){
                 Protein protein = pro.getProtein();
+                protein.getPeptideConsensusRefs().addAll(proteinPcRefs.get(pro));
                 protein.setId(getCorrectNCName(protein.getId()));
                 protein.setAccession(getCorrectNCName(protein.getAccession()));
                 proteinList.getProtein().add(protein);

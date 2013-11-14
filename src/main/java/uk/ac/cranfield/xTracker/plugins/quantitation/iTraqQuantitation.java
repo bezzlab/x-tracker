@@ -52,12 +52,14 @@ public class iTraqQuantitation extends quantitationPlugin{
         loadParam(paramFile);
         checkParameterValues();
         setQuantitationNames();
-
+        //print the correction factors within the method
         Matrix correction = computeCoeffMatrix();
         if(correction.det()==0){
             System.out.println("The quantities can not be corrected as the determinant calculated from supplied parameters is equal to 1");
         }
+        //mz_assayID_maps: keys are msrun id, values are maps of mz=>assayID
         HashMap<String,HashMap<Double,String>> mz_assayID_maps = new HashMap<String, HashMap<Double, String>>();
+        //msrun id=> list of corresponding assay ids
         HashMap<String,ArrayList<String>> allAssayID_map = new HashMap<String, ArrayList<String>>();
         ArrayList<String> allAssayID_list = new ArrayList<String>();
         for(MSRun msrun:xTracker.study.getMSRuns()){

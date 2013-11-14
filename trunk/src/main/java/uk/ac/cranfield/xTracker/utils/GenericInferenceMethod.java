@@ -2,6 +2,7 @@ package uk.ac.cranfield.xTracker.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import uk.ac.cranfield.xTracker.Utils;
 
 /**
@@ -58,7 +59,7 @@ public class GenericInferenceMethod {
         HashMap<String,Double> ret = initializeRet(assayIDs);
         HashMap<String, ArrayList<Double>> tmp = assignMiddleStructure(assayIDs, lowLevelQuant);
         for(String assayID:assayIDs){
-            ArrayList<Double> list = tmp.get(assayID);
+            List<Double> list = tmp.get(assayID);
             ret.put(assayID, Utils.sum(list));
         }
         return ret;

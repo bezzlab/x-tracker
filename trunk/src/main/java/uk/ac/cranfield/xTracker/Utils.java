@@ -114,16 +114,16 @@ public class Utils {
         return sum / arr.length;
     }
 
-    public static double mean(List<Double> list){
-        if(list.isEmpty()) return Double.NaN;
+    public static Double mean(List<Double> list){
+        if(list.isEmpty()) return null;
         return sum(list)/list.size();
     }
 
-    public static double median(List<Double> list) {
+    public static Double median(List<Double> list) {
         Collections.sort(list);
         int len = list.size();
         if (len == 0) {
-            return 0;
+            return null;
 //            return Double.NaN;
         }
         int middle = len / 2;
@@ -134,7 +134,8 @@ public class Utils {
         }
     }
 
-    public static double sum(List<Double> list) {
+    public static Double sum(List<Double> list) {
+        if(list.isEmpty()) return null;
         double ret = 0;
         for(double d:list){
             ret += d;

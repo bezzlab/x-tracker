@@ -131,10 +131,12 @@ public class QuantitationLevel {
 
     public void calculateQuantitation(Set<String> quantitationNames,ArrayList<String> assayIDs,int type){
         try {
+            //get the method for the current object according to its class type (e.g. xProtein or xPeptide)
             Method m = this.getClass().getDeclaredMethod(misc.getMethodName(this.getClass()), new Class[0]);
             ArrayList<QuantitationLevel> results = (ArrayList<QuantitationLevel>)m.invoke(this, new Object[0]);
             ArrayList<Integer> count = new ArrayList<Integer>();
             for(String name:quantitationNames){
+                //the hash map is the quantitation map for the lower level entity (assay ID=> quan) for the current quantitation name
                 ArrayList<HashMap<String, Double>> lowerLevelQuant = new ArrayList<HashMap<String, Double>>();
                 for(QuantitationLevel one: results){
                     if(type==WEIGHTED_AVERAGE) count.add(one.getCount());
@@ -186,7 +188,7 @@ public class QuantitationLevel {
                 double denominator = getQuantity(quantitationName, ratio.getDenominator());
                 double ratioValue;
                 if (denominator == 0) {
-                    ratioValue = Double.NaN;
+                    ratioValue = Double.POSITIVE_INFINITY;
                 } else {
                     ratioValue = numerator / denominator;
                 }

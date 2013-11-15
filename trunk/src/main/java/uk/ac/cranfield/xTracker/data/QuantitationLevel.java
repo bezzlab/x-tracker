@@ -42,7 +42,12 @@ public class QuantitationLevel {
         }
         quan.put(assayID, quantity);
     }
-
+/**
+ * Get quantity for the given quantitation name and assay ID
+ * @param name the quantitation name, e.g. reporter ion intensity
+ * @param assayID the assay id
+ * @return quantity
+ */
     public Double getQuantity(String name,String assayID){
         if (quantities.containsKey(name) && quantities.get(name).containsKey(assayID)){
             return quantities.get(name).get(assayID);
@@ -78,7 +83,7 @@ public class QuantitationLevel {
                 for(Object obj:sv.getAssayRefs()){
                     assayValues.add(quantities.get(name).get(((Assay)obj).getId()));
                 }
-                double result = 0d;
+                Double result = null;
 
                 switch (xTracker.SV_ASSAY_INFERENCE) {
                     case MEAN:
@@ -107,11 +112,15 @@ public class QuantitationLevel {
                 if(ratio.getType().equals(xRatio.ASSAY)) continue;
             //ratio for SV
                 HashMap <String,Double> svValues = studyVariables.get(name);
-                double numerator = svValues.get(ratio.getNumerator());
-                double denominator = svValues.get(ratio.getDenominator());
-                double ratioValue;
-                if (denominator == 0) {
+                Double numerator = svValues.get(ratio.getNumerator());
+                Double denominator = svValues.get(ratio.getDenominator());
+                Double ratioValue;
+                if (numerator == null || denominator == null
+                        || numerator.isNaN() || denominator.isNaN()
+                        || numerator.isInfinite() || denominator.isInfinite()){
                     ratioValue = Double.NaN;
+                }else if (denominator == 0) {
+                    ratioValue = Double.POSITIVE_INFINITY;
                 } else {
                     ratioValue = numerator / denominator;
                 }
@@ -184,10 +193,14 @@ public class QuantitationLevel {
             HashMap<String, Double> ratioValues = new HashMap<String, Double>();
             for (xRatio ratio : xTracker.study.getRatios()) {
                 if (ratio.getType().equals(xRatio.STUDY_VARIABLE)) continue;
-                double numerator = getQuantity(quantitationName, ratio.getNumerator());
-                double denominator = getQuantity(quantitationName, ratio.getDenominator());
+                Double numerator = getQuantity(quantitationName, ratio.getNumerator());
+                Double denominator = getQuantity(quantitationName, ratio.getDenominator());
                 double ratioValue;
-                if (denominator == 0) {
+                if (numerator ==null || denominator == null
+                        || numerator.isNaN() || denominator.isNaN()
+                        || numerator.isInfinite() || denominator.isInfinite()){
+                    ratioValue = Double.NaN;
+                } else if (denominator == 0) {
                     ratioValue = Double.POSITIVE_INFINITY;
                 } else {
                     ratioValue = numerator / denominator;

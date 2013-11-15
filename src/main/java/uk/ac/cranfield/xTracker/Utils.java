@@ -38,6 +38,7 @@ import javax.swing.JOptionPane;
 
 import com.thoughtworks.xstream.XStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -103,41 +104,51 @@ public class Utils {
 //		}});
 //		return Math.sqrt(value);
 //	}
-    /**
-     * @return the mean of a double array @param arr
-     */
-    public static double mean(double[] arr) {
-        double sum = 0;
-        for (double d : arr) {
-            sum += d;
+//    /**
+//     * @return the mean of a double array @param arr
+//     */
+//    public static double mean(double[] arr) {
+//        double sum = 0;
+//        for (double d : arr) {
+//            sum += d;
+//        }
+//        return sum / arr.length;
+//    }
+//
+    private static ArrayList<Double> filter(List<Double> list){
+        ArrayList<Double> filtered = new ArrayList<Double>();
+        for(Double val:list){
+            if (val == null || val.isNaN() || val.isInfinite()) continue;
+            filtered.add(val);
         }
-        return sum / arr.length;
+        return filtered;
     }
 
     public static Double mean(List<Double> list){
-        if(list.isEmpty()) return null;
-        return sum(list)/list.size();
+        ArrayList<Double> filtered = new ArrayList<Double>();
+        if(filtered.isEmpty()) return null;
+        return sum(filtered)/filtered.size();
     }
 
     public static Double median(List<Double> list) {
-        Collections.sort(list);
-        int len = list.size();
-        if (len == 0) {
-            return null;
+        ArrayList<Double> filtered = filter(list);
+        if (filtered.isEmpty()) return null;
 //            return Double.NaN;
-        }
+        Collections.sort(filtered);
+        int len = filtered.size();
         int middle = len / 2;
         if (len % 2 == 1) {
-            return list.get(middle);
+            return filtered.get(middle);
         } else {
-            return (list.get(middle - 1) + list.get(middle)) / 2.0;
+            return (filtered.get(middle - 1) + filtered.get(middle)) / 2.0;
         }
     }
 
     public static Double sum(List<Double> list) {
-        if(list.isEmpty()) return null;
+        ArrayList<Double> filtered = filter(list);
+        if(filtered.isEmpty()) return null;
         double ret = 0;
-        for(double d:list){
+        for(double d:filtered){
             ret += d;
         }
         return ret;

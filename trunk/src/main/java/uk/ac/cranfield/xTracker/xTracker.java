@@ -96,11 +96,11 @@ public class xTracker {
         folders.add("Examples");
         folders.add("../Examples");
         //TODO: use external validator which though is at low priority
-        String basefile = "paper_iTraq4plex/iTraqMzIDmzMLmzq.mzq";
+//        String basefile = "paper_iTraq4plex/iTraqMzIDmzMLmzq.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMzIDmgfCsv.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMzMLmzq.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMGFcsvSingle.mzq";
-//        String basefile = "paper_iTraq4plex/iTraqMascotMGFmzqMultiple.mzq";
+        String basefile = "paper_iTraq4plex/iTraqMascotMGFmzqMultiple.mzq";
 //        String basefile = "mcp_iTraq8plex/iTraq8plexMascot.mzq";
 //        String basefile = "emPai/emPaiMascotMultiple.mzq";
 //        String basefile = "emPai/emPaiMzID.mzq";
@@ -177,12 +177,20 @@ public class xTracker {
 
         //get pipeline configuration from DataProcessingList element which is mandotary
         List<DataProcessing> dpList = mzQuantML.getDataProcessingList().getDataProcessing();
+//        Iterator<Software> softwares = unmarshaller.unmarshalCollectionFromXpath(MzQuantMLElement.Software);
+//        Iterator<Software> softwares = unmarshaller.unmarshalCollectionFromXpath("/MzQuantML/Software");
+//        HashMap<String,Software> softwareMap = new HashMap<String, Software>();
+//        while(softwares.hasNext()){
+//            Software sw = softwares.next();
+//            softwareMap.put(sw.getId(), sw);
+//        }
         boolean pipelineGenerated = false;
         for(DataProcessing dp:dpList){
             if(pipelineGenerated) break;//all pipeline for xtracker is expected to under one DataProcessing
-            Software software=dp.getSoftware();
-            System.out.println("aa:"+software);
-            System.out.println(dp.getSoftwareRef());
+            Software software = dp.getSoftware();
+            System.out.println("Software object:"+software);
+            System.out.println("Software Ref:"+dp.getSoftwareRef());
+//            Software software=softwareMap.get(dp.getSoftwareRef());
             if(software==null) continue;
 //            String swName = ((Software)tmp).getId();
 //            if(!swName.equalsIgnoreCase("xtracker")) continue;
@@ -302,9 +310,11 @@ public class xTracker {
         //Assays
         List<Assay> assayList = mzQuantML.getAssayList().getAssay();
         for(Assay assay:assayList){
-            Object obj = assay.getRawFilesGroupRef();
-            if(obj == null) continue;
-            MSRun msrun = study.getMSRun(((RawFilesGroup)obj).getId());
+            RawFilesGroup rfg = assay.getRawFilesGroup();
+//            Object obj = assay.getRawFilesGroupRef();
+//            if(obj == null) continue;
+//            MSRun msrun = study.getMSRun(((RawFilesGroup)obj).getId());
+            MSRun msrun = study.getMSRun(rfg.getId());
             msrun.addAssay(assay);
         }
 

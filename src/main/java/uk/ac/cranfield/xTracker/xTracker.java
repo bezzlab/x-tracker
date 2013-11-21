@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,8 +34,10 @@ import uk.ac.cranfield.xTracker.data.QuantitationLevel;
 import uk.ac.cranfield.xTracker.data.Study;
 import uk.ac.cranfield.xTracker.data.xRatio;
 import uk.ac.cranfield.xTracker.utils.XMLparser;
+import uk.ac.liv.jmzqml.MzQuantMLElement;
 import uk.ac.liv.jmzqml.model.mzqml.Ratio;
 import uk.ac.liv.jmzqml.model.mzqml.RatioList;
+import uk.ac.liv.jmzqml.model.mzqml.StudyVariable;
 
 /**
  * xTracker is the main class of the whole project.
@@ -100,15 +103,14 @@ public class xTracker {
 //        String basefile = "paper_iTraq4plex/iTraqMzIDmgfCsv.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMzMLmzq.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMGFcsvSingle.mzq";
-        String basefile = "paper_iTraq4plex/iTraqMascotMGFmzqMultiple.mzq";
+//        String basefile = "paper_iTraq4plex/iTraqMascotMGFmzqMultiple.mzq";
 //        String basefile = "mcp_iTraq8plex/iTraq8plexMascot.mzq";
 //        String basefile = "emPai/emPaiMascotMultiple.mzq";
 //        String basefile = "emPai/emPaiMzID.mzq";
 //        String basefile = "emPai/emPaiMascot.mzq";
-//        String basefile = "emPai/emPaiMascotUniqueCharge.mzq";
-//        String basefile = "f:/Data/D1-iTRAQ-4plex/Jun/psTest.mzq";
-        new xTracker(basefile);
-        System.exit(0);
+//////        String basefile = "emPai/emPaiMascotUniqueCharge.mzq"; //this file forgot to put on svn
+//        new xTracker(basefile);
+//        System.exit(0);
         switch (args.length) {
             case 1: {
                 new xTracker(args[0]);
@@ -143,8 +145,8 @@ public class xTracker {
             System.exit(1);
         }
         //load the mzQuantML file into memory
-        MzQuantMLUnmarshaller unmarshaller = new MzQuantMLUnmarshaller(filename);
-        MzQuantML mzQuantML = unmarshaller.unmarshall();
+        MzQuantMLUnmarshaller unmarshaller = new MzQuantMLUnmarshaller(new File(filename));
+        MzQuantML mzQuantML = unmarshaller.unmarshal(MzQuantMLElement.MzQuantML);
         //save the current mzQuantML to be used as a base in the outputing stage
         study.setMzQuantML(mzQuantML);
         study.setFilename(filename);
@@ -188,17 +190,12 @@ public class xTracker {
         for(DataProcessing dp:dpList){
             if(pipelineGenerated) break;//all pipeline for xtracker is expected to under one DataProcessing
             Software software = dp.getSoftware();
-            System.out.println("Software object:"+software);
-            System.out.println("Software Ref:"+dp.getSoftwareRef());
 //            Software software=softwareMap.get(dp.getSoftwareRef());
             if(software==null) continue;
-//            String swName = ((Software)tmp).getId();
-//            if(!swName.equalsIgnoreCase("xtracker")) continue;
-            boolean isXtracker = false;
+           boolean isXtracker = false;
             for(CvParam cvParam: software.getCvParam()){
-                if(cvParam.getCv().getId().equals("PSI-MS")) continue;
                 String accession = cvParam.getAccession().toUpperCase();
-                if(accession.equals("1002123") || accession.equals("MS:1002123")){
+                if(accession.contains("1002123")){
                     isXtracker =  true;
                     break;
                 }
@@ -310,14 +307,19 @@ public class xTracker {
         //Assays
         List<Assay> assayList = mzQuantML.getAssayList().getAssay();
         for(Assay assay:assayList){
-            RawFilesGroup rfg = assay.getRawFilesGroup();
+//            RawFilesGroup rfg = assay.getRawFilesGroup();
 //            Object obj = assay.getRawFilesGroupRef();
 //            if(obj == null) continue;
 //            MSRun msrun = study.getMSRun(((RawFilesGroup)obj).getId());
-            MSRun msrun = study.getMSRun(rfg.getId());
+            MSRun msrun = study.getMSRun(assay.getRawFilesGroupRef());
             msrun.addAssay(assay);
+            study.addAssay(assay);
         }
 
+        Iterator<StudyVariable> svs = unmarshaller.unmarshalCollectionFromXpath(MzQuantMLElement.StudyVariable);
+        while(svs.hasNext()){
+            study.addSV(svs.next());
+        }
         //Ratios
         RatioList ratioList = mzQuantML.getRatioList();
         if(ratioList!=null){

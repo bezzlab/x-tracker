@@ -409,9 +409,7 @@ public class outputMZQ extends outPlugin{
             //data processing inference methods
             List<DataProcessing> dpList = mzq.getDataProcessingList().getDataProcessing();
             for(DataProcessing dp:dpList){
-                Object tmp = dp.getSoftwareRef();
-                if (tmp == null) continue;
-                String swName = ((Software) tmp).getId();
+                String swName = dp.getSoftwareRef();
                 if (!swName.equalsIgnoreCase("xtracker")) continue;
                 List<ProcessingMethod> pmList = dp.getProcessingMethod();
                 ProcessingMethod pm = getQuantitationStep(pmList);

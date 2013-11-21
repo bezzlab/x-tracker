@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import uk.ac.ebi.jmzml.xml.io.MzMLUnmarshaller;
+import uk.ac.liv.jmzqml.model.mzqml.Assay;
 import uk.ac.liv.jmzqml.model.mzqml.Cv;
 import uk.ac.liv.jmzqml.model.mzqml.CvParam;
 import uk.ac.liv.jmzqml.model.mzqml.CvParamRef;
@@ -13,6 +14,7 @@ import uk.ac.liv.jmzqml.model.mzqml.MzQuantML;
 import uk.ac.liv.jmzqml.model.mzqml.Protein;
 import uk.ac.liv.jmzqml.model.mzqml.Ratio;
 import uk.ac.liv.jmzqml.model.mzqml.SearchDatabase;
+import uk.ac.liv.jmzqml.model.mzqml.StudyVariable;
 
 /**
  *
@@ -119,7 +121,10 @@ public class Study {
     
     private HashMap<String,IdentificationFile> identificationFiles = new HashMap<String, IdentificationFile>(); 
 //    private HashSet<CvParam> ratioMeasurements = new HashSet<CvParam>();
-    
+    private HashMap<String,Assay> assays = new HashMap<String, Assay>();
+    private ArrayList<String> assayOrder = new ArrayList<String>();
+    private HashMap<String,StudyVariable> svs = new HashMap<String, StudyVariable>();
+            
     public HashSet<String> getRatioMeasurements(){
 //    public HashSet<CvParam> getRatioMeasurements(){
         return ratioMeasurements;
@@ -484,7 +489,8 @@ public class Study {
      * @return 
      */
     public Cv getCv(String name){
-        return cvs.get(name);
+        if (cvs.containsKey(name)) return cvs.get(name);
+        return null;
     }
     /**
      * Add quantitation label into the list with the correspondingly generated PSI-MS term 
@@ -561,5 +567,24 @@ public class Study {
 
     public Metadata getMetadata() {
         return metadata;
+    }
+    
+    public void addAssay(Assay assay){
+        assays.put(assay.getId(), assay);
+        assayOrder.add(assay.getId());
+    }
+    
+    public Assay getAssay(String id){
+        if (assays.containsKey(id)) return assays.get(id);
+        return null;
+    }
+            
+    public void addSV(StudyVariable sv){
+        svs.put(sv.getId(), sv);
+    }
+    
+    public StudyVariable getSV(String id){
+        if (svs.containsKey(id)) return svs.get(id);
+        return null;
     }
 }

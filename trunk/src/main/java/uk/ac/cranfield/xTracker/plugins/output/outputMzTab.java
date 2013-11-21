@@ -188,7 +188,7 @@ public class outputMzTab extends outPlugin{
     private Param getQuantitationMethod() throws MzTabParsingException{
         CvParam param = xTracker.study.getQuantitationMethod();
         if (param == null) return null;
-        return new Param(param.getCv().getId(),param.getAccession(),param.getName(),param.getValue());
+        return new Param(param.getCvRef(),param.getAccession(),param.getName(),param.getValue());
     }
     /**
      * Gets the plugin description.

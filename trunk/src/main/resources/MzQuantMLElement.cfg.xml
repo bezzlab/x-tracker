@@ -638,7 +638,7 @@ Configurations for various properties of model classes.
     </configurations>
     
     <configurations>
-        <autoRefResolving>true</autoRefResolving>
+        <autoRefResolving>false</autoRefResolving>
         <clazz>uk.ac.liv.jmzqml.model.mzqml.Software</clazz>
         <idMapped>true</idMapped>
         <indexed>true</indexed>

@@ -62,7 +62,8 @@ public class xParam {
 //            if(iCvParam.getUnitCv()!=null){
                 ((CvParam) abstractParam).setUnitAccession(iCvParam.getUnitAccession());
                 ((CvParam) abstractParam).setUnitName(iCvParam.getUnitName());
-                ((CvParam) abstractParam).setUnitCv(findUnitCv(iCvParam.getUnitCv()));
+//                ((CvParam) abstractParam).setUnitCv(findUnitCv(iCvParam.getUnitCvR()));
+                ((CvParam) abstractParam).setUnitCv(xTracker.study.getCv(iCvParam.getUnitCvRef()));
             }
         } else {//userParam
             abstractParam = new UserParam();

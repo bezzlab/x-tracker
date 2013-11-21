@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import javax.xml.validation.Validator;
 import org.w3c.dom.Node;
@@ -31,6 +32,7 @@ import uk.ac.cranfield.xTracker.utils.XMLparser;
 import uk.ac.cranfield.xTracker.xTracker;
 import uk.ac.ebi.jmzidml.model.mzidml.AnalysisSoftware;
 import uk.ac.ebi.jmzidml.model.mzidml.AnalysisSoftwareList;
+import uk.ac.ebi.jmzidml.model.mzidml.Cv;
 
 /**
  *
@@ -80,13 +82,28 @@ public class loadMzIdentML extends identData_loadPlugin{
                         && MzIdentMLElement.SpectrumIdentificationResult.isAutoRefResolving()
                         && MzIdentMLElement.PeptideEvidenceRef.isAutoRefResolving()
                         && MzIdentMLElement.PeptideEvidence.isAutoRefResolving()
-                        && MzIdentMLElement.CvParam.isAutoRefResolving()
+                        && MzIdentMLElement.CvParam.isAutoRefResolving() 
                         && MzIdentMLElement.DBSequence.isAutoRefResolving();
                 if (!autoResolveFlag) {
                     System.out.println("The auto resolving is not allowed for SIR, SII, CvParam, DBSequence, PE or PERef, please allow them in the configuration file MzIdentMLElement.cfg.xml");
                     System.exit(1);
                 }
+                Iterator<Cv> iCVs = unmarshaller.unmarshalCollectionFromXpath(MzIdentMLElement.CV);
+                while(iCVs.hasNext()){
+                    Cv iCv = iCVs.next();
 
+                    //cv is the library of CV terms, e.g. PSI-MS, UO
+                    uk.ac.liv.jmzqml.model.mzqml.Cv cv = xTracker.study.getCv(iCv.getId());
+                    if(cv==null){
+                        cv = new uk.ac.liv.jmzqml.model.mzqml.Cv();
+                        cv.setFullName(iCv.getFullName());
+                        cv.setId(iCv.getId());
+                        cv.setUri(iCv.getUri());
+                        cv.setVersion(iCv.getVersion());
+                        xTracker.study.addCv(cv.getId(), cv);
+                        xTracker.study.getMzQuantML().getCvList().getCv().add(cv);
+                    }
+                }
                 AnalysisSoftwareList softwareList = unmarshaller.unmarshal(MzIdentMLElement.AnalysisSoftwareList);
                 if(softwareList!=null){
                     for(AnalysisSoftware software : softwareList.getAnalysisSoftware()){

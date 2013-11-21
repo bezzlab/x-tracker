@@ -80,8 +80,8 @@ public class QuantitationLevel {
             HashMap<String,Double> values = new HashMap<String, Double>();
             for(StudyVariable sv:xTracker.study.getMzQuantML().getStudyVariableList().getStudyVariable()){
                 ArrayList<Double> assayValues = new ArrayList<Double>();
-                for(Object obj:sv.getAssayRefs()){
-                    assayValues.add(quantities.get(name).get(((Assay)obj).getId()));
+                for(String assayID:sv.getAssayRefs()){
+                    assayValues.add(quantities.get(name).get(assayID));
                 }
                 Double result = null;
 

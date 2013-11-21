@@ -145,7 +145,7 @@ public class loadMascotIdent extends identData_loadPlugin {
                         UserParam userParam = new UserParam();
                         userParam.setName(fasta);
                         Param param = new Param();
-                        param.setParamGroup(userParam);
+                        param.setParam(userParam);
                         sd.setDatabaseName(param);
                         xTracker.study.addSearchDatabase(database, sd);
                     }

@@ -18,6 +18,23 @@ public class xParam {
     public xParam(Param param){
         this.param = param;
     }
+    private static Cv unitCv = null;
+    
+    private Cv findUnitCv(uk.ac.ebi.jmzidml.model.mzidml.Cv iUnitCv){
+        if (unitCv == null){ //not determined before, i.e. first time to locate it
+            unitCv = xTracker.study.getCv(iUnitCv.getId());
+            if(unitCv == null){ //not in the current Cv list in the mzq file, create a new one corresponding to the Cv used in the mzid
+                unitCv = new Cv();
+                unitCv.setFullName(iUnitCv.getFullName());
+                unitCv.setId(iUnitCv.getId());
+                unitCv.setUri(iUnitCv.getUri());
+                unitCv.setVersion(iUnitCv.getVersion());
+                xTracker.study.addCv(unitCv.getId(), unitCv);
+                xTracker.study.getMzQuantML().getCvList().getCv().add(unitCv);
+            }
+        }
+        return unitCv;
+    }
     
     public uk.ac.liv.jmzqml.model.mzqml.Param convertToQparam(){
         AbstractParam abstractParam;
@@ -38,14 +55,14 @@ public class xParam {
                 xTracker.study.addCv(cv.getId(), cv);
                 xTracker.study.getMzQuantML().getCvList().getCv().add(cv);
             }
-            ((CvParam) abstractParam).setCvRef(cv);
+            ((CvParam) abstractParam).setCv(cv);
             ((CvParam) abstractParam).setAccession(iCvParam.getAccession());
             abstractParam.setValue(iCvParam.getValue());
             if(iCvParam.getUnitCvRef()!=null){
 //            if(iCvParam.getUnitCv()!=null){
                 ((CvParam) abstractParam).setUnitAccession(iCvParam.getUnitAccession());
                 ((CvParam) abstractParam).setUnitName(iCvParam.getUnitName());
-                ((CvParam) abstractParam).setUnitCvRef(iCvParam.getUnitCvRef());
+                ((CvParam) abstractParam).setUnitCv(findUnitCv(iCvParam.getUnitCv()));
             }
         } else {//userParam
             abstractParam = new UserParam();
@@ -54,7 +71,7 @@ public class xParam {
             ((UserParam)abstractParam).setType(param.getUserParam().getType());
         }
         uk.ac.liv.jmzqml.model.mzqml.Param qparam = new uk.ac.liv.jmzqml.model.mzqml.Param();
-        qparam.setParamGroup(abstractParam);
+        qparam.setParam(abstractParam);
         return qparam;
     }
     

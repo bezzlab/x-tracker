@@ -89,7 +89,7 @@ public class xModification{
             if(accession!=null){
                 uk.ac.liv.jmzqml.model.mzqml.CvParam qcv = new uk.ac.liv.jmzqml.model.mzqml.CvParam();
                 qcv.setAccession(accession);
-                qcv.setCvRef(xTracker.study.getCv("UNIMOD"));
+                qcv.setCv(xTracker.study.getCv("UNIMOD"));
                 qcv.setName(name);
                 qmod.getCvParam().add(qcv);
             }

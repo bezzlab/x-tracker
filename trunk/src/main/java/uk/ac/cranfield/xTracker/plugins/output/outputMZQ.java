@@ -92,7 +92,7 @@ public class outputMZQ extends outPlugin{
         for (MSRun msrun : xTracker.study.getMSRuns()) {
             FeatureList featureList = new FeatureList();
             featureList.setId("featureList_"+msrun.getID());
-            featureList.setRawFilesGroupRef(msrun.getRawFilesGroup());
+            featureList.setRawFilesGroup(msrun.getRawFilesGroup());
             featureLists.put(msrun.getID(),featureList);
             
             ArrayList<String> assayIDs = new ArrayList<String>();
@@ -113,7 +113,10 @@ public class outputMZQ extends outPlugin{
                         ql.setId("AssayQuantLayer_" + msrun.getID() + "_" + quantitationName);
                     }
                     ql.setDataType(xTracker.study.getQuantitationNameCvParam(quantitationName));
-                    ql.getColumnIndex().addAll(msrun.getAssays());
+                    for(Assay ass: msrun.getAssays()){
+                        ql.getColumnIndex().add(ass.getId());
+                    }
+//                    ql.getColumnIndex().addAll(msrun.getAssays());
                     DataMatrix matrix = new DataMatrix();
                     ql.setDataMatrix(matrix);
                     featureQLs.put(quantitationName, ql);
@@ -135,7 +138,10 @@ public class outputMZQ extends outPlugin{
                 QuantLayer svQL = new QuantLayer();
                 svQL.setId("SV_QuantLayer_Protein_"+quantitationName);
                 svQL.setDataType(xTracker.study.getQuantitationNameCvParam(quantitationName));
-                svQL.getColumnIndex().addAll(svs);
+                for(StudyVariable sv: svs){
+                    svQL.getColumnIndex().add(sv.getId());
+                }
+//                svQL.getColumnIndex().addAll(svs);
                 DataMatrix svMatrix = new DataMatrix();
                 svQL.setDataMatrix(svMatrix);
                 svQLs.put(quantitationName, svQL);
@@ -149,8 +155,12 @@ public class outputMZQ extends outPlugin{
             proteinQL.setId("AssayQuantLayer_Proteins_" + quantitationName);
             peptideQL.setDataType(xTracker.study.getQuantitationNameCvParam(quantitationName));
             proteinQL.setDataType(xTracker.study.getQuantitationNameCvParam(quantitationName));
-            peptideQL.getColumnIndex().addAll(allAssays);
-            proteinQL.getColumnIndex().addAll(allAssays);
+            for (Assay ass:allAssays){
+                peptideQL.getColumnIndex().add(ass.getId());
+                proteinQL.getColumnIndex().add(ass.getId());
+            }
+//            peptideQL.getColumnIndex().addAll(allAssays);
+//            proteinQL.getColumnIndex().addAll(allAssays);
             DataMatrix pepMatrix = new DataMatrix();
             DataMatrix proMatrix = new DataMatrix();
             peptideQL.setDataMatrix(pepMatrix);
@@ -182,14 +192,20 @@ public class outputMZQ extends outPlugin{
             if (!xTracker.study.getAssayRatios().isEmpty()) {
                 peptideRatioQL.setId("RatioQuantLayer_Peptides");
 //                peptideRatioQL.setDataType(peptideRatioCvParamRef);
-                peptideRatioQL.getColumnIndex().addAll(xTracker.study.getAssayRatios());
+                for(Ratio ratio:xTracker.study.getAssayRatios()){
+                    peptideRatioQL.getColumnIndex().add(ratio.getId());
+                }
+//                peptideRatioQL.getColumnIndex().addAll(xTracker.study.getAssayRatios());
                 DataMatrix pepRatioMatrix = new DataMatrix();
                 peptideRatioQL.setDataMatrix(pepRatioMatrix);
             }
             //protein ratio can include ratio for study variables
             proteinRatioQL.setId("RatioQuantLayer_Proteins");
 //            proteinRatioQL.setDataType(proteinRatioCvParamRef);
-            proteinRatioQL.getColumnIndex().addAll(mzq.getRatioList().getRatio());
+            for(Ratio ratio: mzq.getRatioList().getRatio()){
+                proteinRatioQL.getColumnIndex().add(ratio.getId());
+            }
+//            proteinRatioQL.getColumnIndex().addAll(mzq.getRatioList().getRatio());
             DataMatrix proRatioMatrix = new DataMatrix();
             proteinRatioQL.setDataMatrix(proRatioMatrix);
         }
@@ -217,7 +233,8 @@ public class outputMZQ extends outPlugin{
                         PeptideConsensus pc = peptide.convertToQpeptideConsensus();
                         pcRefs.add(pc);
                         pc.setId(getCorrectNCName(pc.getId()));
-                        pc.setSearchDatabaseRef(protein.getProtein().getSearchDatabaseRef());
+                        pc.setSearchDatabase(protein.getProtein().getSearchDatabase());
+//                        pc.setSearchDatabaseRef(protein.getProtein().getSearchDatabaseRef());
                         for (String msrunID : peptide.getMSRunIDs()) {
                             for (xFeature feature : peptide.getFeatures(msrunID)) {
                                 for(Identification identification : feature.getIdentifications()){
@@ -234,7 +251,7 @@ public class outputMZQ extends outPlugin{
                                         for (String quantitationName : xTracker.study.getQuantitationNames()) {
 //                                            quantitationName = quantitationName.replace(" ", "_");
                                             Row row = new Row();
-                                            row.setObjectRef(qFeature);
+                                            row.setObject(qFeature);
                                             HashMap<String, Double> quants = identification.getQuantities(quantitationName);
                                             for (String assayID : msrun_assayIDs_map.get(msrunID)) {
                                                 row.getValue().add(String.valueOf(quants.get(assayID)));
@@ -244,8 +261,8 @@ public class outputMZQ extends outPlugin{
                                     }
                                     //PeptideConsensus EvidenceRef
                                     EvidenceRef evidence = new EvidenceRef();
-                                    evidence.getAssayRefs().addAll(xTracker.study.getMSRun(msrunID).getAssays());
-                                    evidence.setFeatureRef(qFeature);
+                                    evidence.getAssays().addAll(xTracker.study.getMSRun(msrunID).getAssays());
+                                    evidence.setFeature(qFeature);
                                     if (identification.getSii() == null) {//not from mzIdentML file
                                         evidence.getIdRefs().add(identification.getId());
                                         IdentificationFile idFile = xTracker.study.getIdentificationFile(identification.getIdentificationFile());
@@ -253,7 +270,7 @@ public class outputMZQ extends outPlugin{
                                             System.out.println("Please check the identification file "+identification.getIdentificationFile()+" which is not defined in the mzq configuration file");
                                             System.exit(1);
                                         }
-                                        evidence.setIdentificationFileRef(idFile);
+                                        evidence.setIdentificationFile(idFile);
                                     } else {
                                         evidence.getIdRefs().add(identification.getSii().getId());
                                     }
@@ -267,7 +284,7 @@ public class outputMZQ extends outPlugin{
                         if (xTracker.study.needPeptideQuantitation()) {
                             for (String quantitationName : xTracker.study.getQuantitationNames()) {
                                 Row row = new Row();
-                                row.setObjectRef(pc);
+                                row.setObject(pc);
                                 HashMap<String, Double> quants = peptide.getQuantities(quantitationName);
                                 for (Assay assay : allAssays) {
                                     row.getValue().add(String.valueOf(quants.get(assay.getId())));
@@ -285,7 +302,7 @@ public class outputMZQ extends outPlugin{
                             }
                             if(!xTracker.study.getAssayRatios().isEmpty()){
                                 Row ratioRow = new Row();
-                                ratioRow.setObjectRef(pc);
+                                ratioRow.setObject(pc);
                                 for(Ratio assayRatio:xTracker.study.getAssayRatios()){
                                     String quantitationName = assayRatio.getDenominatorDataType().getCvParam().getName();
                                     HashMap<String, Double> ratioValues = peptide.getRatios(quantitationName);
@@ -310,14 +327,14 @@ public class outputMZQ extends outPlugin{
             proteinList.setId("ProteinList");
             for(xProtein pro:proteinSet){
                 Protein protein = pro.getProtein();
-                protein.getPeptideConsensusRefs().addAll(proteinPcRefs.get(pro));
+                protein.getPeptideConsensuses().addAll(proteinPcRefs.get(pro));
                 protein.setId(getCorrectNCName(protein.getId()));
                 protein.setAccession(getCorrectNCName(protein.getAccession()));
                 proteinList.getProtein().add(protein);
                 if (xTracker.study.needProteinQuantitation()) {
                     for (String quantitationName : xTracker.study.getQuantitationNames()) {
                         Row row = new Row();
-                        row.setObjectRef(pro.getProtein());
+                        row.setObject(pro.getProtein());
                         HashMap<String, Double> quants = pro.getQuantities(quantitationName);
                         for (Assay assay : allAssays) {
                             row.getValue().add(String.valueOf(quants.get(assay.getId())));
@@ -326,7 +343,7 @@ public class outputMZQ extends outPlugin{
                         
                         if(svs.size()>1){
                             Row svRow = new Row();
-                            svRow.setObjectRef(pro.getProtein());
+                            svRow.setObject(pro.getProtein());
                             HashMap<String,Double> svValues = pro.getStudyVariableQuantities(quantitationName);
                             for(StudyVariable sv:svs){
                                 svRow.getValue().add(String.valueOf(svValues.get(sv.getId())));
@@ -336,7 +353,7 @@ public class outputMZQ extends outPlugin{
                     }
                     if (xTracker.study.isRatioRequired()) {
                         Row ratioRow = new Row();
-                        ratioRow.setObjectRef(pro.getProtein());
+                        ratioRow.setObject(pro.getProtein());
                         for (xRatio ratio : xTracker.study.getRatios()) {
                             String quantitationName = ratio.getRatio().getDenominatorDataType().getCvParam().getName();
                             HashMap<String, Double> ratioValues = pro.getRatios(quantitationName);

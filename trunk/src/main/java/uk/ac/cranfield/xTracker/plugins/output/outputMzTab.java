@@ -97,7 +97,7 @@ public class outputMzTab extends outPlugin{
             //msrun corresponds to unit
             for(MSRun msrun:xTracker.study.getMSRuns()){
                 for(xProtein protein:xTracker.study.getProteins()){
-                    SearchDatabase sd = (SearchDatabase) protein.getProtein().getSearchDatabaseRef();
+                    SearchDatabase sd = protein.getProtein().getSearchDatabase();
 //                    String database = sd.getDatabaseName().getParamGroup().getName();
                     String database;
                     if(sd.getDatabaseName().getCvParam()!=null){
@@ -188,7 +188,7 @@ public class outputMzTab extends outPlugin{
     private Param getQuantitationMethod() throws MzTabParsingException{
         CvParam param = xTracker.study.getQuantitationMethod();
         if (param == null) return null;
-        return new Param(((Cv)param.getCvRef()).getId(),param.getAccession(),param.getName(),param.getValue());
+        return new Param(param.getCv().getId(),param.getAccession(),param.getName(),param.getValue());
     }
     /**
      * Gets the plugin description.

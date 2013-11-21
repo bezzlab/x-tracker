@@ -96,7 +96,7 @@ public class xTracker {
         folders.add("Examples");
         folders.add("../Examples");
         //TODO: use external validator which though is at low priority
-//        String basefile = "paper_iTraq4plex/iTraqMzIDmzMLmzq.mzq";
+        String basefile = "paper_iTraq4plex/iTraqMzIDmzMLmzq.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMzIDmgfCsv.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMzMLmzq.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMGFcsvSingle.mzq";
@@ -107,8 +107,8 @@ public class xTracker {
 //        String basefile = "emPai/emPaiMascot.mzq";
 //        String basefile = "emPai/emPaiMascotUniqueCharge.mzq";
 //        String basefile = "f:/Data/D1-iTRAQ-4plex/Jun/psTest.mzq";
-//        new xTracker(basefile);
-//        System.exit(0);
+        new xTracker(basefile);
+        System.exit(0);
         switch (args.length) {
             case 1: {
                 new xTracker(args[0]);
@@ -180,13 +180,15 @@ public class xTracker {
         boolean pipelineGenerated = false;
         for(DataProcessing dp:dpList){
             if(pipelineGenerated) break;//all pipeline for xtracker is expected to under one DataProcessing
-            Object tmp=dp.getSoftwareRef();
-            if(tmp==null) continue;
+            Software software=dp.getSoftware();
+            System.out.println("aa:"+software);
+            System.out.println(dp.getSoftwareRef());
+            if(software==null) continue;
 //            String swName = ((Software)tmp).getId();
 //            if(!swName.equalsIgnoreCase("xtracker")) continue;
             boolean isXtracker = false;
-            for(CvParam cvParam: ((Software)tmp).getCvParam()){
-                if(!((Cv)cvParam.getCvRef()).getId().equals("PSI-MS")) continue;
+            for(CvParam cvParam: software.getCvParam()){
+                if(cvParam.getCv().getId().equals("PSI-MS")) continue;
                 String accession = cvParam.getAccession().toUpperCase();
                 if(accession.equals("1002123") || accession.equals("MS:1002123")){
                     isXtracker =  true;

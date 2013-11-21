@@ -451,7 +451,7 @@ public class Study {
         Protein protein = new Protein();
         protein.setAccession(accession);
         protein.setId(id);
-        protein.setSearchDatabaseRef(searchDatabase);
+        protein.setSearchDatabase(searchDatabase);
         xProtein xprotein = new xProtein(protein);
         proteins.add(xprotein);
         return xprotein;
@@ -541,7 +541,7 @@ public class Study {
             addCv(cv.getId(), cv);
             getMzQuantML().getCvList().getCv().add(cv);
         }
-        param.setCvRef(cv);
+        param.setCv(cv);
         return param;
     }
     /**

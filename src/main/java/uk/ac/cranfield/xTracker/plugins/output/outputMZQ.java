@@ -38,7 +38,6 @@ import uk.ac.liv.jmzqml.model.mzqml.IdentificationFile;
 import uk.ac.liv.jmzqml.model.mzqml.ProcessingMethod;
 import uk.ac.liv.jmzqml.model.mzqml.Ratio;
 import uk.ac.liv.jmzqml.model.mzqml.RatioQuantLayer;
-import uk.ac.liv.jmzqml.model.mzqml.Software;
 import uk.ac.liv.jmzqml.model.mzqml.StudyVariable;
 import uk.ac.liv.jmzqml.model.mzqml.UserParam;
 
@@ -290,15 +289,6 @@ public class outputMZQ extends outPlugin{
                                     row.getValue().add(String.valueOf(quants.get(assay.getId())));
                                 }
                                 peptideQLs.get(quantitationName).getDataMatrix().getRow().add(row);
-//                                if(!xTracker.study.getAssayRatios().isEmpty()){
-//                                    Row ratioRow = new Row();
-//                                    ratioRow.setObjectRef(pc);
-//                                    HashMap<String, Double> ratioValues = peptide.getRatios(quantitationName);
-//                                    for (xRatio ratio:xTracker.study.getRatios()){
-//                                        if(ratio.getType().equals(xRatio.ASSAY)) ratioRow.getValue().add(String.valueOf(ratioValues.get(ratio.getId())));
-//                                    }
-//                                    peptideRatioQLs.get(quantitationName).getDataMatrix().getRow().add(ratioRow);
-//                                }
                             }
                             if(!xTracker.study.getAssayRatios().isEmpty()){
                                 Row ratioRow = new Row();
@@ -327,7 +317,10 @@ public class outputMZQ extends outPlugin{
             proteinList.setId("ProteinList");
             for(xProtein pro:proteinSet){
                 Protein protein = pro.getProtein();
-                protein.getPeptideConsensuses().addAll(proteinPcRefs.get(pro));
+//                protein.getPeptideConsensuses().addAll(proteinPcRefs.get(pro));
+                for(PeptideConsensus pc:proteinPcRefs.get(pro)){
+                    protein.getPeptideConsensusRefs().add(pc.getId());
+                }
                 protein.setId(getCorrectNCName(protein.getId()));
                 protein.setAccession(getCorrectNCName(protein.getAccession()));
                 proteinList.getProtein().add(protein);

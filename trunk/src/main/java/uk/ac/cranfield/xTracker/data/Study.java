@@ -36,8 +36,8 @@ public class Study {
 
     public void setQuantitationMethod(CvParam quantitationMethod) {
         if(this.quantitationMethod != null && (!this.quantitationMethod.getAccession().equals(quantitationMethod.getAccession()))){
-            System.out.println("More than one different quantitation methods defined in the AnalysisSummary");
-            System.exit(1);
+            System.out.println("More than one different quantitation methods defined in the AnalysisSummary. The first method " +this.quantitationMethod.getName()+" will be used.");
+            return;
         }
         this.quantitationMethod = quantitationMethod;
     }
@@ -77,6 +77,9 @@ public class Study {
     private int pipelineType = 0;
     public static final int MS1_TYPE = 1;
     public static final int MS2_TYPE = 2;
+    private int labelCondition = 0;
+    public static final int LABELLED = 11;
+    public static final int LABEL_FREE = 12;
     /**
      * the map between raw file and msrun
      */
@@ -264,6 +267,22 @@ public class Study {
      */
     public boolean requireProteinQuantitation(){
         return quantitationFlag > PROTEIN_FLAG;
+    }
+
+    public int getLabelCondition() {
+        return labelCondition;
+    }
+    
+    public void setLabelCondition(int labelCondition){
+        int current = getLabelCondition();
+        if(current == 0) {
+            this.labelCondition = labelCondition;
+            return;
+        }
+        if(current!=labelCondition){
+            System.out.println("Conflict labelling condition, program exits. Please check the settings under AnalysisSummary");
+            System.exit(1);
+        }
     }
     /**
      * set the pipeline type

@@ -99,7 +99,7 @@ public class xTracker {
         folders.add("Examples");
         folders.add("../Examples");
         //TODO: use external validator which though is at low priority
-//        String basefile = "paper_iTraq4plex/iTraqMzIDmzMLmzq.mzq";
+        String basefile = "paper_iTraq4plex/iTraqMzIDmzMLmzq.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMzIDmgfCsv.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMzMLmzq.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMGFcsvSingle.mzq";
@@ -109,8 +109,8 @@ public class xTracker {
 //        String basefile = "emPai/emPaiMzID.mzq";
 //        String basefile = "emPai/emPaiMascot.mzq";
 //////        String basefile = "emPai/emPaiMascotUniqueCharge.mzq"; //this file forgot to put on svn
-//        new xTracker(basefile);
-//        System.exit(0);
+        new xTracker(basefile);
+        System.exit(0);
         switch (args.length) {
             case 1: {
                 new xTracker(args[0]);
@@ -370,58 +370,104 @@ public class xTracker {
         if(accession == 1001836) manager.spectralCountingSpecial();
         switch(accession){
             case 1001834: //LC-MS label-free quantitation analysis
+                study.setPipelineType(Study.MS1_TYPE);
+                study.setLabelCondition(Study.LABEL_FREE);
+                study.setQuantitationMethod(cvParam);
+                return;
             case 1001835: //SILAC quantitation analysis
             case 1001839: //metabolic labeling 14N / 15N quantitation analysis
             case 1002018: //MS1 label-based analysis
                 study.setPipelineType(Study.MS1_TYPE);
+                study.setLabelCondition(Study.LABELLED);
                 study.setQuantitationMethod(cvParam);
                 return;
             case 1001836: //spectral counting quantitation analysis
-            case 1001837: //iTRAQ quantitation analysis
             case 1001838: //SRM quantitation analysis
+                study.setPipelineType(Study.MS2_TYPE);
+                study.setLabelCondition(Study.LABEL_FREE);
+                study.setQuantitationMethod(cvParam);
+                return;
+            case 1001837: //iTRAQ quantitation analysis
             case 1002009: //isobaric label quantitation analysis
             case 1002010: //TMT quantitation analysis
             case 1002023: //MS2 tag-based analysis
                 study.setPipelineType(Study.MS2_TYPE);
+                study.setLabelCondition(Study.LABELLED);
                 study.setQuantitationMethod(cvParam);
                 return;
             case 1002001: //MS1 label-based raw feature quantitation
+                study.setPipelineType(Study.MS1_TYPE);
+                study.setLabelCondition(Study.LABELLED);
+                study.setFeatureQuantitationFlag(flag);
+                return;
             case 1002019: //label-free raw feature quantitation is_a: MS:1001834
                 study.setPipelineType(Study.MS1_TYPE);
+                study.setLabelCondition(Study.LABEL_FREE);
                 study.setFeatureQuantitationFlag(flag);
                 return;
             case 1002002: //MS1 label-based peptide level quantitation
+                study.setPipelineType(Study.MS1_TYPE);
+                study.setLabelCondition(Study.LABELLED);
+                study.setPeptideQuantitationFlag(flag);
+                return;
             case 1002020: //label-free peptide level quantitation is_a: MS:1001834
                 study.setPipelineType(Study.MS1_TYPE);
+                study.setLabelCondition(Study.LABEL_FREE);
                 study.setPeptideQuantitationFlag(flag);
                 return;
             case 1002003: //MS1 label-based protein level quantitation
+                study.setPipelineType(Study.MS1_TYPE);
+                study.setLabelCondition(Study.LABELLED);
+                study.setProteinQuantitationFlag(flag);
+                return;
             case 1002021: //label-free protein level quantitation is_a: MS:1001834
                 study.setPipelineType(Study.MS1_TYPE);
+                study.setLabelCondition(Study.LABEL_FREE);
                 study.setProteinQuantitationFlag(flag);
                 return;
             case 1002004: //MS1 label-based proteingroup level quantitation
+                study.setPipelineType(Study.MS1_TYPE);
+                study.setLabelCondition(Study.LABELLED);
+//                study.setProteinGroupQuantitationFlag(flag);
+                return;
             case 1002022: //label-free proteingroup level quantitation is_a: MS:1001834
                 study.setPipelineType(Study.MS1_TYPE);
+                study.setLabelCondition(Study.LABEL_FREE);
 //                study.setProteinGroupQuantitationFlag(flag);
                 return;
             case 1002024: //MS2 tag-based feature level quantitation
                 study.setPipelineType(Study.MS2_TYPE);
+                study.setLabelCondition(Study.LABELLED);
                 study.setFeatureQuantitationFlag(flag);
                 return;
             case 1002015: //spectral count peptide level quantitation
+                study.setPipelineType(Study.MS2_TYPE);
+                study.setLabelCondition(Study.LABEL_FREE);
+                study.setPeptideQuantitationFlag(flag);
+                return;
             case 1002025: //MS2 tag-based peptide level quantitation
                 study.setPipelineType(Study.MS2_TYPE);
+                study.setLabelCondition(Study.LABELLED);
                 study.setPeptideQuantitationFlag(flag);
                 return;
             case 1002016: //spectral count protein level quantitation
+                study.setPipelineType(Study.MS2_TYPE);
+                study.setLabelCondition(Study.LABEL_FREE);
+                study.setProteinQuantitationFlag(flag);
+                return;
             case 1002026: //MS2 tag-based protein level quantitation
                 study.setPipelineType(Study.MS2_TYPE);
+                study.setLabelCondition(Study.LABELLED);
                 study.setProteinQuantitationFlag(flag);
                 return;
             case 1002017: //spectral count proteingroup level quantitation
+                study.setPipelineType(Study.MS2_TYPE);
+                study.setLabelCondition(Study.LABEL_FREE);
+//                study.setProteinGroupQuantitationFlag(flag);
+                return;
             case 1002027: //MS2 tag-based proteingroup level quantitation
                 study.setPipelineType(Study.MS2_TYPE);
+                study.setLabelCondition(Study.LABELLED);
 //                study.setProteinGroupQuantitationFlag(flag);
                 return;
         }

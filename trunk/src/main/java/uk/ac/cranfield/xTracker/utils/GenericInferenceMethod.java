@@ -91,7 +91,11 @@ public class GenericInferenceMethod {
         HashMap<String, ArrayList<Double>> tmp = assignMiddleStructure(assayIDs, lowLevelQuant);
         for(String assayID:assayIDs){
             ArrayList<Double> list = tmp.get(assayID);
-            ret.put(assayID, Utils.sum(list)/list.size());
+            if(list==null || list.size()==0){
+                ret.put(assayID, null);
+            }else{
+                ret.put(assayID, Utils.sum(list)/list.size());
+            }
         }
         return ret;
     }
@@ -109,7 +113,11 @@ public class GenericInferenceMethod {
             HashMap<String, Double> quant = lowLevelQuant.get(i);
             for(String assayID:assayIDs){
                 if(quant.containsKey(assayID)){
-                    tmp.get(assayID).add(quant.get(assayID)*count.get(i));
+                    if(quant.get(assayID)==null){
+                        tmp.get(assayID).add(null);
+                    }else{
+                        tmp.get(assayID).add(quant.get(assayID)*count.get(i));
+                    }
                 }
             }
         }
@@ -121,13 +129,17 @@ public class GenericInferenceMethod {
 
         for(String assayID:assayIDs){
             ArrayList<Double> list = tmp.get(assayID);
+            list = Utils.filter(list);
             int len = list.size();
-            if(len == 0) continue;
-            double sum = 0;
-            for (Double value:list) {
-                sum += value;
+            if(len == 0){
+                ret.put(assayID, null);
+            }else{
+                double sum = 0;
+                for (Double value:list) {
+                    sum += value;
+                }
+                ret.put(assayID, sum/totalCount);
             }
-            ret.put(assayID, sum/totalCount);
         }
         return ret;
     }

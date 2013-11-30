@@ -115,7 +115,7 @@ public class Utils {
 //        return sum / arr.length;
 //    }
 //
-    private static ArrayList<Double> filter(List<Double> list){
+    public static ArrayList<Double> filter(List<Double> list){
         ArrayList<Double> filtered = new ArrayList<Double>();
         for(Double val:list){
             if (val == null || val.isNaN() || val.isInfinite()) continue;

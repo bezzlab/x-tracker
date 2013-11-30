@@ -260,7 +260,12 @@ public class outputMZQ extends outPlugin{
                                     }
                                     //PeptideConsensus EvidenceRef
                                     EvidenceRef evidence = new EvidenceRef();
-                                    evidence.getAssays().addAll(xTracker.study.getMSRun(msrunID).getAssays());
+//                                    evidence.getAssays().addAll(xTracker.study.getMSRun(msrunID).getAssays());
+                                    List<String> assayRefs = new ArrayList<String>();
+                                    for(Assay ass:xTracker.study.getMSRun(msrunID).getAssays()){
+                                        assayRefs.add(ass.getId());
+                                    }
+                                    evidence.getAssayRefs().addAll(assayRefs);
                                     evidence.setFeature(qFeature);
                                     if (identification.getSii() == null) {//not from mzIdentML file
                                         evidence.getIdRefs().add(identification.getId());

@@ -15,8 +15,8 @@
     <developers>
         <developer>
             <name>Jun Fan</name>
-            <email>j.fan@cranfield.ac.uk</email>
-            <organization>Cranfield University</organization>
+            <email>j.fan@qmul.ac.uk</email>
+            <organization>Queen Mary University of London</organization>
         </developer>
     </developers>
 
@@ -30,7 +30,7 @@
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
             <artifactId>xstream</artifactId>
-            <version>1.4.2</version>
+            <version>1.4.7</version>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.jexcelapi</groupId>
@@ -45,12 +45,12 @@
         <dependency>             
             <groupId>uk.ac.ebi.jmzml</groupId>             
             <artifactId>jmzml</artifactId>             
-            <version>1.6.7</version>         
+            <version>1.6.8</version>         
         </dependency>
         <dependency>             
             <groupId>uk.ac.ebi.jmzidml</groupId>             
             <artifactId>jmzidentml</artifactId>             
-            <version>1.1.2</version>         
+            <version>1.1.6</version>         
         </dependency>
         <dependency>
             <groupId>uk.ac.liv</groupId>
@@ -60,7 +60,7 @@
         <dependency>
             <groupId>uk.ac.ebi.pride</groupId>
             <artifactId>jmztab</artifactId>
-            <version>1.0.8</version>
+            <version>1.0.9</version>
         </dependency>
         <dependency>
             <groupId>Jama</groupId>

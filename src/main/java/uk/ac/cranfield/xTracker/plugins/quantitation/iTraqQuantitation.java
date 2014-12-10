@@ -113,7 +113,12 @@ public class iTraqQuantitation extends quantitationPlugin{
                                             //which located at the limit m/z
                                             // same slope (h2-h1)/(mz2-mz1) = (hx-h1)/(maxValue-mz1)  h=>intensity
                                             if(integrationMethod.equals("Area")){
-                                                double heightMaxValue = (intenValues[j]-intenValues[j-1])/(mzValues[j]-mzValues[j-1])*(maxValue-mzValues[j-1])+intenValues[j-1];
+                                                double heightMaxValue;
+                                                if (j==0){
+                                                    heightMaxValue = 0;
+                                                }else{
+                                                    heightMaxValue = (intenValues[j]-intenValues[j-1])/(mzValues[j]-mzValues[j-1])*(maxValue-mzValues[j-1])+intenValues[j-1];
+                                                }
                                                 peaks.addElem(maxValue, heightMaxValue);
                                             }
                                             break;

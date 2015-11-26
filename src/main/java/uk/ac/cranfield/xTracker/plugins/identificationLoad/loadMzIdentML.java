@@ -33,6 +33,7 @@ import uk.ac.cranfield.xTracker.xTracker;
 import uk.ac.ebi.jmzidml.model.mzidml.AnalysisSoftware;
 import uk.ac.ebi.jmzidml.model.mzidml.AnalysisSoftwareList;
 import uk.ac.ebi.jmzidml.model.mzidml.Cv;
+import uk.ac.ebi.jmzidml.model.mzidml.CvParam;
 
 /**
  *
@@ -152,6 +153,12 @@ public class loadMzIdentML extends identData_loadPlugin{
                                 //currently using the spectral file location from the parameter file, not the getSpectraData.getLocation() assuming the 1-to-1 relationship
 //                                Identification identification = new Identification(sir.getId(), sir.getSpectraData().getLocation(), sir.getSpectrumID(), selected, sir.getCvParam(), identFile); 
                                 Identification identification = new Identification(sir.getId(),rawSpectra , sir.getSpectrumID(), selected, sir.getCvParam(), identFile); 
+                                for (CvParam cv:sir.getCvParam()){
+                                    if (cv.getAccession().equals("MS:1000796")){
+                                        identification.setAlternativeSpectrumID(cv.getValue());
+                                        break;
+                                    }
+                                }
                                 identification.setMz(selected.getExperimentalMassToCharge());
 //                      b) for each available PeptideEvidence (PE)
                                 List<PeptideEvidenceRef> peRefList = selected.getPeptideEvidenceRef();

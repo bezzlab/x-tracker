@@ -326,7 +326,8 @@ public class outputMZQ extends outPlugin{
                 for(PeptideConsensus pc:proteinPcRefs.get(pro)){
                     protein.getPeptideConsensusRefs().add(pc.getId());
                 }
-                protein.setId(getCorrectNCName(protein.getId()));
+//                protein.setId(getCorrectNCName(protein.getId()));
+                protein.setId(getCorrectNCName(protein.getAccession()));
                 protein.setAccession(getCorrectNCName(protein.getAccession()));
                 proteinList.getProtein().add(protein);
                 if (xTracker.study.needProteinQuantitation()) {

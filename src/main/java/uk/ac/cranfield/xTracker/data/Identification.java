@@ -22,6 +22,8 @@ public class Identification extends QuantitationLevel{
      * the spectrum id in the spectral file
      */
     private String spectrumID;
+    
+    private String alternativeSpectrumID;
     /**
      * the corresponding spectrum where the identification is detected
      */
@@ -148,6 +150,14 @@ public class Identification extends QuantitationLevel{
      */
     public String getSpectraDataLocation() {
         return spectraDataLocation;
+    }
+
+    public String getAlternativeSpectrumID() {
+        return alternativeSpectrumID;
+    }
+
+    public void setAlternativeSpectrumID(String alternativeSpectrumID) {
+        this.alternativeSpectrumID = alternativeSpectrumID;
     }
     /**
      * Get the spectrum id

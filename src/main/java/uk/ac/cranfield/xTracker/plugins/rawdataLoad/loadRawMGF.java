@@ -45,7 +45,7 @@ public class loadRawMGF extends rawData_loadPlugin {
                         for (xFeature feature : features) {
                             for (Identification identification : feature.getIdentifications()) {
                                 String location = identification.getSpectraDataLocation();
-                                if(!location.toLowerCase().endsWith(".mgf")) continue;
+//                                if(!location.toLowerCase().endsWith(".mgf")) continue;
                                 HashMap <String,ArrayList<Identification>> map;
                                 if(index.containsKey(location)){
                                     map = index.get(location);
@@ -60,6 +60,15 @@ public class loadRawMGF extends rawData_loadPlugin {
                                 }else{
                                     idents = new ArrayList<Identification>();
                                     map.put(specID, idents);
+                                }
+                                idents.add(identification);
+                                
+                                final String alterSpecID = identification.getAlternativeSpectrumID().trim();
+                                if (map.containsKey(alterSpecID)){
+                                    idents = map.get(alterSpecID);
+                                }else{
+                                    idents = new ArrayList<Identification>();
+                                    map.put(alterSpecID, idents);
                                 }
                                 idents.add(identification);
                             }

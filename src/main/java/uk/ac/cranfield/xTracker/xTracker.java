@@ -99,18 +99,19 @@ public class xTracker {
         folders.add("Examples");
         folders.add("../Examples");
         //TODO: use external validator which though is at low priority
-        String basefile = "paper_iTraq4plex/iTraqMzIDmzMLmzq.mzq";
+//        String basefile = "paper_iTraq4plex/iTraqMzIDmzMLmzq.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMzIDmgfCsv.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMzMLmzq.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMGFcsvSingle.mzq";
 //        String basefile = "paper_iTraq4plex/iTraqMascotMGFmzqMultiple.mzq";
+//        String basefile = "gio/gio_itraq.mzq";
 //        String basefile = "mcp_iTraq8plex/iTraq8plexMascot.mzq";
 //        String basefile = "emPai/emPaiMascotMultiple.mzq";
 //        String basefile = "emPai/emPaiMzID.mzq";
 //        String basefile = "emPai/emPaiMascot.mzq";
-//////        String basefile = "emPai/emPaiMascotUniqueCharge.mzq"; //this file forgot to put on svn
-        new xTracker(basefile);
-        System.exit(0);
+////        String basefile = "emPai/emPaiMascotUniqueCharge.mzq"; //this file forgot to put on svn
+//        new xTracker(basefile);
+//        System.exit(0);
         switch (args.length) {
             case 1: {
                 new xTracker(args[0]);

@@ -1,0 +1,82 @@
+<MzQuantML id="emPai_mzQuantML_example" creationDate="2013-04-30T16:00:00" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://psidev.info/psi/pi/mzQuantML/1.0.0 ../../../schema/mzQuantML_1_0_0.xsd"
+ xmlns="http://psidev.info/psi/pi/mzQuantML/1.0.0"
+ version="1.0.0">
+	<!--1:1-->
+	<CvList>
+		<Cv id="PSI-MS" fullName="Proteomics Standards Initiative Mass Spectrometry Vocabularies"
+			uri="http://psidev.cvs.sourceforge.net/viewvc/*checkout*/psidev/psi/psi-ms/mzML/controlledVocabulary/psi-ms.obo"
+			version="3.39.0"/>
+		<Cv id="UO" fullName="Unit Ontology"
+			uri="http://obo.cvs.sourceforge.net/*checkout*/obo/obo/ontology/phenotype/unit.obo"/>
+		<Cv id="PSI-MOD" fullName="Proteomics Standards Initiative Protein Modifications Vocabularies" uri="http://psidev.cvs.sourceforge.net/psidev/psi/mod/data/PSI-MOD.obo" version="1.2"/>
+	        <Cv id="UNIMOD" uri="http://www.unimod.org/obo/unimod.obo" fullName="UNIMOD"/>
+	</CvList>
+
+	<!--1:1-->
+	<AnalysisSummary>
+		<!--optional, if missed, xtracker will use the default value false, true, false, false for feature, peptide, protein, protein group quantitation-->
+	        <cvParam accession="MS:1001836" cvRef="PSI-MS" name="spectral counting quantitation analysis"/>
+        	<cvParam accession="MS:1002015" cvRef="PSI-MS" value="false" name="spectral count peptide level quantitation"/>
+        	<cvParam accession="MS:1002016" cvRef="PSI-MS" value="true" name="spectral count protein level quantitation"/>
+        	<cvParam accession="MS:1002017" cvRef="PSI-MS" value="false" name="spectral count proteingroup level quantitation"/>
+	</AnalysisSummary>
+
+	<!--1:1-->
+	<InputFiles>
+		<RawFilesGroup id="raw1">
+			<RawFile location="emPai/4209wa3sWT2_5.mgf" id="r1"/>
+		</RawFilesGroup>
+		
+		<IdentificationFiles>
+			<IdentificationFile location="emPai/4209wa3sWT2_5.xml" id="id_file1"/>
+		</IdentificationFiles>
+	</InputFiles>
+		
+	<!--1:1-->
+	<SoftwareList>
+		<Software id="x-Tracker" version="2.0-ALPHA">
+	        	<cvParam accession="MS:1002123" cvRef="PSI-MS" name="x-Tracker"/>
+		</Software>
+	</SoftwareList>
+	
+	<!--1:1-->
+	<DataProcessingList>
+		<DataProcessing id="DP1"  software_ref="x-Tracker" order="1">
+		<!--used as xtracker configuration file-->
+			<ProcessingMethod order="1">
+				<userParam name="Plugin type" value="load identification"/>
+				<userParam name="Plugin name" value="loadMascotIdent"/>
+				<userParam name="Plugin configuration file" value="emPai/loadMascotEmPai.xtp"/>
+			</ProcessingMethod>
+			<ProcessingMethod order="2">
+				<userParam name="Plugin type" value="feature detection and quantitation"/>
+				<userParam name="Plugin name" value="emPAIquantitation"/>
+				<userParam name="Plugin configuration file" value="emPai/emPaiQuantitation.xtp"/>
+			</ProcessingMethod>
+			<ProcessingMethod order="3">
+				<userParam name="Plugin type" value="Output"/>
+				<userParam name="Plugin name" value="outputMZQ"/>
+				<userParam name="Plugin configuration file" value="emPai/outputMZQ.xtp"/>
+			</ProcessingMethod>
+
+		</DataProcessing>
+	</DataProcessingList>
+	
+	<!--1:1-->
+	<AssayList id="AssayList1">
+		<Assay id="assay1" name="assay1" rawFilesGroup_ref="raw1">
+            		<Label>
+		                <Modification massDelta="0.0">
+                			<cvParam cvRef="PSI-MS" accession="MS:1002038" name="unlabeled sample"/>
+                		</Modification>
+            		</Label>
+		</Assay>
+	</AssayList>
+	<!--1:1-->
+	<StudyVariableList>
+		<StudyVariable id="SV_group" name="Group">
+			<Assay_refs>assay1</Assay_refs>
+		</StudyVariable>
+	</StudyVariableList>
+</MzQuantML>

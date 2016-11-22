@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<emPaiQuantitation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="Plugins/emPaiQuantitation.xsd">
+	<!--the molecular weight of observable peptide-->
+	<peptideMwRange>
+    			<minimum>500</minimum>
+    			<maximum>3200</maximum>
+	</peptideMwRange>
+	<fastaFiles>
+		<fastaFile>emPai/Pseudomonas.fasta</fastaFile>
+		<fastaFile>emPai/s_pombe.fasta</fastaFile>
+	</fastaFiles>
+	<enzyme>Trypsin</enzyme>
+</emPaiQuantitation>

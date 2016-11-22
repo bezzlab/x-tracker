@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SpectralIdentificationList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="Plugins/loadMzIdentML.xsd">
+	<SpectralIdentificationPair spectra="emPai/TgondiiME49_ToxoDB-6_2.mgf" identification="emPai/Toxo-1D_OF.mzid"/>
+</SpectralIdentificationList>

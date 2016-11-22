@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<iTraqQuantitation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="Plugins/iTraqQuantitation.xsd">
+	<AssayParamList>
+		<AssayParam>
+			<AssayName>iTRAQ4plex-114 reporter fragment</AssayName><!-- this should be equal to the name in cvParam/Modification/Label/Assay-->
+			<mzValue>114.11123</mzValue><!--this value should be got from the kit-->
+			<CorrectionFactors>
+				<factor deltaMass="-2">0</factor>
+				<factor deltaMass="-1">1.0</factor>
+				<factor deltaMass="+1">5.9</factor>
+				<factor deltaMass="+2">0.2</factor>
+			</CorrectionFactors>
+		</AssayParam>
+		<AssayParam>
+			<AssayName>iTRAQ4plex-115 reporter fragment</AssayName>
+			<mzValue>115.10826</mzValue>
+			<CorrectionFactors>
+				<factor deltaMass="-2">0</factor>
+				<factor deltaMass="-1">2</factor>
+				<factor deltaMass="+1">5.6</factor>
+				<factor deltaMass="+2">0.1</factor>
+			</CorrectionFactors>
+		</AssayParam>
+		<AssayParam>
+			<AssayName>iTRAQ4plex-116 reporter fragment</AssayName>
+			<mzValue>116.11162</mzValue>
+			<CorrectionFactors>
+				<factor deltaMass="-2">0</factor>
+				<factor deltaMass="-1">3</factor>
+				<factor deltaMass="+1">4.5</factor>
+				<factor deltaMass="+2">0.1</factor>
+			</CorrectionFactors>
+		</AssayParam>
+		<AssayParam>
+			<AssayName>iTRAQ4plex-117, mTRAQ heavy, reporter fragment</AssayName>
+			<mzValue>117.11497</mzValue>
+			<CorrectionFactors>
+				<factor deltaMass="-2">0.1</factor>
+				<factor deltaMass="-1">4</factor>
+				<factor deltaMass="+1">3.5</factor>
+				<factor deltaMass="+2">0</factor>
+			</CorrectionFactors>
+		</AssayParam>
+	</AssayParamList>
+	<Setting>
+		<mzRange>
+    			<minus>0.05</minus>
+    			<plus>0.05</plus>
+		</mzRange>
+<!--		<IntegrationMethod>SumIntensities</IntegrationMethod>--><!--the method used to calculate the area of the peak-->
+		<IntegrationMethod>Area</IntegrationMethod><!--the method used to calculate the area of the peak-->
+	</Setting>
+</iTraqQuantitation>
